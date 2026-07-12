@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import KPICard from "../../components/ui/KPICard";
-import DataTable from "../../components/ui/DataTable";
+import PageHeader from "../../components/layout/PageHeader";
+import KPICard from "../../components/dashboard/KPICard";
+import DataTable from "../../components/common/DataTable";
 import { receivers } from "../../data/mockData";
 import { Users, UserCheck, Truck, Clock, Plus, Star } from "lucide-react";
 

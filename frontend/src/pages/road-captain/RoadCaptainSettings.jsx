@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import ChartCard from "../../components/ui/ChartCard";
+import PageHeader from "../../components/layout/PageHeader";
+import ChartCard from "../../components/charts/ChartCard";
 import { User, Bell, Route, Monitor, Shield, Save, ChevronRight } from "lucide-react";
 
 const sections = [

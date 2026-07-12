@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../../utils/utils";
-import PageHeader from "../../../components/ui/PageHeader";
-import KPICard from "../../../components/ui/KPICard";
-import ChartCard from "../../../components/ui/ChartCard";
-import SimpleBarChart from "../../../components/ui/SimpleBarChart";
-import DonutChart from "../../../components/ui/DonutChart";
-import DataTable from "../../../components/ui/DataTable";
+import PageHeader from "../../../components/layout/PageHeader";
+import KPICard from "../../../components/dashboard/KPICard";
+import ChartCard from "../../../components/charts/ChartCard";
+import SimpleBarChart from "../../../components/charts/BarChart";
+import DonutChart from "../../../components/charts/PieChart";
+import DataTable from "../../../components/common/DataTable";
 import { vehicles } from "../../../data/vehicleData";
 import {
   Route,

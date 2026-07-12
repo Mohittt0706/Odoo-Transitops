@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import StatusBadge from "../../components/ui/StatusBadge";
+import PageHeader from "../../components/layout/PageHeader";
+import StatusBadge from "../../components/common/Badge";
 import {
   FileText,
   Download,

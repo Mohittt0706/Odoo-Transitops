@@ -1,4 +1,4 @@
-import PageHeader from "../../components/ui/PageHeader"
+import PageHeader from "../../components/layout/PageHeader"
 import { motion } from "framer-motion"
 import { cn } from "../../utils/utils"
 import { Shield, BookOpen, ClipboardCheck, Car, UserCheck, AlertTriangle } from "lucide-react"
