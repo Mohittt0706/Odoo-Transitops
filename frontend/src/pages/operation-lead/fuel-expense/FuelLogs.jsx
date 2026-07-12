@@ -1,96 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PageHeader from "../../../components/layout/PageHeader";
 import DataTable from "../../../components/common/DataTable";
-import ChartCard from "../../../components/charts/ChartCard";
-import SimpleBarChart from "../../../components/charts/BarChart";
-import DonutChart from "../../../components/charts/PieChart";
-import AreaChart from "../../../components/charts/AreaChart";
-import LineChart from "../../../components/charts/LineChart";
-import { FuelStatusBadge, StatCard } from "../../../components/fuel-expense/FuelExpenseComponents";
-import { fuelLogs, monthlyFuelCost, fuelConsumptionTrend, monthlyOperationalCost, expenseDistribution, fuelStats } from "../../../data/fuelExpenseData";
-import { Flame, Fuel, DollarSign, Gauge, Route, TrendingUp, Droplets, Car } from "lucide-react";
+import { FuelStatusBadge } from "../../../components/fuel-expense/FuelExpenseComponents";
+import { fuelService } from "../../../services/fuel.service";
+import { Flame, FileDown, Fuel, DollarSign } from "lucide-react";
 
 const columns = [
-  { key: "id", label: "Fuel Log ID", width: "85px" },
-  { key: "vehicle", label: "Vehicle", render: (v, r) => <div><p className="text-sm font-semibold">{r.vehicleName}</p><p className="text-[10px] text-neutral-textMuted">{v}</p></div> },
-  { key: "driver", label: "Driver" },
+  { key: "_id", label: "Fuel Log ID", render: (val) => <span className="text-xs font-mono">{(val || "").slice(-6).toUpperCase()}</span> },
+  { key: "vehicle", label: "Vehicle", render: (_, r) => <div><p className="text-sm font-semibold">{r.vehicleId?.vehicleName || "-"}</p><p className="text-[10px] text-neutral-textMuted">{r.vehicleId?.registrationNumber || ""}</p></div> },
   { key: "fuelStation", label: "Fuel Station" },
   { key: "fuelType", label: "Type" },
-  { key: "quantity", label: "Qty (L)", render: (v) => `${v} L` },
-  { key: "costPerLiter", label: "Cost/L", render: (v) => `₹${v}` },
-  { key: "totalCost", label: "Total Cost", render: (v) => `₹${v.toLocaleString()}` },
-  { key: "mileage", label: "Fuel Econ.", render: (v) => `${v} km/L` },
-  { key: "date", label: "Date" },
-  { key: "status", label: "Status", render: (v) => <FuelStatusBadge status={v} /> },
-];
-
-const statCards = [
-  { label: "Total Fuel Cost", value: fuelStats.totalFuelCost, icon: DollarSign, color: "primary" },
-  { label: "Monthly Consumption", value: fuelStats.monthlyConsumption, icon: Droplets, color: "warning" },
-  { label: "Avg Fuel Economy", value: fuelStats.avgFuelEconomy, icon: Gauge, color: "success" },
-  { label: "Total Distance", value: fuelStats.totalDistance, icon: Route, color: "info" },
+  { key: "liters", label: "Qty (L)", render: (v) => `${v || 0} L` },
+  { key: "cost", label: "Total Cost", render: (v) => `₹${(v || 0).toLocaleString()}` },
+  { key: "date", label: "Date", render: (v) => v ? new Date(v).toLocaleDateString() : "-" },
+  { key: "status", label: "Status", render: (v) => <FuelStatusBadge status={v || "Completed"} /> },
 ];
 
 export default function FuelLogs() {
   const navigate = useNavigate();
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
-  const filtered = filter === "all" ? fuelLogs : fuelLogs.filter((l) => l.status === filter);
+
+  const fetchLogs = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fuelService.getAll();
+      setLogs(res.data.fuelLogs || []);
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message || "Failed to load fuel logs");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchLogs(); }, [fetchLogs]);
+
+  const totalCost = logs.reduce((s, l) => s + (l.cost || 0), 0);
+  const totalLiters = logs.reduce((s, l) => s + (l.liters || 0), 0);
+
+  if (error) {
+    return (
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <PageHeader title="Fuel Logs" subtitle={error} />
+        <div className="flex justify-center py-12"><button onClick={fetchLogs} className="btn btn-primary text-xs">Retry</button></div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-      <PageHeader
-        title="Fuel Logs"
-        subtitle="Track and manage fleet fuel consumption"
+      <PageHeader title="Fuel Logs" subtitle="Track and manage fleet fuel consumption"
         actions={
-          <button onClick={() => navigate("/dashboard/operations/fuel/add")} className="btn btn-primary text-xs flex items-center gap-1.5">
-            <Flame className="w-3.5 h-3.5" /> Add Fuel Log
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="btn-icon"><FileDown className="w-4 h-4" /></button>
+            <button onClick={() => navigate("/dashboard/operations/fuel/add")} className="btn btn-primary text-xs flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5" /> Add Fuel Log
+            </button>
+          </div>
         }
       />
-
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        {statCards.map((s, i) => (
-          <StatCard key={s.label} {...s} delay={i * 0.03} />
+        {[
+          { label: "Total Fuel Cost", value: `₹${(totalCost / 1000).toFixed(1)}k`, icon: DollarSign },
+          { label: "Total Liters", value: `${totalLiters.toFixed(0)} L`, icon: Fuel },
+          { label: "Total Logs", value: logs.length, icon: Fuel },
+          { label: "Avg Cost/L", value: totalLiters > 0 ? `₹${(totalCost / totalLiters).toFixed(2)}` : "—", icon: DollarSign },
+        ].map((s, i) => (
+          <motion.div key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+            className="bg-white border border-neutral-border rounded-xl p-4 shadow-soft-sm">
+            <p className="text-[10px] font-semibold text-neutral-textMuted uppercase tracking-wider">{s.label}</p>
+            <p className="text-lg font-bold font-headings text-neutral-textMain mt-1">{s.value}</p>
+          </motion.div>
         ))}
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <ChartCard title="Monthly Fuel Cost" subtitle="Last 7 months">
-          <SimpleBarChart data={monthlyFuelCost} height={160} color="#2563EB" />
-        </ChartCard>
-        <ChartCard title="Fuel Consumption Trend" subtitle="Litres consumed">
-          <LineChart data={fuelConsumptionTrend} color="orange" />
-        </ChartCard>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <ChartCard title="Expense Categories" subtitle="Distribution">
-          <DonutChart data={expenseDistribution} size={130} thickness={16} />
-        </ChartCard>
-        <ChartCard title="Monthly Operational Cost" subtitle="Total expenses">
-          <AreaChart data={monthlyOperationalCost} color="blue" />
-        </ChartCard>
-      </div>
-
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {["all", "Approved", "Pending", "Rejected"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setFilter(s)}
-            className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-md transition-all ${filter === s ? "bg-primary text-white" : "text-neutral-textMuted hover:text-accent"}`}
-          >
-            {s === "all" ? "All" : s}
-          </button>
-        ))}
-      </div>
-
-      <DataTable
-        columns={columns}
-        data={filtered}
-        searchPlaceholder="Search fuel logs..."
-        pageSize={10}
-      />
+      <DataTable columns={columns} data={logs} loading={loading} searchPlaceholder="Search fuel logs..." pageSize={8} />
     </motion.div>
   );
 }
