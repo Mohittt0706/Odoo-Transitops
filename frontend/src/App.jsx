@@ -1,10 +1,13 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import RoleGuard from "./components/auth/RoleGuard";
 
 import AuthLayout from "./layouts/AuthLayout";
 import LoginForm from "./components/forms/LoginForm";
 import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
-import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import DriverOverview from "./pages/operation-lead/DriverOverview";
@@ -192,14 +195,21 @@ export default function App() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
-        <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
-        <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
-        <Route path="/role-selection" element={<AnimatedPage><RoleSelectionPage /></AnimatedPage>} />
+    <AuthProvider>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
+          <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
+          <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
+          <Route path="/role-selection" element={<Navigate to="/login" replace />} />
 
-        <Route path="/dashboard/operations" element={<DashboardLayout role="operations" />}>
+          <Route path="/dashboard/operations" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="operations">
+                <DashboardLayout role="operations" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
           <Route index element={<OperationsDashboard />} />
           <Route path="fleet" element={<FleetLayout />}>
             <Route index element={<VehicleOverview />} />
@@ -244,7 +254,13 @@ export default function App() {
           <Route path="settings" element={<OperationsSettings />} />
         </Route>
 
-        <Route path="/dashboard/road-captain" element={<DashboardLayout role="road-captain" />}>
+        <Route path="/dashboard/road-captain" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="road-captain">
+                <DashboardLayout role="road-captain" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
           <Route index element={<RoadCaptainDashboard />} />
           <Route path="my-trips" element={<MyTripsPage />} />
           <Route path="trip-history" element={<TripHistoryPage />} />
@@ -257,7 +273,13 @@ export default function App() {
           <Route path="settings" element={<RoadCaptainSettings />} />
         </Route>
 
-        <Route path="/dashboard/safety" element={<DashboardLayout role="safety" />}>
+        <Route path="/dashboard/safety" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="safety">
+                <DashboardLayout role="safety" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
           <Route index element={<SafetyDashboard />} />
           <Route path="drivers" element={<SafetyDriversPage />} />
           <Route path="compliance" element={<CompliancePage />} />
@@ -269,7 +291,13 @@ export default function App() {
           <Route path="settings" element={<SafetySettings />} />
         </Route>
 
-        <Route path="/dashboard/finance" element={<DashboardLayout role="finance" />}>
+        <Route path="/dashboard/finance" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="finance">
+                <DashboardLayout role="finance" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
           <Route index element={<FinanceDashboard />} />
           <Route path="expenses" element={<ExpensesPage />} />
           <Route path="fuel-cost" element={<FuelCostPage />} />
@@ -282,7 +310,13 @@ export default function App() {
           <Route path="settings" element={<FinanceSettings />} />
         </Route>
 
-        <Route path="/dashboard/destination" element={<DashboardLayout role="destination" />}>
+        <Route path="/dashboard/destination" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="destination">
+                <DashboardLayout role="destination" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
           <Route index element={<DestinationDashboard />} />
           <Route path="incoming" element={<IncomingDeliveriesPage />} />
           <Route path="completed" element={<CompletedDeliveriesPage />} />
@@ -293,7 +327,8 @@ export default function App() {
           <Route path="reports" element={<DestinationReportsPage />} />
           <Route path="settings" element={<DestinationSettings />} />
         </Route>
-      </Routes>
-    </AnimatePresence>
+        </Routes>
+      </AnimatePresence>
+    </AuthProvider>
   );
 }

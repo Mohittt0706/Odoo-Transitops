@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/utils";
+import { useAuth } from "../../context/AuthContext";
 import {
   Search,
   Bell,
@@ -37,6 +38,7 @@ function getBreadcrumbs(pathname) {
 export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onMobileMenu }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
@@ -224,7 +226,7 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
                   </button>
                   <div className="border-t border-neutral-border my-1" />
                   <button
-                    onClick={() => navigate("/role-selection")}
+                    onClick={logout}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-danger hover:bg-danger-light transition-colors"
                   >
                     <LogOut className="w-4 h-4" /> Sign Out
