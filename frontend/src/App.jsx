@@ -1,56 +1,40 @@
-import React from 'react';
-import Navbar from './components/landing/Navbar';
-import HeroSection from './components/landing/HeroSection';
-import TrustedCompanies from './components/landing/TrustedCompanies';
-import FleetStatistics from './components/landing/FleetStatistics';
-import Features from './components/landing/Features';
-import Workflow from './components/landing/Workflow';
-import RoleCards from './components/landing/RoleCards';
-import WhyChoose from './components/landing/WhyChoose';
-import DashboardPreview from './components/landing/DashboardPreview';
-import Testimonials from './components/landing/Testimonials';
-import FAQ from './components/landing/FAQ';
-import Footer from './components/landing/Footer';
-import { ArrowRight } from 'lucide-react';
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function App() {
+import AuthLayout from "./components/auth/AuthLayout";
+import LoginForm from "./components/auth/LoginForm";
+import ForgotPasswordForm from "./components/auth/ForgotPasswordForm";
+import RoleSelectionPage from "./pages/RoleSelectionPage";
+import DashboardPlaceholder from "./pages/DashboardPlaceholder";
+
+import Navbar from "./components/landing/Navbar";
+import HeroSection from "./components/landing/HeroSection";
+import TrustedCompanies from "./components/landing/TrustedCompanies";
+import FleetStatistics from "./components/landing/FleetStatistics";
+import Features from "./components/landing/Features";
+import Workflow from "./components/landing/Workflow";
+import RoleCards from "./components/landing/RoleCards";
+import WhyChoose from "./components/landing/WhyChoose";
+import DashboardPreview from "./components/landing/DashboardPreview";
+import Testimonials from "./components/landing/Testimonials";
+import FAQ from "./components/landing/FAQ";
+import Footer from "./components/landing/Footer";
+import { ArrowRight } from "lucide-react";
+
+function LandingPage() {
   return (
     <div className="bg-neutral-light min-h-screen text-neutral-textMain flex flex-col font-sans">
-      
-      {/* 1. Header Navigation Bar */}
       <Navbar />
-
-      {/* 2. Hero Presentation */}
       <HeroSection />
-
-      {/* 3. Social Proofing Badges */}
       <TrustedCompanies />
-
-      {/* 4. Fleet Telematics statistics */}
       <FleetStatistics />
-
-      {/* 5. Feature capability blocks */}
       <Features />
-
-      {/* 6. Integration timeline checklist */}
       <Workflow />
-
-      {/* 7. Workspace role showcases */}
       <RoleCards />
-
-      {/* 8. Central benefits lists */}
       <WhyChoose />
-
-      {/* 9. Live operations control preview */}
       <DashboardPreview />
-
-      {/* 10. Customer reviews boards */}
       <Testimonials />
-
-      {/* 11. Platform FAQs dropdowns */}
       <FAQ />
-
-      {/* 12. Final Call-to-Action panel */}
       <section className="py-20 bg-white border-b border-neutral-border relative overflow-hidden">
         <div className="container mx-auto px-6 max-w-4xl text-center flex flex-col items-center gap-6 relative z-10">
           <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-headings">
@@ -60,22 +44,101 @@ export default function App() {
             Transform Your Fleet Operations Today
           </h2>
           <p className="text-slate-500 text-sm md:text-base leading-relaxed max-w-xl">
-            Authorize your TransitOps Odoo integration keys and start dispatching certified operators on optimized route plans in minutes.
+            Authorize your TransitOps Odoo integration keys and start dispatching
+            certified operators on optimized route plans in minutes.
           </p>
           <div className="flex items-center gap-3.5 flex-wrap justify-center mt-2">
-            <button className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
+            <a href="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
               Start Free Trial
-            </button>
-            <button className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
+            </a>
+            <a href="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
               Request Live Demo <ArrowRight className="w-4 h-4" />
-            </button>
+            </a>
           </div>
         </div>
       </section>
-
-      {/* 13. System Footer info */}
       <Footer />
-
     </div>
+  );
+}
+
+function LoginPage() {
+  return (
+    <AuthLayout>
+      <LoginForm />
+    </AuthLayout>
+  );
+}
+
+function ForgotPasswordPage() {
+  return (
+    <AuthLayout>
+      <ForgotPasswordForm />
+    </AuthLayout>
+  );
+}
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.25 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+function AnimatedPage({ children }) {
+  return (
+    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      {children}
+    </motion.div>
+  );
+}
+
+export default function App() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <AnimatedPage>
+              <LandingPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <AnimatedPage>
+              <LoginPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <AnimatedPage>
+              <ForgotPasswordPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/role-selection"
+          element={
+            <AnimatedPage>
+              <RoleSelectionPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/dashboard/:role"
+          element={
+            <AnimatedPage>
+              <DashboardPlaceholder />
+            </AnimatedPage>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   );
 }

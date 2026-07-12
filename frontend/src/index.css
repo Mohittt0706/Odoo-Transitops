@@ -95,6 +95,20 @@
   @apply bg-accent-light text-neutral-textMuted border-slate-200/50;
 }
 
+/* Floating label base (used by InputField) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+  -webkit-text-fill-color: #111827;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Focus ring removal for peer */
+input.peer:focus {
+  box-shadow: none;
+}
+
 /* Custom scroll bar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -105,4 +119,9 @@
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-slate-300 rounded-full hover:bg-slate-400;
+}
+
+/* Smooth page transitions */
+#root {
+  min-height: 100vh;
 }
