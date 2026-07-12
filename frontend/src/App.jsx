@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { ToastProvider } from "./components/common/Toast";
@@ -172,12 +172,12 @@ function LandingPage() {
             certified operators on optimized route plans in minutes.
           </p>
           <div className="flex items-center gap-3.5 flex-wrap justify-center mt-2">
-            <a href="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
-              Start Free Trial
-            </a>
-            <a href="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
-              Request Live Demo <ArrowRight className="w-4 h-4" />
-            </a>
+              <Link to="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
+                Start Free Trial
+              </Link>
+              <Link to="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
+                Request Live Demo <ArrowRight className="w-4 h-4" />
+              </Link>
           </div>
         </div>
       </section>
