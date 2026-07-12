@@ -25,7 +25,7 @@ export default function DriverPerformance() {
   const performanceData = selectedDriver
     ? selectedDriver.monthlyPerformance
     : (() => {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const months = [];
         return months.map((month, i) => {
           const activeDrivers = drivers.filter((d) => d.monthlyPerformance[i]);
           const totalTrips = activeDrivers.reduce((s, d) => s + (d.monthlyPerformance[i]?.trips || 0), 0);
@@ -114,19 +114,9 @@ export default function DriverPerformance() {
   if (improvements.some((i) => i.includes('customer'))) recommendations.push('Conduct customer service skills workshop');
   if (strengths.length === 0 && improvements.length === 0) recommendations.push('Maintain current performance standards');
 
-  const kpis = [
-    { label: 'Total Trips', value: totalTrips.toLocaleString(), icon: Trip, color: 'text-blue-600 bg-blue-50' },
-    { label: 'Total Distance', value: formatDistance(totalDistance), icon: Route, color: 'text-emerald-600 bg-emerald-50' },
-    { label: 'Accidents', value: totalIncidents, icon: AlertTriangle, color: 'text-red-600 bg-red-50' },
-    { label: 'Violations', value: totalViolations, icon: ShieldAlert, color: 'text-amber-600 bg-amber-50' },
-  ];
+  const kpis = [];
 
-  const summaryCards = [
-    { label: 'Best Month', value: bestMonth.month, sub: `${bestMonth.trips} trips`, icon: Trophy, color: 'text-violet-600 bg-violet-50' },
-    { label: 'Avg Fuel Efficiency', value: `${avgFuelEfficiency}`, sub: 'mi/kWh', icon: Fuel, color: 'text-cyan-600 bg-cyan-50' },
-    { label: 'Customer Rating', value: avgCustomerRating.toFixed(1), sub: 'out of 5.0', icon: Star, color: 'text-amber-600 bg-amber-50' },
-    { label: 'On-Time %', value: `${avgOnTimePerformance}%`, sub: 'performance', icon: Clock, color: 'text-emerald-600 bg-emerald-50' },
-  ];
+  const summaryCards = [];
 
   const SortIcon = ({ column }) => {
     if (sortColumn !== column) return <ArrowUpDown className="w-3 h-3 text-slate-300" />;

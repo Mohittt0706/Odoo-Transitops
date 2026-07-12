@@ -23,14 +23,9 @@ export default function DriverOverview() {
   const avgSafetyScore = Math.round(drivers.reduce((sum, d) => sum + d.safetyScore, 0) / totalDrivers);
   const driverUtilization = Math.round((onTripDrivers / totalDrivers) * 100);
 
-  const statusDistribution = [
-    { label: 'Available', value: availableDrivers, color: '#22C55E' },
-    { label: 'On Trip', value: onTripDrivers, color: '#06B6D4' },
-    { label: 'Off Duty', value: offDutyDrivers, color: '#F59E0B' },
-    { label: 'Suspended', value: suspendedDrivers, color: '#EF4444' },
-  ];
+  const statusDistribution = [];
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  const months = [];
 
   const safetyTrendData = months.map((month, i) => {
     const scores = drivers.map(d => d.monthlyPerformance[i]?.rating ? d.monthlyPerformance[i].rating * 20 : 85);

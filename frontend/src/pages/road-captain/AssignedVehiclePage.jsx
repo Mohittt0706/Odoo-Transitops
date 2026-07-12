@@ -9,14 +9,7 @@ import { Truck, CircleCheck, AlertTriangle, Fuel, Gauge, Calendar, Shield, Wrenc
 const vehicle = vehicles.find((v) => v.plate === "MH-12-RT-2244");
 const vehicleMaint = maintenance.filter((m) => m.plate === "MH-12-RT-2244");
 
-const healthItems = [
-  { label: "Engine", status: "Healthy", icon: Activity, color: "text-success" },
-  { label: "Brakes", status: "Healthy", icon: CircleCheck, color: "text-success" },
-  { label: "Tires", status: "Good", icon: CircleCheck, color: "text-success" },
-  { label: "AC", status: "Service Due", icon: AlertTriangle, color: "text-warning" },
-  { label: "Battery", status: "Healthy", icon: Battery, color: "text-success" },
-  { label: "Transmission", status: "Good", icon: Gauge, color: "text-success" },
-];
+const healthItems = [];
 
 export default function AssignedVehiclePage() {
   return (

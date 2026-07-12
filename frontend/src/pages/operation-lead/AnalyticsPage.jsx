@@ -4,44 +4,13 @@ import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import { TrendingUp, Route, IndianRupee, Users } from "lucide-react";
 
-const fleetUtilizationTrend = [
-  { label: "Jan", value: 62 },
-  { label: "Feb", value: 65 },
-  { label: "Mar", value: 68 },
-  { label: "Apr", value: 72 },
-  { label: "May", value: 70 },
-  { label: "Jun", value: 75 },
-  { label: "Jul", value: 78 },
-];
+const fleetUtilizationTrend = [];
 
-const tripCompletionRate = [
-  { label: "Jan", value: 88 },
-  { label: "Feb", value: 91 },
-  { label: "Mar", value: 85 },
-  { label: "Apr", value: 93 },
-  { label: "May", value: 90 },
-  { label: "Jun", value: 95 },
-  { label: "Jul", value: 92 },
-];
+const tripCompletionRate = [];
 
-const revenueGrowth = [
-  { label: "Jan", value: 8 },
-  { label: "Feb", value: 9 },
-  { label: "Mar", value: 10 },
-  { label: "Apr", value: 11 },
-  { label: "May", value: 10.5 },
-  { label: "Jun", value: 11.8 },
-  { label: "Jul", value: 12.4 },
-];
+const revenueGrowth = [];
 
-const driverPerformance = [
-  { label: "Rajesh", value: 98 },
-  { label: "Suresh", value: 95 },
-  { label: "Vikram", value: 99 },
-  { label: "Anil", value: 88 },
-  { label: "Deepak", value: 94 },
-  { label: "Jose", value: 96 },
-];
+const driverPerformance = [];
 
 export default function AnalyticsPage() {
   return (

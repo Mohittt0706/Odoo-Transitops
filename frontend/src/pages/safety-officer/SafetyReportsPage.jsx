@@ -3,56 +3,7 @@ import { motion } from "framer-motion"
 import { cn } from "../../utils/utils"
 import { Shield, BookOpen, ClipboardCheck, Car, UserCheck, AlertTriangle } from "lucide-react"
 
-const reports = [
-  {
-    title: "Incident Summary",
-    description: "Complete overview of all safety incidents with severity analysis and resolution status",
-    lastGenerated: "2026-07-10",
-    icon: AlertTriangle,
-    color: "text-red-600",
-    bg: "bg-red-50",
-  },
-  {
-    title: "Compliance Report",
-    description: "Detailed compliance status for all drivers including insurance, fitness and pollution certificates",
-    lastGenerated: "2026-07-09",
-    icon: Shield,
-    color: "text-green-600",
-    bg: "bg-green-50",
-  },
-  {
-    title: "Training Completion",
-    description: "Driver training progress and course completion statistics",
-    lastGenerated: "2026-07-08",
-    icon: BookOpen,
-    color: "text-blue-600",
-    bg: "bg-blue-50",
-  },
-  {
-    title: "Inspection Audit",
-    description: "Vehicle inspection history and audit trail for all fleet vehicles",
-    lastGenerated: "2026-07-07",
-    icon: ClipboardCheck,
-    color: "text-amber-600",
-    bg: "bg-amber-50",
-  },
-  {
-    title: "Driver Safety Rating",
-    description: "Individual driver safety scores and ranking across the fleet",
-    lastGenerated: "2026-07-06",
-    icon: UserCheck,
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-  },
-  {
-    title: "License Status Report",
-    description: "License validity tracking with expiry alerts and renewal requirements",
-    lastGenerated: "2026-07-05",
-    icon: Car,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
-  },
-]
+const reports = []
 
 export default function SafetyReportsPage() {
   return (
