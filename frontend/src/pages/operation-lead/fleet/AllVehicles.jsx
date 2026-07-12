@@ -1,20 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../../components/layout/PageHeader";
 import DataTable from "../../../components/common/DataTable";
 import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
-import { vehicles } from "../../../data/vehicleData";
-import { cn } from "../../../utils/utils";
+import { vehicleService } from "../../../services/vehicle.service";
 import { Truck, Plus, Download, Eye, Pencil } from "lucide-react";
+import { cn } from "../../../utils/utils";
 
-const statusFilters = ["All", "Active", "In Maintenance", "Inactive"];
+const statusFilters = ["All", "AVAILABLE", "ON_TRIP", "IN_MAINTENANCE"];
 
 export default function AllVehicles() {
   const navigate = useNavigate();
+  const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeStatus, setActiveStatus] = useState("All");
 
-  const filteredVehicles = activeStatus === "All" ? vehicles : vehicles.filter((v) => v.status === activeStatus);
+  const fetchVehicles = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = {};
+      if (activeStatus !== "All") params.status = activeStatus;
+      const res = await vehicleService.getAll(params);
+      setVehicles(res.data.vehicles || []);
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message || "Failed to load vehicles");
+    } finally {
+      setLoading(false);
+    }
+  }, [activeStatus]);
+
+  useEffect(() => {
+    fetchVehicles();
+  }, [fetchVehicles]);
 
   const columns = [
     {
@@ -22,58 +42,35 @@ export default function AllVehicles() {
       label: "Vehicle",
       render: (_, row) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: row.color + "15" }}>
-            <Truck className="w-4.5 h-4.5" style={{ color: row.color }} strokeWidth={1.8} />
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-primary/10">
+            <Truck className="w-4.5 h-4.5 text-primary" strokeWidth={1.8} />
           </div>
-          <span className="font-semibold text-sm text-neutral-textMain">{row.name}</span>
+          <span className="font-semibold text-sm text-neutral-textMain">{row.vehicleName}</span>
         </div>
       ),
     },
     {
       key: "registration",
       label: "Registration",
-      render: (val) => <span className="font-mono text-xs font-semibold text-neutral-textMain">{val}</span>,
+      render: (_, row) => (
+        <span className="font-mono text-xs font-semibold text-neutral-textMain">{row.registrationNumber}</span>
+      ),
     },
-    { key: "type", label: "Type" },
-    { key: "loadCapacity", label: "Load Capacity" },
+    { key: "vehicleType", label: "Type" },
+    {
+      key: "maxLoadCapacity",
+      label: "Load Capacity",
+      render: (val) => <span className="text-sm">{val?.toLocaleString("en-IN") || "-"} kg</span>,
+    },
     {
       key: "odometer",
       label: "Odometer",
-      render: (val) => <span className="text-sm">{val.toLocaleString("en-IN")} km</span>,
-    },
-    {
-      key: "fuelLevel",
-      label: "Fuel Level",
-      render: (val) => (
-        <div className="flex items-center gap-2">
-          <div className="w-16 h-1.5 bg-neutral-border rounded-full overflow-hidden">
-            <div
-              className={cn("h-full rounded-full transition-all", val > 70 ? "bg-emerald-500" : val > 40 ? "bg-amber-500" : "bg-red-500")}
-              style={{ width: `${val}%` }}
-            />
-          </div>
-          <span className="text-xs font-medium text-neutral-textMuted">{val}%</span>
-        </div>
-      ),
+      render: (val) => <span className="text-sm">{(val || 0).toLocaleString("en-IN")} km</span>,
     },
     {
       key: "status",
       label: "Status",
       render: (val) => <VehicleStatusBadge status={val} />,
-    },
-    {
-      key: "driver",
-      label: "Assigned Driver",
-      render: (val) => <span className={cn("text-sm", val === "—" && "text-neutral-textMuted")}>{val}</span>,
-    },
-    {
-      key: "lastService",
-      label: "Last Service",
-      render: (val) => (
-        <span className="text-sm">
-          {new Date(val).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
-        </span>
-      ),
     },
     {
       key: "actions",
@@ -82,14 +79,14 @@ export default function AllVehicles() {
       render: (_, row) => (
         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
           <button
-            onClick={() => navigate(`/dashboard/operations/fleet/details/${row.id}`)}
+            onClick={() => navigate(`/dashboard/operations/fleet/details/${row._id}`)}
             className="p-1.5 rounded-lg text-neutral-textMuted hover:text-primary hover:bg-primary-light transition-colors"
             title="View"
           >
             <Eye className="w-4 h-4" />
           </button>
           <button
-            onClick={() => navigate(`/dashboard/operations/fleet/edit/${row.id}`)}
+            onClick={() => navigate(`/dashboard/operations/fleet/edit/${row._id}`)}
             className="p-1.5 rounded-lg text-neutral-textMuted hover:text-warning hover:bg-warning-light transition-colors"
             title="Edit"
           >
@@ -99,6 +96,20 @@ export default function AllVehicles() {
       ),
     },
   ];
+
+  if (error) {
+    return (
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <PageHeader title="All Vehicles" subtitle="Error loading vehicles" />
+        <div className="flex flex-col items-center gap-4 py-20">
+          <p className="text-sm text-danger">{error}</p>
+          <button onClick={fetchVehicles} className="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary-dark">
+            Retry
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
@@ -132,18 +143,18 @@ export default function AllVehicles() {
                 : "bg-white text-neutral-textMuted border-neutral-border hover:border-primary/40 hover:text-primary"
             )}
           >
-            {status}
+            {status === "All" ? "All" : status.replace(/_/g, " ")}
           </button>
         ))}
       </div>
 
       <DataTable
         columns={columns}
-        data={filteredVehicles}
+        data={vehicles}
         searchPlaceholder="Search vehicles by name, registration..."
         pageSize={8}
         bulkSelect
-        onRowClick={(row) => navigate(`/dashboard/operations/fleet/details/${row.id}`)}
+        onRowClick={(row) => navigate(`/dashboard/operations/fleet/details/${row._id}`)}
       />
     </motion.div>
   );
