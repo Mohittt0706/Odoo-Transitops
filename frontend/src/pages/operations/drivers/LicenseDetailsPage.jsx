@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
+import PageHeader from "../../../components/layout/PageHeader";
 import { LicenseBadge, DriverStatsCard } from "../../../components/drivers/DriverComponents";
 import { drivers, licenseStats } from "../../../data/driverData";
 import { FileText, Download, Upload, AlertTriangle, ShieldCheck, Clock, XCircle, ArrowLeft } from "lucide-react";

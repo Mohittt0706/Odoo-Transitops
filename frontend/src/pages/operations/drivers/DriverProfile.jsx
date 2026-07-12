@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
-import StatusBadge from "../../../components/ui/StatusBadge";
+import PageHeader from "../../../components/layout/PageHeader";
+import StatusBadge from "../../../components/common/Badge";
 import { DriverAvatar, SafetyBadge, LicenseBadge, DriverStatsCard } from "../../../components/drivers/DriverComponents";
 import { drivers } from "../../../data/driverData";
 import { MapPin, Phone, Mail, Calendar, Truck, Route, Award, FileText, AlertCircle, Star, Map, Gauge, Fuel } from "lucide-react";

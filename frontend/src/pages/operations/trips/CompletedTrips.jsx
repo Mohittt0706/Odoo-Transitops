@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
-import DataTable from "../../../components/ui/DataTable";
+import PageHeader from "../../../components/layout/PageHeader";
+import DataTable from "../../../components/common/DataTable";
 import { TripStatusBadge } from "../../../components/trips/TripComponents";
 import { trips } from "../../../data/tripData";
 import { ArrowLeft, Download, Star } from "lucide-react";

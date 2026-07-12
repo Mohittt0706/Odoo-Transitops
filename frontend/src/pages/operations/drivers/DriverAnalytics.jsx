@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
-import ChartCard from "../../../components/ui/ChartCard";
-import SimpleBarChart from "../../../components/ui/SimpleBarChart";
-import DonutChart from "../../../components/ui/DonutChart";
+import PageHeader from "../../../components/layout/PageHeader";
+import ChartCard from "../../../components/charts/ChartCard";
+import SimpleBarChart from "../../../components/charts/BarChart";
+import DonutChart from "../../../components/charts/PieChart";
 import { DriverStatsCard } from "../../../components/drivers/DriverComponents";
 import { drivers } from "../../../data/driverData";
 import { TrendingUp, BarChart3, PieChart, Activity, Clock, Gauge, Droplets, AlertTriangle } from "lucide-react";

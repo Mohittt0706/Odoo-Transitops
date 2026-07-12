@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
+import PageHeader from "../../../components/layout/PageHeader";
 import { drivers as driverData } from "../../../data/driverData";
 import { ConfirmationModal, Toast } from "../../../components/drivers/DriverComponents";
 import { cn } from "../../../lib/utils";
