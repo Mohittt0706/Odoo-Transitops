@@ -4,6 +4,18 @@ import { authService } from "../services/auth.service";
 
 const AuthContext = createContext(null);
 
+const ROLE_MAP = {
+  OPERATION_LEAD: "operations",
+  ROAD_CAPTAIN: "road-captain",
+  SAFETY_OFFICER: "safety",
+  FINANCE_HUB: "finance",
+  DESTINATION_CONTROL: "destination",
+};
+
+function mapRole(backendRole) {
+  return ROLE_MAP[backendRole] || backendRole;
+}
+
 function getInitialUser() {
   try {
     const stored = localStorage.getItem("transitops_auth");
@@ -12,6 +24,15 @@ function getInitialUser() {
     localStorage.removeItem("transitops_auth");
     return null;
   }
+}
+
+function buildUserData(u) {
+  return {
+    id: u._id || u.id,
+    email: u.email,
+    role: mapRole(u.role),
+    name: u.fullName || u.name,
+  };
 }
 
 export function AuthProvider({ children }) {
@@ -26,9 +47,11 @@ export function AuthProvider({ children }) {
         .then((res) => {
           const u = res.data.user;
           if (u) {
-            const userData = { id: u._id || u.id, email: u.email, role: u.role, name: u.name };
+            const userData = buildUserData(u);
             localStorage.setItem("transitops_auth", JSON.stringify(userData));
             setUser(userData);
+          } else {
+            setUser(null);
           }
         })
         .catch(() => {
@@ -49,11 +72,18 @@ export function AuthProvider({ children }) {
       if (!token || !u) {
         return { success: false, error: "Invalid response from server." };
       }
+      const role = mapRole(u.role);
+      if (!role) {
+        return { success: false, error: "Invalid user role returned from server." };
+      }
+      if (role !== expectedRole) {
+        return { success: false, error: "Invalid credentials for this role." };
+      }
       localStorage.setItem("authToken", token);
-      const userData = { id: u._id || u.id, email: u.email, role: u.role, name: u.name };
+      const userData = buildUserData(u);
       localStorage.setItem("transitops_auth", JSON.stringify(userData));
       setUser(userData);
-      return { success: true, role: u.role };
+      return { success: true, role };
     } catch (err) {
       const msg = err?.response?.data?.message || "Invalid email or password.";
       return { success: false, error: msg };
