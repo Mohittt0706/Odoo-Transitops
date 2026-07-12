@@ -20,8 +20,10 @@ const docks = ['Dock 1','Dock 2','Dock 3','Dock 4','Dock 5','Dock 6','Dock 7','D
 const companies = ['Reliance Retail Ltd','Flipkart Logistics','Amazon India','Tata Chemicals','HUL Distribution','Wipro Technologies','Adani Logistics','Mahindra Logistics','Transport Corporation','DHL Supply Chain','Blue Dart Express','Gati Limited','Safe Express','Delhivery Logistics','Future Supply Chain'];
 const receiverNames = ['Rajesh Mehta','Priya Gupta','Vikash Singh','Meena Patel','Suresh Iyer','Anita Desai','Rahul Verma','Deepa Nair','Arun Kumar','Sunita Sharma','Vijay Reddy','Kavita Joshi','Ravi Menon','Pooja Agarwal','Rohit Singh'];
 const phonePrefixes = ['98200','98111','98333','98444','98555','98765','98666','98888','98999','98123'];
-const statuses = ['In Transit','Arrived','Docked','Unloading','Completed','Pending','Delayed','Rejected'];
+const statuses = ['Incoming','On Route','Arrived','Waiting Dock','Dock Assigned','Unloading','Delayed','Completed','Cancelled'];
 const podStatuses = ['Verified','Pending','Awaiting Photo','Uploaded','Partially Uploaded','Rejected'];
+const vehicles = ['TATA-001','TATA-002','ASHOK-001','ASHOK-002','BHARAT-001','BHARAT-002','EICHER-001','EICHER-002','VOLVO-001','VOLVO-002','SCANIA-001','SCANIA-002','TATA-003','TATA-004','ASHOK-003','BHARAT-003','EICHER-003','VOLVO-003','SCANIA-003','TATA-005'];
+const warehouses = ['Mumbai Central Hub','Chennai Distribution','Delhi North Facility','Bangalore Tech Park','Kochi Port Terminal','Pune Logistics Center','Jaipur Warehouse','Hyderabad Hub','Ahmedabad Depot','Lucknow Distribution'];
 export const receivers = Array.from({ length: 50 }, (_, i) => ({
   id: `RC-${String(i + 1).padStart(3, '0')}`,
   name: pick(companies),
@@ -37,19 +39,20 @@ export const receivers = Array.from({ length: 50 }, (_, i) => ({
   digitalSignature: Math.random() > 0.25,
 }));
 
-export const incomingDeliveries = Array.from({ length: 40 }, (_, i) => ({
+export const incomingDeliveries = Array.from({ length: 50 }, (_, i) => ({
   id: `INC-${String(i + 1).padStart(3, '0')}`,
   truck: pick(trucks),
   driver: pick(drivers),
+  vehicle: pick(vehicles),
   source: pick(origins),
-  destination: pick(destinations),
+  destination: pick(warehouses),
   arrivalTime: `${rndDate(-1, 2)} ${rndTime()}`,
   eta: `${rndTime()}`,
   dock: pick(docks),
   cargo: pick(cargoTypes),
   weight: `${rnd(500, 25000)} kg`,
   priority: pick(['High', 'Medium', 'Low']),
-  status: pick(['In Transit', 'Arrived', 'Docked', 'Unloading', 'Delayed']),
+  status: pick(['Incoming', 'On Route', 'Arrived', 'Waiting Dock', 'Dock Assigned', 'Unloading', 'Delayed', 'Completed', 'Cancelled']),
   notes: Math.random() > 0.5 ? `Special handling required: ${pick(['Fragile', 'Perishable', 'Hazardous', 'Oversized', 'Temperature Controlled'])}` : '',
 }));
 
