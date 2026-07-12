@@ -1,42 +1,30 @@
 const express = require('express');
 const router = express.Router();
 
+const authenticate = require('../middleware/auth.middleware');
+const authorize = require('../middleware/role.middleware');
+const validate = require('../middleware/validator.middleware');
+const {
+  createReceiverSchema,
+  updateReceiverSchema,
+  receiverQuerySchema,
+} = require('../validators/receiver.validator');
 const {
   create,
   findAll,
   findById,
+  update,
+  remove,
 } = require('../controllers/receiver/receiver.controller');
-const authenticate = require('../middleware/auth.middleware');
-const validate = require('../middleware/validator.middleware');
-const Joi = require('joi');
-
-const createReceiverSchema = Joi.object({
-  fullName: Joi.string().trim().required().messages({
-    'any.required': 'Full name is required',
-    'string.empty': 'Full name cannot be empty',
-  }),
-  company: Joi.string().trim().required().messages({
-    'any.required': 'Company is required',
-    'string.empty': 'Company cannot be empty',
-  }),
-  contactNumber: Joi.string().trim().required().messages({
-    'any.required': 'Contact number is required',
-    'string.empty': 'Contact number cannot be empty',
-  }),
-  email: Joi.string().email().required().messages({
-    'any.required': 'Email is required',
-    'string.email': 'Please provide a valid email',
-  }),
-  address: Joi.string().trim().required().messages({
-    'any.required': 'Address is required',
-    'string.empty': 'Address cannot be empty',
-  }),
-});
+const { ROLES } = require('../constants/roles');
 
 router.use(authenticate);
 
-router.post('/', validate(createReceiverSchema), create);
-router.get('/', findAll);
+router.get('/', validate(receiverQuerySchema, 'query'), findAll);
 router.get('/:id', findById);
+
+router.post('/', authorize(ROLES.OPERATION_LEAD), validate(createReceiverSchema), create);
+router.put('/:id', authorize(ROLES.OPERATION_LEAD), validate(updateReceiverSchema), update);
+router.delete('/:id', authorize(ROLES.OPERATION_LEAD), remove);
 
 module.exports = router;

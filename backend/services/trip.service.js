@@ -272,6 +272,35 @@ const cancel = async (id) => {
   return trip;
 };
 
+const confirmDelivery = async (tripId, data) => {
+  const trip = await Trip.findOne({ _id: tripId, isActive: true });
+  if (!trip) throwErr('Trip not found', 404);
+
+  if (trip.status !== TRIP_STATUS.DISPATCHED) {
+    throwErr('Only DISPATCHED trips can be confirmed for delivery', 400);
+  }
+
+  const vehicle = await Vehicle.findOne({ _id: trip.vehicleId, isActive: true });
+  if (vehicle) {
+    vehicle.status = VEHICLE_STATUS.AVAILABLE;
+    await vehicle.save();
+  }
+
+  const driver = await Driver.findOne({ _id: trip.driverId, isActive: { $ne: false } });
+  if (driver) {
+    driver.status = DRIVER_STATUS.AVAILABLE;
+    await driver.save();
+  }
+
+  trip.status = TRIP_STATUS.COMPLETED;
+  trip.deliveryTime = new Date();
+  if (data.receiverRemarks) trip.receiverRemarks = data.receiverRemarks;
+  if (data.receiverSignature) trip.receiverSignature = data.receiverSignature;
+  await trip.save();
+
+  return trip;
+};
+
 module.exports = {
   create,
   getAll,
@@ -281,4 +310,5 @@ module.exports = {
   dispatch,
   complete,
   cancel,
+  confirmDelivery,
 };

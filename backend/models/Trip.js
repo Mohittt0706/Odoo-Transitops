@@ -58,6 +58,17 @@ const tripSchema = new mongoose.Schema(
     completionTime: {
       type: Date,
     },
+    deliveryTime: {
+      type: Date,
+    },
+    receiverRemarks: {
+      type: String,
+      trim: true,
+    },
+    receiverSignature: {
+      type: String,
+      trim: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
