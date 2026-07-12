@@ -1,90 +1,82 @@
+import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
-import KPICard from "../../components/dashboard/KPICard";
 import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
-import { motion } from "framer-motion";
-import { TrendingUp, Trophy, AlertTriangle, BarChart3 } from "lucide-react";
-
-const roiPerVehicle = [
-  { label: "Volvo FH16", value: 32 },
-  { label: "Scania R450", value: 28 },
-  { label: "Tata Prima", value: 26 },
-  { label: "BharatBenz", value: 24 },
-  { label: "Mahindra Blazo", value: 22 },
-  { label: "Ashok Leyland", value: 20 },
-  { label: "Eicher Pro", value: 18 },
-  { label: "Tata Ultra", value: 15 },
-  { label: "AMW 2523", value: 12 },
-  { label: "Isuzu FVR", value: 8 },
-];
-
-const roiBreakdown = [
-  { vehicle: "Volvo FH16", investment: "₹45.0L", returns: "₹59.4L", roi: "32%", status: "Excellent" },
-  { vehicle: "Scania R450", investment: "₹42.0L", returns: "₹53.8L", roi: "28%", status: "Excellent" },
-  { vehicle: "Tata Prima 4040.S", investment: "₹38.0L", returns: "₹47.9L", roi: "26%", status: "Good" },
-  { vehicle: "BharatBenz 2528", investment: "₹35.0L", returns: "₹43.4L", roi: "24%", status: "Good" },
-  { vehicle: "Mahindra Blazo X25", investment: "₹32.0L", returns: "₹39.0L", roi: "22%", status: "Good" },
-  { vehicle: "Ashok Leyland 4220", investment: "₹30.0L", returns: "₹36.0L", roi: "20%", status: "Average" },
-  { vehicle: "Eicher Pro 6036", investment: "₹28.0L", returns: "₹33.0L", roi: "18%", status: "Average" },
-  { vehicle: "Tata Ultra 1918", investment: "₹22.0L", returns: "₹25.3L", roi: "15%", status: "Below Avg" },
-  { vehicle: "AMW 2523", investment: "₹25.0L", returns: "₹28.0L", roi: "12%", status: "Below Avg" },
-  { vehicle: "Isuzu FVR", investment: "₹20.0L", returns: "₹21.6L", roi: "8%", status: "Poor" },
-];
+import { StatCard } from "../../components/finance-hub/FinanceHubComponents";
+import { roiData, vehicles } from "../../data/financeData";
+import { TrendingUp, Trophy, AlertTriangle, BarChart3, DollarSign, Target, Award } from "lucide-react";
 
 export default function ROIPage() {
+  const sorted = [...roiData].sort((a, b) => b.roi - a.roi);
+  const avgRoi = Math.round(roiData.reduce((s, v) => s + v.roi, 0) / roiData.length);
+  const totalProfit = roiData.reduce((s, v) => s + v.profit, 0);
+  const totalInvestment = roiData.reduce((s, v) => s + v.purchaseCost, 0);
+
+  const roiChart = sorted.map((v) => ({ label: v.name.split(" ").slice(-1)[0], value: v.roi }));
+
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-      <PageHeader title="ROI Analysis" subtitle="Return on investment by vehicle" />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KPICard title="Overall ROI" value="24.8%" change="2%" trend="up" icon={<TrendingUp className="w-5 h-5" />} />
-        <KPICard title="Best Vehicle" value="Volvo FH16 - 32%" change="3%" trend="up" icon={<Trophy className="w-5 h-5" />} />
-        <KPICard title="Worst Vehicle" value="Isuzu FVR - 8%" change="1%" trend="down" icon={<AlertTriangle className="w-5 h-5" />} />
-        <KPICard title="Fleet Average" value="24.8%" change="2%" trend="up" icon={<BarChart3 className="w-5 h-5" />} />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+      <PageHeader title="Vehicle ROI" subtitle="Return on investment analysis" />
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        <StatCard label="Avg ROI" value={`${avgRoi}%`} icon={TrendingUp} color="success" />
+        <StatCard label="Total Investment" value={`₹${(totalInvestment / 100000).toFixed(0)}L`} icon={DollarSign} color="primary" />
+        <StatCard label="Net Profit" value={`₹${(totalProfit / 100000).toFixed(1)}L`} icon={Target} color="purple" />
+        <StatCard label="Top Vehicle" value={sorted[0].name.split(" ")[0]} icon={Trophy} color="warning" />
+        <StatCard label="Highest ROI" value={`${sorted[0].roi}%`} icon={Award} color="success" />
+        <StatCard label="Lowest ROI" value={`${sorted[sorted.length - 1].roi}%`} icon={AlertTriangle} color="danger" />
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <ChartCard title="ROI Per Vehicle">
-          <SimpleBarChart data={roiPerVehicle} />
-        </ChartCard>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">ROI Breakdown by Vehicle</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Vehicle</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Investment</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Returns</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">ROI</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {roiBreakdown.map((row, i) => (
-                  <tr key={i} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-2 font-medium text-gray-900">{row.vehicle}</td>
-                    <td className="py-3 px-2 text-gray-600">{row.investment}</td>
-                    <td className="py-3 px-2 text-gray-600">{row.returns}</td>
-                    <td className="py-3 px-2 text-emerald-600 font-semibold">{row.roi}</td>
-                    <td className="py-3 px-2">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        row.status === "Excellent" ? "bg-emerald-100 text-emerald-700" :
-                        row.status === "Good" ? "bg-blue-100 text-blue-700" :
-                        row.status === "Average" ? "bg-yellow-100 text-yellow-700" :
-                        row.status === "Below Avg" ? "bg-orange-100 text-orange-700" :
-                        "bg-red-100 text-red-700"
-                      }`}>
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ChartCard title="ROI Comparison" subtitle="By vehicle"><SimpleBarChart data={roiChart} height={160} color="#7C3AED" /></ChartCard>
+        <ChartCard title="Vehicle Profitability">
+          <div className="space-y-2">
+            {sorted.map((v, i) => (
+              <div key={v.plate} className="flex items-center gap-3">
+                <span className="text-[11px] font-bold text-neutral-textMuted w-5">{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="font-semibold truncate">{v.name}</span>
+                    <div className="flex gap-3">
+                      <span className="text-success font-bold">+₹{(v.profit / 1000).toFixed(0)}k</span>
+                      <span className="text-primary font-bold">{v.roi}%</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex-1 h-1.5 bg-neutral-border rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(v.revenue / sorted[0].revenue) * 100}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+        </ChartCard>
       </div>
+      <ChartCard title="ROI Breakdown Table" delay={0.3}>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-neutral-border">
+                {["#", "Vehicle", "Purchase Cost", "Revenue", "Expenses", "Net Profit", "ROI %"].map((h) => (
+                  <th key={h} className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-neutral-textMuted">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sorted.map((v, i) => (
+                <tr key={v.plate} className="border-b border-neutral-border/50">
+                  <td className="px-4 py-3 text-neutral-textMuted text-xs">{i + 1}</td>
+                  <td className="px-4 py-3 font-semibold">{v.name}<br /><span className="text-[10px] text-neutral-textMuted">{v.plate}</span></td>
+                  <td className="px-4 py-3">₹{(v.purchaseCost / 1000).toFixed(0)}k</td>
+                  <td className="px-4 py-3">₹{(v.revenue / 1000).toFixed(0)}k</td>
+                  <td className="px-4 py-3">₹{(v.cost / 1000).toFixed(0)}k</td>
+                  <td className="px-4 py-3 font-semibold text-success">₹{(v.profit / 1000).toFixed(0)}k</td>
+                  <td className="px-4 py-3"><span className="font-bold text-primary">{v.roi}%</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </ChartCard>
     </motion.div>
   );
 }

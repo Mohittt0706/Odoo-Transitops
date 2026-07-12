@@ -123,6 +123,15 @@ import FinanceReportsPage from "./pages/finance-hub/FinanceReportsPage";
 import FinanceAnalytics from "./pages/finance-hub/FinanceAnalytics";
 import FinanceSettings from "./pages/finance-hub/FinanceSettings";
 
+import NotificationLayout from "./layouts/NotificationLayout";
+import AllNotifications from "./pages/notifications/AllNotifications";
+import AlertDashboard from "./pages/notifications/AlertDashboard";
+import MaintenanceAlerts from "./pages/notifications/MaintenanceAlerts";
+import TripAlerts from "./pages/notifications/TripAlerts";
+import LicenseAlerts from "./pages/notifications/LicenseAlerts";
+import FinancialAlerts from "./pages/notifications/FinancialAlerts";
+import NotificationSettingsPage from "./pages/notifications/NotificationSettings";
+
 import DestinationDashboard from "./pages/destination-control/DestinationDashboard";
 import IncomingDeliveriesPage from "./pages/destination-control/IncomingDeliveriesPage";
 import CompletedDeliveriesPage from "./pages/destination-control/CompletedDeliveriesPage";
@@ -360,6 +369,22 @@ export default function App() {
           <Route path="proof-of-delivery" element={<ProofOfDeliveryPage />} />
           <Route path="reports" element={<DestinationReportsPage />} />
           <Route path="settings" element={<DestinationSettings />} />
+        </Route>
+
+        <Route path="/dashboard/notifications" element={
+            <ProtectedRoute>
+              <DashboardLayout role="operations" />
+            </ProtectedRoute>
+          }>
+          <Route element={<NotificationLayout />}>
+            <Route index element={<AllNotifications />} />
+            <Route path="alerts" element={<AlertDashboard />} />
+            <Route path="maintenance" element={<MaintenanceAlerts />} />
+            <Route path="trips" element={<TripAlerts />} />
+            <Route path="licenses" element={<LicenseAlerts />} />
+            <Route path="financial" element={<FinancialAlerts />} />
+            <Route path="settings" element={<NotificationSettingsPage />} />
+          </Route>
         </Route>
         </Routes>
       </AnimatePresence>
