@@ -82,9 +82,15 @@ const querySchema = Joi.object({
   limit: Joi.number().integer().min(1).max(100).optional().default(10),
 });
 
+const confirmDeliverySchema = Joi.object({
+  receiverRemarks: Joi.string().trim().allow(''),
+  receiverSignature: Joi.string().trim().allow(''),
+});
+
 module.exports = {
   createTripSchema,
   updateTripSchema,
   completeTripSchema,
   querySchema,
+  confirmDeliverySchema,
 };

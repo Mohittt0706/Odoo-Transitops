@@ -74,6 +74,15 @@ const cancel = async (req, res, next) => {
   }
 };
 
+const confirmDelivery = async (req, res, next) => {
+  try {
+    const trip = await tripService.confirmDelivery(req.params.tripId, req.body);
+    sendSuccess(res, { trip }, 'Delivery confirmed successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   create,
   getAll,
@@ -83,4 +92,5 @@ module.exports = {
   dispatch,
   complete,
   cancel,
+  confirmDelivery,
 };

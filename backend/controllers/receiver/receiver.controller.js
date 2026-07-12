@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
 const findAll = async (req, res, next) => {
   try {
     const result = await receiverService.findAll(req.query);
-    sendSuccess(res, result, 'Receivers fetched successfully');
+    sendSuccess(res, { receivers: result.receivers, pagination: result.pagination }, 'Receivers fetched successfully');
   } catch (error) {
     next(error);
   }
@@ -28,4 +28,22 @@ const findById = async (req, res, next) => {
   }
 };
 
-module.exports = { create, findAll, findById };
+const update = async (req, res, next) => {
+  try {
+    const receiver = await receiverService.update(req.params.id, req.body);
+    sendSuccess(res, { receiver }, 'Receiver updated successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const remove = async (req, res, next) => {
+  try {
+    await receiverService.remove(req.params.id);
+    sendSuccess(res, {}, 'Receiver deleted successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { create, findAll, findById, update, remove };

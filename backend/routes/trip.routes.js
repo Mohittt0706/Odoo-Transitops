@@ -10,6 +10,7 @@ const {
   dispatch,
   complete,
   cancel,
+  confirmDelivery,
 } = require('../controllers/trips/trip.controller');
 const authenticate = require('../middleware/auth.middleware');
 const authorize = require('../middleware/role.middleware');
@@ -19,6 +20,7 @@ const {
   updateTripSchema,
   completeTripSchema,
   querySchema,
+  confirmDeliverySchema,
 } = require('../validators/trip.validator');
 const { ROLES } = require('../constants/roles');
 
@@ -78,6 +80,14 @@ router.post(
   authenticate,
   authorize(ROLES.OPERATION_LEAD),
   cancel
+);
+
+router.patch(
+  '/:tripId/confirm-delivery',
+  authenticate,
+  authorize(ROLES.DESTINATION_CONTROL),
+  validate(confirmDeliverySchema),
+  confirmDelivery
 );
 
 module.exports = router;
