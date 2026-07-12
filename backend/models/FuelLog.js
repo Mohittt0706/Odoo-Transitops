@@ -9,7 +9,6 @@ const fuelLogSchema = new mongoose.Schema({
   tripId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trip',
-    required: [true, 'Trip is required'],
   },
   liters: {
     type: Number,
@@ -20,6 +19,14 @@ const fuelLogSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Cost is required'],
     min: [0, 'Cost cannot be negative'],
+  },
+  fuelStation: {
+    type: String,
+    trim: true,
+  },
+  odometerReading: {
+    type: Number,
+    min: [0, 'Odometer reading cannot be negative'],
   },
   date: {
     type: Date,

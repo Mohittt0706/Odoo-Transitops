@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const EXPENSE_TYPES = ['Fuel', 'Maintenance', 'Toll', 'Parking', 'Insurance', 'Other'];
+
 const expenseSchema = new mongoose.Schema({
   vehicleId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -9,11 +11,14 @@ const expenseSchema = new mongoose.Schema({
   tripId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trip',
-    required: [true, 'Trip is required'],
   },
   type: {
     type: String,
     required: [true, 'Expense type is required'],
+    enum: {
+      values: EXPENSE_TYPES,
+      message: 'Invalid expense type: {VALUE}',
+    },
     trim: true,
   },
   amount: {
