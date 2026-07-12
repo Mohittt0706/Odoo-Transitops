@@ -58,33 +58,33 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
 
   return (
     <header className="sticky top-0 z-20 bg-white border-b border-neutral-border">
-      <div className="flex items-center justify-between h-16 px-4 sm:px-6">
+      <div className="flex items-center justify-between h-14 px-4 sm:px-5">
         {/* Left */}
         <div className="flex items-center gap-3">
           <button
             onClick={onMobileMenu}
-            className="lg:hidden p-2 rounded-lg hover:bg-accent-light text-neutral-textMuted"
+            className="lg:hidden p-1.5 rounded-lg hover:bg-neutral-light text-neutral-textMuted"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-[18px] h-[18px]" />
           </button>
           <button
             onClick={onToggleSidebar}
-            className="hidden lg:flex p-2 rounded-lg hover:bg-accent-light text-neutral-textMuted transition-colors"
+            className="hidden lg:flex p-1.5 rounded-lg hover:bg-neutral-light text-neutral-textMuted transition-colors"
           >
             {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
 
           {/* Breadcrumbs */}
-          <nav className="hidden sm:flex items-center gap-1.5 text-sm">
+          <nav className="hidden sm:flex items-center gap-1 text-[13px]">
             {crumbs.map((crumb, i) => (
-              <span key={crumb.path} className="flex items-center gap-1.5">
-                {i > 0 && <span className="text-neutral-border">/</span>}
+              <span key={crumb.path} className="flex items-center gap-1">
+                {i > 0 && <span className="text-neutral-border text-xs">/</span>}
                 {crumb.isLast ? (
-                  <span className="font-semibold text-neutral-textMain font-headings">{crumb.label}</span>
+                  <span className="font-semibold text-neutral-textMain">{crumb.label}</span>
                 ) : (
                   <button
                     onClick={() => navigate(crumb.path)}
-                    className="text-neutral-textMuted hover:text-accent transition-colors"
+                    className="text-neutral-textMuted hover:text-primary transition-colors"
                   >
                     {crumb.label}
                   </button>
@@ -100,9 +100,9 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
           <div className="relative">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 rounded-lg hover:bg-accent-light text-neutral-textMuted transition-colors"
+              className="p-1.5 rounded-lg hover:bg-neutral-light text-neutral-textMuted transition-colors"
             >
-              <Search className="w-[18px] h-[18px]" />
+              <Search className="w-[17px] h-[17px]" />
             </button>
             <AnimatePresence>
               {searchOpen && (
@@ -147,11 +147,11 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
           <div className="relative">
             <button
               onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="p-2 rounded-lg hover:bg-accent-light text-neutral-textMuted transition-colors relative"
+              className="p-1.5 rounded-lg hover:bg-neutral-light text-neutral-textMuted transition-colors relative"
             >
-              <Bell className="w-[18px] h-[18px]" />
+              <Bell className="w-[17px] h-[17px]" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-danger text-white text-[8px] font-bold rounded-full flex items-center justify-center">
                   {unreadCount}
                 </span>
               )}
@@ -190,25 +190,25 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
           {/* Theme Toggle */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-lg hover:bg-accent-light text-neutral-textMuted transition-colors"
+            className="p-1.5 rounded-lg hover:bg-neutral-light text-neutral-textMuted transition-colors"
           >
-            {darkMode ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
+            {darkMode ? <Sun className="w-[17px] h-[17px]" /> : <Moon className="w-[17px] h-[17px]" />}
           </button>
 
           {/* Profile */}
           <div className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-accent-light transition-colors"
+              className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-neutral-light transition-colors"
             >
-              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-primary" />
+              <div className="w-7 h-7 bg-primary/10 rounded-full flex items-center justify-center ring-2 ring-primary/10">
+                <User className="w-3.5 h-3.5 text-primary" />
               </div>
               <div className="hidden sm:block text-left">
-                <div className="text-xs font-semibold text-neutral-textMain leading-tight">John Admin</div>
+                <div className="text-[12px] font-semibold text-neutral-textMain leading-tight">John Admin</div>
                 <div className="text-[10px] text-neutral-textMuted">Admin</div>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-textMuted hidden sm:block" />
+              <ChevronDown className="w-3 h-3 text-neutral-textMuted hidden sm:block" />
             </button>
             <AnimatePresence>
               {profileOpen && (
