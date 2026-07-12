@@ -5,9 +5,9 @@ import KPICard from "../../../components/dashboard/KPICard";
 import ChartCard from "../../../components/charts/ChartCard";
 import DonutChart from "../../../components/charts/PieChart";
 import SimpleBarChart from "../../../components/charts/BarChart";
-import ActivityFeed from "../../../components/fleet/ActivityFeed";
-import VehicleCard from "../../../components/fleet/VehicleCard";
-import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
+import ActivityFeed from "../../../components/timeline/ActivityFeed";
+import VehicleCard from "../../../components/dashboard/VehicleCard";
+import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
 import { vehicles, recentActivity, monthlyUsage } from "../../../data/vehicleData";
 import { Truck, CheckCircle, Wrench, XCircle, BarChart3, Plus, Calendar } from "lucide-react";
 

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../../components/layout/PageHeader";
 import DataTable from "../../../components/common/DataTable";
-import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
+import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
 import { vehicles } from "../../../data/vehicleData";
 import { cn } from "../../../utils/utils";
 import { Truck, Plus, Download, Eye, Pencil } from "lucide-react";

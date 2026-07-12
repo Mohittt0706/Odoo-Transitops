@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { cn } from "../../../utils/utils";
 import PageHeader from "../../../components/layout/PageHeader";
-import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
+import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
 import { vehicles } from "../../../data/vehicleData";
 import { Truck, Fuel, Clock, ArrowRight, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
