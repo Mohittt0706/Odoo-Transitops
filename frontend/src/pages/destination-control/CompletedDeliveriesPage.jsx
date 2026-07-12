@@ -94,7 +94,7 @@ export default function CompletedDeliveriesPage() {
           { label: "Rejected", value: rejectedCount, icon: XCircle, color: "bg-red-50 text-red-600" },
           { label: "On-Time Rate", value: `${onTimeRate}%`, icon: Clock, color: "bg-primary/10 text-primary" },
           { label: "Avg Rating", value: avgRating, icon: Star, color: "bg-amber-50 text-amber-600" },
-          { label: "Avg Unloading", value: `${Math.round(completedDeliveries.reduce((s, d) => s + (parseInt(d.unloadingTime) || 60), 0) / completedDeliveries.length)} min`, icon: Truck, color: "bg-purple-50 text-purple-600" },
+          { label: "Avg Unloading", value: `${Math.round(completedDeliveries.reduce((s, d) => s + (parseInt(d.unloadingTime) || 0), 0) / completedDeliveries.length)} min`, icon: Truck, color: "bg-purple-50 text-purple-600" },
         ].map((kpi, i) => (
           <motion.div key={kpi.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.03 }}

@@ -8,17 +8,7 @@ import { motion } from "framer-motion"
 import { cn } from "../../utils/utils"
 import { Shield, CheckCircle } from "lucide-react"
 
-const complianceData = drivers.map((d) => {
-  const comp = compliance.find((c) => c.driverId === d.id) || {}
-  return {
-    driver: d.name,
-    insurance: comp.insurance || "Valid",
-    fitness: comp.fitness || "Valid",
-    pollution: comp.pollution || "Valid",
-    tax: comp.tax || "Valid",
-    overall: comp.overall || d.complianceScore,
-  }
-})
+const complianceData = []
 
 const columns = [
   { key: "driver", label: "Driver" },

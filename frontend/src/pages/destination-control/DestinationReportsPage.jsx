@@ -7,18 +7,7 @@ import {
 } from "lucide-react";
 import ExportAllModal from "./ExportAllModal";
 
-const reportTypes = [
-  { title: "Daily Delivery Report", desc: "Summary of all deliveries completed today", icon: Clock, color: "bg-primary/10 text-primary" },
-  { title: "Weekly Performance Report", desc: "Weekly KPIs including on-time rates, delays, and volume", icon: BarChart3, color: "bg-emerald-50 text-emerald-600" },
-  { title: "Monthly Summary Report", desc: "Comprehensive monthly delivery and warehouse analysis", icon: Calendar, color: "bg-blue-50 text-blue-600" },
-  { title: "Warehouse Utilization Report", desc: "Capacity usage, dock efficiency, and storage metrics", icon: Warehouse, color: "bg-purple-50 text-purple-600" },
-  { title: "Delivery Performance Report", desc: "On-time rates, delays, and driver performance analysis", icon: BarChart3, color: "bg-cyan-50 text-cyan-600" },
-  { title: "Dock Utilization Report", desc: "Dock usage patterns, bottlenecks, and efficiency metrics", icon: Dock, color: "bg-amber-50 text-amber-600" },
-  { title: "Delay Analysis Report", desc: "Root cause analysis of delayed deliveries with recommendations", icon: AlertTriangle, color: "bg-red-50 text-red-600" },
-  { title: "POD Status Report", desc: "Proof of delivery completion status and pending items", icon: FileText, color: "bg-indigo-50 text-indigo-600" },
-  { title: "Receiver Activity Report", desc: "Receiver-wise delivery history and verification status", icon: Users, color: "bg-teal-50 text-teal-600" },
-  { title: "Inventory Status Report", desc: "Current stock levels, turnover rates, and reorder alerts", icon: Package, color: "bg-rose-50 text-rose-600" },
-];
+const reportTypes = [];
 
 export default function DestinationReportsPage() {
   const [selectedReport, setSelectedReport] = useState(null);
@@ -124,11 +113,7 @@ export default function DestinationReportsPage() {
       <div className="bg-white border border-neutral-border rounded-xl p-5 shadow-soft-sm">
         <h3 className="text-sm font-bold text-neutral-textMain mb-4">Scheduled Reports</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { title: "Daily Operations Report", schedule: "Every day at 08:00 PM", format: "PDF", recipients: "ops@transitops.com" },
-            { title: "Weekly Warehouse Summary", schedule: "Every Monday at 09:00 AM", format: "Excel", recipients: "warehouse@transitops.com" },
-            { title: "Monthly Executive Report", schedule: "1st of every month", format: "PDF", recipients: "exec@transitops.com" },
-          ].map((sched, i) => (
+          {[].map((sched, i) => (
             <motion.div key={sched.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.05 }}
               className="p-4 rounded-xl border border-neutral-border hover:shadow-soft-sm transition-all">
