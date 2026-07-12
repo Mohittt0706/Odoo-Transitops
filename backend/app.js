@@ -5,10 +5,14 @@ const morgan = require('morgan');
 
 const routes = require('./routes');
 const errorHandler = require('./middleware/error.middleware');
+const { CLIENT_URL } = require('./config/env');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: CLIENT_URL,
+  credentials: true,
+}));
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
