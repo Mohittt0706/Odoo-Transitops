@@ -223,7 +223,7 @@ export default function App() {
     <AuthProvider>
       <ToastProvider>
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
+        <Routes location={location}>
           <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
           <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
           <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
