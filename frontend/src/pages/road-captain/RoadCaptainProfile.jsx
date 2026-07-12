@@ -4,26 +4,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/layout/PageHeader";
-<<<<<<< HEAD
-import ChartCard from "../../components/charts/ChartCard";
-import SimpleBarChart from "../../components/charts/BarChart";
-import { MetricCard } from "../../components/road-captain/RoadCaptainComponents";
-import { performanceData } from "../../data/roadCaptainData";
-import { User, Phone, Mail, BadgeCheck, Truck, Star, Clock, Ruler, TrendingUp, CheckCircle, Calendar, MapPin, Gauge, Target, Edit3, Shield } from "lucide-react";
-
-const profileStats = [];
-
-const performanceMetrics = [];
-
-const recentActivity = [];
-=======
 import { Form, FormSection, FormRow, FormInput, FormSelect, FormFileUpload, FormActions } from "../../components/forms";
 import { FormLabel } from "../../components/forms";
 import { useToast } from "../../components/common/Toast";
 import ConfirmationModal from "../../components/common/ConfirmationModal";
 import { profileSchema } from "../../lib/validations";
 import { User, Mail, Phone, Building, Globe, MapPin, Camera, Save } from "lucide-react";
->>>>>>> 90419a56f07a1c3e5e8232fb608c5213f033379b
 
 export default function RoadCaptainProfile() {
   const navigate = useNavigate();
