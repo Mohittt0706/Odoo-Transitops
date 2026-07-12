@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-light: #EFF6FF;
+  
+  --color-accent: #111827;
+  --color-accent-hover: #1F2937;
+  --color-accent-light: #F3F4F6;
+  
+  --color-success: #22C55E;
+  --color-success-light: #DCFCE7;
+  
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  
+  --color-danger: #EF4444;
+  --color-danger-light: #FEE2E2;
+  
+  --color-neutral-light: #F8FAFC;
+  --color-neutral-border: #E5E7EB;
+  --color-neutral-textMuted: #6B7280;
+  --color-neutral-textMain: #111827;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-headings: 'Manrope', sans-serif;
+
+  --shadow-soft-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-soft-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-soft-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.04), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-light text-neutral-textMain font-sans antialiased;
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headings font-bold text-neutral-textMain;
+  }
+}
+
+/* Custom button classes to map colors cleanly */
+.btn {
+  @apply inline-flex items-center justify-center font-headings font-semibold text-xs px-5 py-2.5 rounded-lg transition-all duration-150 cursor-pointer;
+}
+
+.btn-primary {
+  @apply bg-primary text-white hover:bg-primary-hover shadow-soft-sm;
+}
+
+.btn-secondary {
+  @apply bg-accent-light text-accent hover:bg-neutral-border border border-neutral-border shadow-soft-sm;
+}
+
+.btn-danger {
+  @apply bg-danger text-white hover:bg-red-600 shadow-soft-sm;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-neutral-textMuted hover:bg-accent-light hover:text-accent;
+}
+
+.btn-icon {
+  @apply p-2 rounded-lg bg-white border border-neutral-border text-neutral-textMuted hover:bg-accent-light hover:text-accent transition-all duration-150 cursor-pointer;
+}
+
+.card {
+  @apply bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm transition-all duration-300;
+}
+
+.card-interactive {
+  @apply hover:-translate-y-0.5 hover:shadow-soft-md;
+}
+
+.badge {
+  @apply inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border;
+}
+
+.badge-success {
+  @apply bg-success-light text-success border-emerald-200/50;
+}
+
+.badge-warning {
+  @apply bg-warning-light text-warning border-amber-200/50;
+}
+
+.badge-danger {
+  @apply bg-danger-light text-danger border-red-200/50;
+}
+
+.badge-muted {
+  @apply bg-accent-light text-neutral-textMuted border-slate-200/50;
+}
+
+/* Custom scroll bar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400;
+}
