@@ -1,11 +1,23 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-import AuthLayout from "./components/auth/AuthLayout";
-import LoginForm from "./components/auth/LoginForm";
-import ForgotPasswordForm from "./components/auth/ForgotPasswordForm";
-import RoleSelectionPage from "./pages/RoleSelectionPage";
+import AuthLayout from "./layouts/AuthLayout";
+import DriverLayout from "./layouts/DriverLayout";
+import LoginForm from "./components/forms/LoginForm";
+import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
+import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
 import DashboardPlaceholder from "./pages/DashboardPlaceholder";
+
+import DriverOverview from "./pages/drivers/DriverOverview";
+import AllDrivers from "./pages/drivers/AllDrivers";
+import RegisterDriver from "./pages/drivers/RegisterDriver";
+import DriverProfile from "./pages/drivers/DriverProfile";
+import EditDriver from "./pages/drivers/EditDriver";
+import DriverDocuments from "./pages/drivers/DriverDocuments";
+import DriverPerformance from "./pages/drivers/DriverPerformance";
+import LicenseManagement from "./pages/drivers/LicenseManagement";
+import DriverHistory from "./pages/drivers/DriverHistory";
+import DriverSettings from "./pages/drivers/DriverSettings";
 
 import Navbar from "./components/landing/Navbar";
 import HeroSection from "./components/landing/HeroSection";
@@ -138,6 +150,22 @@ export default function App() {
             </AnimatedPage>
           }
         />
+        <Route path="/drivers" element={<DriverLayout />}>
+          <Route index element={<DriverOverview />} />
+          <Route path="overview" element={<DriverOverview />} />
+          <Route path="all" element={<AllDrivers />} />
+          <Route path="register" element={<RegisterDriver />} />
+          <Route path="profile/:driverId" element={<DriverProfile />} />
+          <Route path="edit/:driverId" element={<EditDriver />} />
+          <Route path="documents" element={<DriverDocuments />} />
+          <Route path="documents/:driverId" element={<DriverDocuments />} />
+          <Route path="performance" element={<DriverPerformance />} />
+          <Route path="performance/:driverId" element={<DriverPerformance />} />
+          <Route path="licenses" element={<LicenseManagement />} />
+          <Route path="history" element={<DriverHistory />} />
+          <Route path="history/:driverId" element={<DriverHistory />} />
+          <Route path="settings" element={<DriverSettings />} />
+        </Route>
       </Routes>
     </AnimatePresence>
   );
