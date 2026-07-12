@@ -16,7 +16,7 @@ import {
   FileSpreadsheet,
   X,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import StatusBadge from '../../components/drivers/StatusBadge';
 import AreaChart from '../../components/charts/AreaChart';
 import { drivers } from '../../data/drivers';

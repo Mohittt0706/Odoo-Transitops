@@ -7,7 +7,7 @@ import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
 import DocumentCard from "../../../components/fleet/DocumentCard";
 import TimelineItem from "../../../components/fleet/TimelineItem";
 import { vehicles } from "../../../data/vehicleData";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../utils/utils";
 import {
   Truck, Edit, Trash2, Gauge, Fuel, Shield, Wrench,
   Calendar, MapPin, User

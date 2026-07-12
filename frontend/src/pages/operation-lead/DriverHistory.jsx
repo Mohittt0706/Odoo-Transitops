@@ -20,7 +20,7 @@ import {
   Activity,
   TrendingUp,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import { drivers } from '../../data/drivers';
 import TimelineEvent from '../../components/drivers/TimelineEvent';
 

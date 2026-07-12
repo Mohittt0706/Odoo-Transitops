@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 
 export default function RoleCard({ role, index }) {
   const navigate = useNavigate();

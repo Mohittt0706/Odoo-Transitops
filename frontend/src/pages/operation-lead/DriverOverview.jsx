@@ -11,7 +11,7 @@ import { drivers } from '../../data/drivers';
 import DonutChart from '../../components/charts/DonutChart';
 import AreaChart from '../../components/charts/AreaChart';
 import BarChart from '../../components/charts/BarChart';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 
 export default function DriverOverview() {
   const totalDrivers = drivers.length;

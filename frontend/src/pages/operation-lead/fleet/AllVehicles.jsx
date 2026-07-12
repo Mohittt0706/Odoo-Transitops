@@ -5,7 +5,7 @@ import PageHeader from "../../../components/ui/PageHeader";
 import DataTable from "../../../components/ui/DataTable";
 import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
 import { vehicles } from "../../../data/vehicleData";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../utils/utils";
 import { Truck, Plus, Download, Eye, Pencil } from "lucide-react";
 
 const statusFilters = ["All", "Active", "In Maintenance", "Inactive"];

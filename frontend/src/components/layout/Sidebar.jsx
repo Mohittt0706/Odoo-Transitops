@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 import { roleConfigs } from "./roleConfigs";
 import { LogOut, Truck, X } from "lucide-react";
 

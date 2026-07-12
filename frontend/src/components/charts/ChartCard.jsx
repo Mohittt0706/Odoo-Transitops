@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 
 export default function ChartCard({ title, subtitle, children, className = "", delay = 0, actions }) {
   return (

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 import { CheckCircle, Wrench, Fuel, Route, Shield, Clock, FileText } from "lucide-react";
 
 const iconMap = {

@@ -8,7 +8,7 @@ import {
   RefreshCw, Trash2, Ban, Route, Car, Eye, Heart, HeartPulse,
   BadgeCheck, Landmark, Fingerprint, Contact
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import StatusBadge from '../../components/drivers/StatusBadge';
 import SafetyScoreBadge from '../../components/drivers/SafetyScoreBadge';
 import TimelineEvent from '../../components/drivers/TimelineEvent';

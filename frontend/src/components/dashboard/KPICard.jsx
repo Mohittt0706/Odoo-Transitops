@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 
 export default function KPICard({ title, value, change, changeType = "neutral", icon: Icon, color = "bg-primary/10 text-primary", delay = 0 }) {
   return (

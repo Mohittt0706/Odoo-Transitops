@@ -20,7 +20,7 @@ import {
   Monitor,
   ChevronDown,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import {
   driverStatuses,
   licenseCategories,

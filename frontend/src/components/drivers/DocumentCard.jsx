@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, Download, RefreshCw, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 
 export default function DocumentCard({ document, onDownload, onReplace, onDelete }) {
   const isUploaded = document.uploaded;

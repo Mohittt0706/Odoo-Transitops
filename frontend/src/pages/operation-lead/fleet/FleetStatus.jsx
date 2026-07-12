@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../utils/utils";
 import PageHeader from "../../../components/ui/PageHeader";
 import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
 import { vehicles } from "../../../data/vehicleData";

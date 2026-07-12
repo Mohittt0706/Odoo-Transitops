@@ -17,7 +17,7 @@ import {
   Award,
   AlertTriangle,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import { drivers, licenseCategories, departments, roles, bloodGroups } from '../../data/drivers';
 
 const tabs = [
