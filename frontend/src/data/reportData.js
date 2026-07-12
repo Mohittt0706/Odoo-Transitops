@@ -1,0 +1,24 @@
+export const reportCategories = [];
+export const reportStatuses = [];
+export const reportFormats = [];
+
+export const reports = [];
+
+export const monthlyRevenue = [];
+export const monthlyExpenses = [];
+export const fleetUtilization = [];
+export const fuelConsumption = [];
+export const vehicleStatusData = [];
+export const revenueDistribution = [];
+export const vehiclePerformance = [];
+export const driverPerformance = [];
+export const fuelData = [];
+export const roiData = [];
+export const operationalCostBreakdown = [];
+export const departmentSpending = [];
+export const quarterlyRevenue = [];
+export const annualRevenue = [];
+export const fleetGrowthData = [];
+export const maintenanceTrend = [];
+export const tripPerformance = [];
+export const vehicleHealthData = [];

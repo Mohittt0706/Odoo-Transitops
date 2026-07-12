@@ -1,0 +1,400 @@
+import { Routes, Route, useLocation, Navigate, Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { ToastProvider } from "./components/common/Toast";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import RoleGuard from "./components/auth/RoleGuard";
+
+import AuthLayout from "./layouts/AuthLayout";
+import LoginForm from "./components/forms/LoginForm";
+import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
+import DashboardLayout from "./layouts/DashboardLayout";
+
+import DriverOverview from "./pages/operation-lead/DriverOverview";
+import AllDrivers from "./pages/operation-lead/AllDrivers";
+import RegisterDriver from "./pages/operation-lead/RegisterDriver";
+import DriverProfile from "./pages/operation-lead/DriverProfile";
+import EditDriverPage from "./pages/operation-lead/EditDriver";
+import DriverDocumentsPage from "./pages/operation-lead/DriverDocuments";
+import DriverPerformancePage from "./pages/operation-lead/DriverPerformance";
+import LicenseManagementPage from "./pages/operation-lead/LicenseManagement";
+import DriverHistoryPage from "./pages/operation-lead/DriverHistory";
+import DriverSettingsPage from "./pages/operation-lead/DriverSettings";
+import DriverDocuments from "./pages/operation-lead/DriverDocuments";
+import DriverPerformance from "./pages/operation-lead/DriverPerformance";
+import LicenseManagement from "./pages/operation-lead/LicenseManagement";
+import DriverHistory from "./pages/operation-lead/DriverHistory";
+import DriverSettings from "./pages/operation-lead/DriverSettings";
+
+import Navbar from "./components/landing/Navbar";
+import HeroSection from "./components/landing/HeroSection";
+import TrustedCompanies from "./components/landing/TrustedCompanies";
+import FleetStatistics from "./components/landing/FleetStatistics";
+import Features from "./components/landing/Features";
+import Workflow from "./components/landing/Workflow";
+import RoleCards from "./components/landing/RoleCards";
+import WhyChoose from "./components/landing/WhyChoose";
+import DashboardPreview from "./components/landing/DashboardPreview";
+import Testimonials from "./components/landing/Testimonials";
+import FAQ from "./components/landing/FAQ";
+import Footer from "./components/landing/Footer";
+import { ArrowRight } from "lucide-react";
+
+import OperationsDashboard from "./pages/operation-lead/OperationsDashboard";
+import FleetLayout from "./layouts/FleetLayout";
+import VehicleOverview from "./pages/operation-lead/fleet/VehicleOverview";
+import AllVehicles from "./pages/operation-lead/fleet/AllVehicles";
+import RegisterVehicle from "./pages/operation-lead/fleet/RegisterVehicle";
+import VehicleDetails from "./pages/operation-lead/fleet/VehicleDetails";
+import EditVehicle from "./pages/operation-lead/fleet/EditVehicle";
+import VehicleDocuments from "./pages/operation-lead/fleet/VehicleDocuments";
+import VehicleAnalytics from "./pages/operation-lead/fleet/VehicleAnalytics";
+import VehicleHistory from "./pages/operation-lead/fleet/VehicleHistory";
+import FleetStatus from "./pages/operation-lead/fleet/FleetStatus";
+import VehicleSettings from "./pages/operation-lead/fleet/VehicleSettings";
+import VehiclesPage from "./pages/operation-lead/VehiclesPage";
+import DriversPage from "./pages/operation-lead/DriversPage";
+import DriverLayout from "./components/drivers/DriverLayout";
+import DriverProfilePage from "./pages/operations/drivers/DriverProfile";
+import DriverForm from "./pages/operations/drivers/DriverForm";
+import DriverAnalytics from "./pages/operations/drivers/DriverAnalytics";
+import LicenseDetailsPage from "./pages/operations/drivers/LicenseDetailsPage";
+import TripsPage from "./pages/operation-lead/TripsPage";
+import TripLayout from "./components/trips/TripLayout";
+import CreateTrip from "./pages/operations/trips/CreateTrip";
+import TripDetails from "./pages/operations/trips/TripDetails";
+import TripTimelinePage from "./pages/operations/trips/TripTimeline";
+import CompletedTrips from "./pages/operations/trips/CompletedTrips";
+import CancelledTrips from "./pages/operations/trips/CancelledTrips";
+import EditTrip from "./pages/operations/trips/EditTrip";
+import AssignmentsPage from "./pages/operation-lead/AssignmentsPage";
+import MaintenancePage from "./pages/operation-lead/MaintenancePage";
+import MaintenanceLayout from "./components/maintenance/MaintenanceLayout";
+import CreateMaintenance from "./pages/operation-lead/maintenance/CreateMaintenance";
+import MaintenanceDetails from "./pages/operation-lead/maintenance/MaintenanceDetails";
+import MaintenanceHistory from "./pages/operation-lead/maintenance/MaintenanceHistory";
+import EditMaintenance from "./pages/operation-lead/maintenance/EditMaintenance";
+import VehicleServiceLog from "./pages/operation-lead/maintenance/VehicleServiceLog";
+import ReportsDashboard from "./pages/reports/ReportsDashboard";
+import FleetAnalytics from "./pages/reports/FleetAnalytics";
+import FuelAnalytics from "./pages/reports/FuelAnalytics";
+import RevenueAnalytics from "./pages/reports/RevenueAnalytics";
+import VehicleROI from "./pages/reports/VehicleROI";
+import OperationalCost from "./pages/reports/OperationalCost";
+import ExportReports from "./pages/reports/ExportReports";
+import AnalyticsPage from "./pages/operation-lead/AnalyticsPage";
+import OperationsNotifications from "./pages/operation-lead/OperationsNotifications";
+import OperationsSettings from "./pages/operation-lead/OperationsSettings";
+import FuelLayout from "./layouts/FuelLayout";
+import FuelLogs from "./pages/operation-lead/fuel-expense/FuelLogs";
+import AddFuelLog from "./pages/operation-lead/fuel-expense/AddFuelLog";
+import ExpenseEntry from "./pages/operation-lead/fuel-expense/ExpenseEntry";
+import ExpensesPageOp from "./pages/operation-lead/fuel-expense/Expenses";
+import ExpenseDetails from "./pages/operation-lead/fuel-expense/ExpenseDetails";
+import VehicleExpenses from "./pages/operation-lead/fuel-expense/VehicleExpenses";
+
+import RoadCaptainDashboard from "./pages/road-captain/RoadCaptainDashboard";
+import MyTripsPage from "./pages/road-captain/MyTripsPage";
+import TripHistoryPage from "./pages/road-captain/TripHistoryPage";
+import AssignedVehiclePage from "./pages/road-captain/AssignedVehiclePage";
+import NavigationPage from "./pages/road-captain/NavigationPage";
+import FuelLogsPage from "./pages/road-captain/FuelLogsPage";
+import EmergencyPage from "./pages/road-captain/EmergencyPage";
+import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
+import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
+import TodaysRoute from "./pages/road-captain/TodaysRoute";
+
+import SafetyDashboard from "./pages/safety-officer/SafetyDashboard";
+import SafetyDriversPage from "./pages/safety-officer/SafetyDriversPage";
+import CompliancePage from "./pages/safety-officer/CompliancePage";
+import LicensesPage from "./pages/safety-officer/LicensesPage";
+import IncidentsPage from "./pages/safety-officer/IncidentsPage";
+import TrainingPage from "./pages/safety-officer/TrainingPage";
+import InspectionsPage from "./pages/safety-officer/InspectionsPage";
+import SafetyReportsPage from "./pages/safety-officer/SafetyReportsPage";
+import SafetySettings from "./pages/safety-officer/SafetySettings";
+
+import FinanceDashboard from "./pages/finance-hub/FinanceDashboard";
+import ExpensesPage from "./pages/finance-hub/ExpensesPage";
+import FuelCostPage from "./pages/finance-hub/FuelCostPage";
+import MaintenanceCostPage from "./pages/finance-hub/MaintenanceCostPage";
+import RevenuePage from "./pages/finance-hub/RevenuePage";
+import ROIPage from "./pages/finance-hub/ROIPage";
+import InvoicesPage from "./pages/finance-hub/InvoicesPage";
+import FinanceReportsPage from "./pages/finance-hub/FinanceReportsPage";
+import FinanceAnalytics from "./pages/finance-hub/FinanceAnalytics";
+import FinanceSettings from "./pages/finance-hub/FinanceSettings";
+
+import NotificationLayout from "./layouts/NotificationLayout";
+import AllNotifications from "./pages/notifications/AllNotifications";
+import AlertDashboard from "./pages/notifications/AlertDashboard";
+import MaintenanceAlerts from "./pages/notifications/MaintenanceAlerts";
+import TripAlerts from "./pages/notifications/TripAlerts";
+import LicenseAlerts from "./pages/notifications/LicenseAlerts";
+import FinancialAlerts from "./pages/notifications/FinancialAlerts";
+import NotificationSettingsPage from "./pages/notifications/NotificationSettings";
+
+import DestinationDashboard from "./pages/destination-control/DestinationDashboard";
+import IncomingDeliveriesPage from "./pages/destination-control/IncomingDeliveriesPage";
+import CompletedDeliveriesPage from "./pages/destination-control/CompletedDeliveriesPage";
+import WarehousePage from "./pages/destination-control/WarehousePage";
+import InventoryPage from "./pages/destination-control/InventoryPage";
+import ReceiversPage from "./pages/destination-control/ReceiversPage";
+import ProofOfDeliveryPage from "./pages/destination-control/ProofOfDeliveryPage";
+import DestinationReportsPage from "./pages/destination-control/DestinationReportsPage";
+import DestinationSettings from "./pages/destination-control/DestinationSettings";
+
+function LandingPage() {
+  return (
+    <div className="bg-neutral-light min-h-screen text-neutral-textMain flex flex-col font-sans">
+      <Navbar />
+      <HeroSection />
+      <TrustedCompanies />
+      <FleetStatistics />
+      <Features />
+      <Workflow />
+      <RoleCards />
+      <WhyChoose />
+      <DashboardPreview />
+      <Testimonials />
+      <FAQ />
+      <section className="py-20 bg-white border-b border-neutral-border relative overflow-hidden">
+        <div className="container mx-auto px-6 max-w-4xl text-center flex flex-col items-center gap-6 relative z-10">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-headings">
+            Get Started Today
+          </span>
+          <h2 className="text-3xl md:text-5xl font-extrabold font-headings tracking-tight text-neutral-textMain max-w-2xl leading-tight">
+            Transform Your Fleet Operations Today
+          </h2>
+          <p className="text-slate-500 text-sm md:text-base leading-relaxed max-w-xl">
+            Authorize your TransitOps Odoo integration keys and start dispatching
+            certified operators on optimized route plans in minutes.
+          </p>
+          <div className="flex items-center gap-3.5 flex-wrap justify-center mt-2">
+              <Link to="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
+                Start Free Trial
+              </Link>
+              <Link to="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
+                Request Live Demo <ArrowRight className="w-4 h-4" />
+              </Link>
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </div>
+  );
+}
+
+function LoginPage() {
+  return (
+    <AuthLayout>
+      <LoginForm />
+    </AuthLayout>
+  );
+}
+
+function ForgotPasswordPage() {
+  return (
+    <AuthLayout>
+      <ForgotPasswordForm />
+    </AuthLayout>
+  );
+}
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.25 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+function AnimatedPage({ children }) {
+  return (
+    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      {children}
+    </motion.div>
+  );
+}
+
+export default function App() {
+  const location = useLocation();
+
+  return (
+    <AuthProvider>
+      <ToastProvider>
+      <AnimatePresence mode="wait">
+        <Routes location={location}>
+          <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
+          <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
+          <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
+          <Route path="/role-selection" element={<Navigate to="/login" replace />} />
+
+          <Route path="/dashboard/operations" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="operations">
+                <DashboardLayout role="operations" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
+          <Route index element={<OperationsDashboard />} />
+          <Route path="fleet" element={<FleetLayout />}>
+            <Route index element={<VehicleOverview />} />
+            <Route path="all" element={<AllVehicles />} />
+            <Route path="register" element={<RegisterVehicle />} />
+            <Route path="details/:id" element={<VehicleDetails />} />
+            <Route path="edit/:id" element={<EditVehicle />} />
+            <Route path="documents" element={<VehicleDocuments />} />
+            <Route path="analytics" element={<VehicleAnalytics />} />
+            <Route path="history" element={<VehicleHistory />} />
+            <Route path="status" element={<FleetStatus />} />
+            <Route path="settings" element={<VehicleSettings />} />
+          </Route>
+          <Route path="vehicles" element={<VehiclesPage />} />
+          <Route path="drivers" element={<DriverLayout />}>
+            <Route index element={<DriversPage />} />
+            <Route path="profile/:id" element={<DriverProfilePage />} />
+            <Route path="add" element={<DriverForm />} />
+            <Route path="edit/:id" element={<DriverForm />} />
+            <Route path="analytics" element={<DriverAnalytics />} />
+            <Route path="license/:id" element={<LicenseDetailsPage />} />
+          </Route>
+          <Route path="trips" element={<TripLayout />}>
+            <Route index element={<TripsPage />} />
+            <Route path="create" element={<CreateTrip />} />
+            <Route path="details/:id" element={<TripDetails />} />
+            <Route path="timeline/:id" element={<TripTimelinePage />} />
+            <Route path="edit/:id" element={<EditTrip />} />
+            <Route path="completed" element={<CompletedTrips />} />
+            <Route path="cancelled" element={<CancelledTrips />} />
+          </Route>
+          <Route path="assignments" element={<AssignmentsPage />} />
+          <Route path="maintenance" element={<MaintenanceLayout />}>
+            <Route index element={<MaintenancePage />} />
+            <Route path="create" element={<CreateMaintenance />} />
+            <Route path="edit/:id" element={<EditMaintenance />} />
+            <Route path=":id" element={<MaintenanceDetails />} />
+            <Route path="history" element={<MaintenanceHistory />} />
+            <Route path="service-log" element={<VehicleServiceLog />} />
+          </Route>
+          <Route path="fuel" element={<FuelLayout />}>
+            <Route index element={<FuelLogs />} />
+          <Route path="add" element={<AddFuelLog />} />
+        </Route>
+          <Route path="expense/add" element={<ExpenseEntry />} />
+          <Route path="expenses" element={<FuelLayout />}>
+            <Route index element={<ExpensesPageOp />} />
+            <Route path=":id" element={<ExpenseDetails />} />
+          </Route>
+          <Route path="vehicle-expenses" element={<FuelLayout />}>
+            <Route index element={<VehicleExpenses />} />
+          </Route>
+          <Route path="reports" element={<ReportsDashboard />} />
+          <Route path="reports/fleet" element={<FleetAnalytics />} />
+          <Route path="reports/fuel" element={<FuelAnalytics />} />
+          <Route path="reports/revenue" element={<RevenueAnalytics />} />
+          <Route path="reports/roi" element={<VehicleROI />} />
+          <Route path="reports/operational-cost" element={<OperationalCost />} />
+          <Route path="reports/export" element={<ExportReports />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="notifications" element={<OperationsNotifications />} />
+          <Route path="settings" element={<OperationsSettings />} />
+        </Route>
+
+        <Route path="/dashboard/road-captain" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="road-captain">
+                <DashboardLayout role="road-captain" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
+          <Route index element={<RoadCaptainDashboard />} />
+          <Route path="my-trips" element={<MyTripsPage />} />
+          <Route path="todays-route" element={<TodaysRoute />} />
+          <Route path="trip-history" element={<TripHistoryPage />} />
+          <Route path="history" element={<TripHistoryPage />} />
+          <Route path="assigned-vehicle" element={<AssignedVehiclePage />} />
+          <Route path="vehicle" element={<AssignedVehiclePage />} />
+          <Route path="navigation" element={<NavigationPage />} />
+          <Route path="fuel-logs" element={<FuelLogsPage />} />
+          <Route path="fuel" element={<FuelLogsPage />} />
+          <Route path="emergency" element={<EmergencyPage />} />
+          <Route path="profile" element={<RoadCaptainProfile />} />
+          <Route path="settings" element={<RoadCaptainSettings />} />
+        </Route>
+
+        <Route path="/dashboard/safety" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="safety">
+                <DashboardLayout role="safety" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
+          <Route index element={<SafetyDashboard />} />
+          <Route path="drivers" element={<SafetyDriversPage />} />
+          <Route path="compliance" element={<CompliancePage />} />
+          <Route path="licenses" element={<LicensesPage />} />
+          <Route path="incidents" element={<IncidentsPage />} />
+          <Route path="training" element={<TrainingPage />} />
+          <Route path="inspections" element={<InspectionsPage />} />
+          <Route path="reports" element={<SafetyReportsPage />} />
+          <Route path="settings" element={<SafetySettings />} />
+        </Route>
+
+        <Route path="/dashboard/finance" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="finance">
+                <DashboardLayout role="finance" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
+          <Route index element={<FinanceDashboard />} />
+          <Route path="expenses" element={<ExpensesPage />} />
+          <Route path="fuel-cost" element={<FuelCostPage />} />
+          <Route path="maintenance-cost" element={<MaintenanceCostPage />} />
+          <Route path="revenue" element={<RevenuePage />} />
+          <Route path="roi" element={<ROIPage />} />
+          <Route path="invoices" element={<InvoicesPage />} />
+          <Route path="reports" element={<FinanceReportsPage />} />
+          <Route path="analytics" element={<FinanceAnalytics />} />
+          <Route path="settings" element={<FinanceSettings />} />
+        </Route>
+
+        <Route path="/dashboard/destination" element={
+            <ProtectedRoute>
+              <RoleGuard requiredRole="destination">
+                <DashboardLayout role="destination" />
+              </RoleGuard>
+            </ProtectedRoute>
+          }>
+          <Route index element={<DestinationDashboard />} />
+          <Route path="incoming" element={<IncomingDeliveriesPage />} />
+          <Route path="completed" element={<CompletedDeliveriesPage />} />
+          <Route path="warehouse" element={<WarehousePage />} />
+          <Route path="inventory" element={<InventoryPage />} />
+          <Route path="receivers" element={<ReceiversPage />} />
+          <Route path="proof-of-delivery" element={<ProofOfDeliveryPage />} />
+          <Route path="reports" element={<DestinationReportsPage />} />
+          <Route path="settings" element={<DestinationSettings />} />
+        </Route>
+
+        <Route path="/dashboard/notifications" element={
+            <ProtectedRoute>
+              <DashboardLayout role="operations" />
+            </ProtectedRoute>
+          }>
+          <Route element={<NotificationLayout />}>
+            <Route index element={<AllNotifications />} />
+            <Route path="alerts" element={<AlertDashboard />} />
+            <Route path="maintenance" element={<MaintenanceAlerts />} />
+            <Route path="trips" element={<TripAlerts />} />
+            <Route path="licenses" element={<LicenseAlerts />} />
+            <Route path="financial" element={<FinancialAlerts />} />
+            <Route path="settings" element={<NotificationSettingsPage />} />
+          </Route>
+        </Route>
+        </Routes>
+      </AnimatePresence>
+      </ToastProvider>
+    </AuthProvider>
+  );
+}
