@@ -1,12 +1,70 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
-import { rcTrips, weeklyDistanceData, fuelTrendData } from "../../data/roadCaptainData";
+import { dashboardService } from "../../services/dashboard.service";
 import { TripStatusBadge, QuickActionButton, MetricCard } from "../../components/road-captain/RoadCaptainComponents";
-import { Route, Truck, MapPin, Clock, Fuel, Star, BarChart3, Play, Pause, CheckCircle, AlertTriangle, Receipt, Gauge, Shield, TrendingUp, DollarSign } from "lucide-react";
+import { Route, Truck, MapPin, Clock, Fuel, Star, BarChart3, Play, Pause, CheckCircle, AlertTriangle, Receipt, Gauge, Shield, TrendingUp, DollarSign, Loader2, Inbox } from "lucide-react";
 
 export default function RoadCaptainDashboard() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
+    dashboardService.getDashboard()
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load dashboard data");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">{error}</p>
+          <button onClick={fetchData} className="btn btn-primary mt-4">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Inbox className="w-12 h-12 text-neutral-textMuted mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">No data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const rcTrips = data.rcTrips || [];
+  const weeklyDistanceData = data.weeklyDistanceData || [];
+  const fuelTrendData = data.fuelTrendData || [];
+
   const activeTrip = rcTrips.find((t) => t.id === "TR-0084");
 
   const stats = [];
