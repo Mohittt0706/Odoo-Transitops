@@ -5,19 +5,9 @@ import {
 } from 'lucide-react';
 
 export default function ArrivalHub() {
-    const [incomingShipments] = useState([
-        { id: 'SH-0192', source: 'Chicago Depot', carrier: 'TransitOps Express', eta: '10:15 AM', status: 'In Transit', cargo: 'Medical Supplies' },
-        { id: 'SH-0185', source: 'Laredo Border', carrier: 'RedLine Freight', eta: '11:40 AM', status: 'Customs Hold', cargo: 'High-Value Electronics' },
-        { id: 'SH-0199', source: 'Houston Terminal', carrier: 'Fleet Carrier 4', eta: '12:10 PM', status: 'Departed', cargo: 'Heavy Machining Parts' }
-    ]);
+    const [incomingShipments] = useState([]);
 
-    const [bays, setBays] = useState([
-        { bay: 'Bay 1', status: 'Occupied (TX-8041)', type: 'occupied', detail: 'Unloading - 45% complete' },
-        { bay: 'Bay 2', status: 'Occupied (FL-4821)', type: 'occupied', detail: 'Pre-check verification' },
-        { bay: 'Bay 3', status: 'Available', type: 'free', detail: 'Empty' },
-        { bay: 'Bay 4', status: 'Available', type: 'free', detail: 'Empty' },
-        { bay: 'Bay 5', status: 'Available', type: 'free', detail: 'Empty' }
-    ]);
+    const [bays, setBays] = useState([]);
 
     const [signedOff, setSignedOff] = useState(false);
     const [signatureName, setSignatureName] = useState('');
@@ -44,17 +34,17 @@ export default function ArrivalHub() {
                     <p className="text-xs text-slate-400 font-semibold mt-0.5">Incoming warehouse manifests, docking bay assignments, and terminal queue trackers</p>
                 </div>
                 <span className="text-[10px] font-black uppercase bg-blue-50 border border-blue-100 text-blue-600 px-3 py-1.5 rounded-xl shadow-sm">
-                    DOCK DOORS: {activeBaysCount} / 5 AVAILABLE
+                    DOCK DOORS: {activeBaysCount} / 0 AVAILABLE
                 </span>
             </div>
 
             {/* Stats row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {[
-                    { label: 'Expected Shipments', val: '18 Today', sub: '4 completed, 14 pending', icon: Package, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Average Turnaround', val: '28.4 mins', sub: 'Goal: Under 30 mins', icon: Timer, color: 'text-cyan-600 bg-cyan-50' },
-                    { label: 'Bays Occupancy', val: `${Math.round(((5 - activeBaysCount) / 5) * 100)}% Active`, sub: `${5 - activeBaysCount} bays active`, icon: Layers, color: 'text-indigo-600 bg-indigo-50' },
-                    { label: 'Carrier Delays', val: '1 Pending', sub: 'Laredo customs hold', icon: AlertTriangle, color: 'text-amber-600 bg-amber-50' }
+                    { label: 'Expected Shipments', val: '0', sub: '0 completed, 0 pending', icon: Package, color: 'text-blue-600 bg-blue-50' },
+                    { label: 'Average Turnaround', val: 'N/A', sub: 'Goal: N/A', icon: Timer, color: 'text-cyan-600 bg-cyan-50' },
+                    { label: 'Bays Occupancy', val: '0% Active', sub: '0 bays active', icon: Layers, color: 'text-indigo-600 bg-indigo-50' },
+                    { label: 'Carrier Delays', val: '0', sub: 'No delays', icon: AlertTriangle, color: 'text-amber-600 bg-amber-50' }
                 ].map((kpi, idx) => {
                     const Icon = kpi.icon;
                     return (

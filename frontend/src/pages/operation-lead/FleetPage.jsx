@@ -62,10 +62,10 @@ export default function FleetPage() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KPICard title="Total Fleet" value="24" icon={Truck} color="bg-primary/10 text-primary" delay={0} />
-        <KPICard title="Active" value="18" change="12%" changeType="up" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
-        <KPICard title="Maintenance" value="2" change="1 vehicle" changeType="down" icon={Wrench} color="bg-amber-50 text-amber-600" delay={0.1} />
-        <KPICard title="Utilization" value="78%" change="3%" changeType="up" icon={Gauge} color="bg-purple-50 text-purple-600" delay={0.15} />
+        <KPICard title="Total Fleet" value="0" icon={Truck} color="bg-primary/10 text-primary" delay={0} />
+        <KPICard title="Active" value="0" change="0" changeType="up" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
+        <KPICard title="Maintenance" value="0" change="0" changeType="down" icon={Wrench} color="bg-amber-50 text-amber-600" delay={0.1} />
+        <KPICard title="Utilization" value="0" change="0" changeType="up" icon={Gauge} color="bg-purple-50 text-purple-600" delay={0.15} />
       </div>
 
       <DataTable

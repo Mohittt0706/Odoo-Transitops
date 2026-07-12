@@ -133,15 +133,7 @@ export default function ExportReports() {
 
       {/* Quick Actions */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {[
-          { label: "Generate Report", icon: FileText, color: "bg-primary/10 text-primary hover:bg-primary/20" },
-          { label: "Download PDF", icon: FileText, color: "bg-danger-light text-danger hover:bg-danger/20" },
-          { label: "Export CSV", icon: FileText, color: "bg-primary-light text-primary hover:bg-primary/20" },
-          { label: "Export Excel", icon: FileSpreadsheet, color: "bg-success-light text-success hover:bg-success/20" },
-          { label: "Print Report", icon: Printer, color: "bg-accent-light text-neutral-textMuted hover:bg-accent" },
-          { label: "Share Analytics", icon: Send, color: "bg-purple-50 text-purple-600 hover:bg-purple-100" },
-          { label: "Schedule Export", icon: Calendar, color: "bg-cyan-50 text-cyan-600 hover:bg-cyan-100" },
-        ].map((action, i) => (
+        {[].map((action, i) => (
           <motion.button
             key={action.label}
             initial={{ opacity: 0, y: 5 }}
@@ -360,11 +352,7 @@ export default function ExportReports() {
 
       {/* Schedule Export Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-        {[
-          { title: "Daily Reports", desc: "Automated daily fleet summary", time: "08:00 AM", icon: Clock, color: "bg-primary/10 text-primary" },
-          { title: "Weekly Analytics", desc: "Weekly performance digest", time: "Every Monday", icon: Calendar, color: "bg-purple-50 text-purple-600" },
-          { title: "Monthly Executive", desc: "Monthly executive summary", time: "1st of month", icon: FileText, color: "bg-emerald-50 text-emerald-600" },
-        ].map((schedule, i) => (
+        {[].map((schedule, i) => (
           <motion.div
             key={schedule.title}
             initial={{ opacity: 0, y: 10 }}

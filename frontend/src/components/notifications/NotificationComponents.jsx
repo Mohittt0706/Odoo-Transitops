@@ -87,7 +87,7 @@ export function FilterPanel({ filters, active, onChange, compact }) {
   );
 }
 
-export function NotificationCard({ notification, selected, onToggleSelect, onMarkRead, onArchive, onDelete, onPin, delay = 0 }) {
+export function NotificationCard({ notification, selected, onToggleSelect, onMarkRead, onArchive, onDelete, onPin, onDemoAction, delay = 0 }) {
   const catCfg = categoryColor[notification.category] || categoryColor.general;
 
   return (
@@ -118,6 +118,11 @@ export function NotificationCard({ notification, selected, onToggleSelect, onMar
               <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", catCfg.dot)} />
               <CategoryBadge category={notification.category} />
               <PriorityBadge priority={notification.priority} />
+              {notification.demoStatus && (
+                <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold border", notification.demoStatus === "Pending" ? "bg-amber-50 text-amber-600 border-amber-200" : notification.demoStatus === "Accepted" ? "bg-emerald-50 text-emerald-600 border-emerald-200" : "bg-red-50 text-red-600 border-red-200")}>
+                  {notification.demoStatus}
+                </span>
+              )}
             </div>
             <p className="text-xs text-neutral-textMuted mt-1 line-clamp-1">{notification.description}</p>
             <div className="flex items-center gap-3 mt-2 text-[10px] text-neutral-textMuted">
@@ -126,6 +131,26 @@ export function NotificationCard({ notification, selected, onToggleSelect, onMar
               {notification.trip && <span>| Trip: {notification.trip}</span>}
               <span>| {new Date(notification.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
             </div>
+            {notification.demoStatus === "Pending" && (
+              <div className="flex items-center gap-2 mt-3">
+                <button onClick={() => onDemoAction?.(notification.id, "view")}
+                  className="px-3 py-1.5 text-[10px] font-bold rounded-lg border border-primary/20 text-primary hover:bg-primary/5 transition-all">
+                  View
+                </button>
+                <button onClick={() => onDemoAction?.(notification.id, "accept")}
+                  className="px-3 py-1.5 text-[10px] font-bold rounded-lg border border-emerald-200 text-emerald-600 hover:bg-emerald-50 transition-all">
+                  Accept
+                </button>
+                <button onClick={() => onDemoAction?.(notification.id, "reject")}
+                  className="px-3 py-1.5 text-[10px] font-bold rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-all">
+                  Reject
+                </button>
+                <button onClick={() => onDemoAction?.(notification.id, "schedule")}
+                  className="px-3 py-1.5 text-[10px] font-bold rounded-lg border border-purple-200 text-purple-600 hover:bg-purple-50 transition-all">
+                  Schedule
+                </button>
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
             {!notification.read && (
@@ -214,7 +239,7 @@ export function EmptyState({ icon: Icon, title, description }) {
 export function LoadingSkeleton() {
   return (
     <div className="space-y-3 animate-pulse">
-      {[1, 2, 3, 4, 5].map((i) => (
+      {[].map((i) => (
         <div key={i} className="flex items-start gap-3 p-4 bg-white border border-neutral-border rounded-xl">
           <div className="w-4 h-4 rounded bg-neutral-border" />
           <div className="flex-1 space-y-2">

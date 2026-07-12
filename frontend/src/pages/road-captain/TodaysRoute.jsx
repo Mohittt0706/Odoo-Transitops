@@ -72,7 +72,7 @@ const createLiveIcon = () => L.divIcon({
 
 export default function TodaysRoute() {
   const [currentPosIndex, setCurrentPosIndex] = useState(0);
-  const [currentSpeed, setCurrentSpeed] = useState(62);
+  const [currentSpeed, setCurrentSpeed] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCentered, setIsCentered] = useState(true);
 
@@ -81,11 +81,7 @@ export default function TodaysRoute() {
   const markerRef = useRef(null);
   const polylineRef = useRef(null);
 
-  const routeStops = [
-    { name: "HP Petrol Station", dist: "38 km", type: "Fuel" },
-    { name: "Food Plaza Lonavala", dist: "96 km", type: "Rest" },
-    { name: "BPCL Station Pimpri", dist: "128 km", type: "Fuel" },
-  ];
+  const routeStops = [];
 
   // 1. Initialize Map
   useEffect(() => {
@@ -125,9 +121,9 @@ export default function TodaysRoute() {
     const startMarker = L.marker(routeCoordinates[0], { icon: createStartIcon() }).addTo(map);
     startMarker.bindPopup(`
       <div class="p-2 font-sans">
-        <h4 class="font-bold text-sm text-neutral-textMain font-headings">Mumbai Central</h4>
-        <p class="text-xs text-neutral-textMuted mt-0.5">Start Point</p>
-        <p class="text-xs text-success font-semibold mt-1">Departed: 06:00 AM</p>
+        <h4 class="font-bold text-sm text-neutral-textMain font-headings">Start</h4>
+        <p class="text-xs text-neutral-textMuted mt-0.5">-</p>
+        <p class="text-xs text-success font-semibold mt-1">Departed: N/A</p>
       </div>
     `);
 
@@ -135,21 +131,16 @@ export default function TodaysRoute() {
     const destMarker = L.marker(routeCoordinates[routeCoordinates.length - 1], { icon: createDestinationIcon() }).addTo(map);
     destMarker.bindPopup(`
       <div class="p-2 font-sans">
-        <h4 class="font-bold text-sm text-neutral-textMain font-headings">Pune Hub</h4>
-        <p class="text-xs text-neutral-textMuted mt-0.5">Destination</p>
-        <p class="text-xs text-primary font-semibold mt-1">ETA: 11:30 AM</p>
+        <h4 class="font-bold text-sm text-neutral-textMain font-headings">Destination</h4>
+        <p class="text-xs text-neutral-textMuted mt-0.5">-</p>
+        <p class="text-xs text-primary font-semibold mt-1">ETA: N/A</p>
       </div>
     `);
 
     // Waypoints
-    const waypointDetails = [
-      { name: "Panvel Toll Plaza", dist: "35 km", eta: "06:45 AM" },
-      { name: "Khalapur Toll Plaza", dist: "62 km", eta: "07:30 AM" },
-      { name: "Lonavala Waypoint", dist: "96 km", eta: "08:30 AM" },
-      { name: "Pimpri-Chinchwad Stop", dist: "125 km", eta: "09:45 AM" }
-    ];
+    const waypointDetails = [];
 
-    [5, 7, 10, 15].forEach((idx, i) => {
+    [].forEach((idx, i) => {
       const details = waypointDetails[i];
       const wpMarker = L.marker(routeCoordinates[idx], { icon: createWaypointIcon() }).addTo(map);
       wpMarker.bindPopup(`
@@ -165,9 +156,9 @@ export default function TodaysRoute() {
     const driverMarker = L.marker(routeCoordinates[0], { icon: createLiveIcon() }).addTo(map);
     driverMarker.bindPopup(`
       <div class="p-2 font-sans min-w-[150px]">
-        <h4 class="font-bold text-sm text-neutral-textMain font-headings">MH-12-RT-2244</h4>
-        <p class="text-xs text-neutral-textMuted mt-0.5">Driver: Vikram Singh</p>
-        <p class="text-xs text-emerald-600 font-semibold mt-1">Live Tracking Active</p>
+        <h4 class="font-bold text-sm text-neutral-textMain font-headings">Vehicle</h4>
+        <p class="text-xs text-neutral-textMuted mt-0.5">Driver: N/A</p>
+        <p class="text-xs text-emerald-600 font-semibold mt-1">-</p>
       </div>
     `).openPopup();
     markerRef.current = driverMarker;
@@ -201,13 +192,7 @@ export default function TodaysRoute() {
       markerRef.current.setLatLng(newPos);
 
       // Find upcoming target
-      const upcomingWaypoints = [
-        { name: "Panvel Toll", idx: 5 },
-        { name: "Khalapur", idx: 7 },
-        { name: "Lonavala", idx: 10 },
-        { name: "Pimpri-Chinchwad", idx: 15 },
-        { name: "Pune", idx: 18 }
-      ];
+      const upcomingWaypoints = [];
 
       let nextStop = upcomingWaypoints[upcomingWaypoints.length - 1];
       for (const wp of upcomingWaypoints) {
@@ -219,9 +204,9 @@ export default function TodaysRoute() {
 
       markerRef.current.setPopupContent(`
         <div class="p-2 font-sans min-w-[160px]">
-          <h4 class="font-bold text-sm text-neutral-textMain font-headings">MH-12-RT-2244</h4>
-          <p class="text-[11px] text-neutral-textMuted mt-0.5">Driver: Vikram Singh</p>
-          <p class="text-[11px] text-primary font-semibold mt-1">Next Stop: ${nextStop.name}</p>
+          <h4 class="font-bold text-sm text-neutral-textMain font-headings">Vehicle</h4>
+          <p class="text-[11px] text-neutral-textMuted mt-0.5">Driver: N/A</p>
+          <p class="text-[11px] text-primary font-semibold mt-1">Next Stop: N/A</p>
           <div class="flex items-center gap-1 mt-1.5 text-[11px] text-emerald-600 font-bold">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             Speed: ${currentSpeed} km/h
@@ -242,7 +227,7 @@ export default function TodaysRoute() {
       setCurrentSpeed((prev) => {
         const delta = Math.floor(Math.random() * 9) - 4; // -4 to +4
         const nextSpeed = prev + delta;
-        return Math.max(55, Math.min(78, nextSpeed));
+        return Math.max(0, Math.min(0, nextSpeed));
       });
     }, 2500);
 
@@ -300,19 +285,19 @@ export default function TodaysRoute() {
 
   // Calculate elapsed progress percentage
   const progressPercent = Math.min(100, Math.round((currentPosIndex / (routeCoordinates.length - 1)) * 100));
-  const remainingDist = Math.max(0, 148 - Math.round((currentPosIndex / (routeCoordinates.length - 1)) * 148));
+  const remainingDist = Math.max(0, 0 - Math.round((currentPosIndex / (routeCoordinates.length - 1)) * 0));
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-      <PageHeader title="Today's Route" subtitle="Mumbai → Pune — 148 km" />
+      <PageHeader title="Today's Route" subtitle="0 km" />
 
       {/* Top Status Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Total Distance", value: "148 km", icon: MapPin, color: "primary" },
-          { label: "Est. Time", value: "5h 30m", icon: Clock, color: "warning" },
-          { label: "Traffic", value: <StatusBadge status="Moderate" variant="warning" />, icon: Navigation, color: "info" },
-          { label: "Weather", value: <StatusBadge status="Clear" variant="success" />, icon: CloudSun, color: "success" },
+          { label: "Total Distance", value: "0 km", icon: MapPin, color: "primary" },
+          { label: "Est. Time", value: "N/A", icon: Clock, color: "warning" },
+          { label: "Traffic", value: <StatusBadge status="N/A" variant="warning" />, icon: Navigation, color: "info" },
+          { label: "Weather", value: <StatusBadge status="N/A" variant="success" />, icon: CloudSun, color: "success" },
         ].map((s, i) => (
           <motion.div 
             key={s.label} 
@@ -347,7 +332,7 @@ export default function TodaysRoute() {
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary" />
-              <span className="text-sm font-semibold text-neutral-textMain font-headings">Mumbai</span>
+              <span className="text-sm font-semibold text-neutral-textMain font-headings">Start</span>
             </div>
             <div className="flex-1 h-1.5 bg-neutral-border/60 rounded-full relative overflow-hidden">
               <div 
@@ -360,7 +345,7 @@ export default function TodaysRoute() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-neutral-textMain font-headings">Pune</span>
+              <span className="text-sm font-semibold text-neutral-textMain font-headings">Destination</span>
               <div className="w-3 h-3 rounded-full bg-success" />
             </div>
           </div>
@@ -373,7 +358,7 @@ export default function TodaysRoute() {
             </div>
             <div className="p-3 rounded-xl bg-slate-50/80 border border-neutral-border/40">
               <p className="text-[10px] text-neutral-textMuted uppercase font-semibold">ETA</p>
-              <p className="text-sm font-bold text-neutral-textMain mt-0.5 font-headings">11:30 AM</p>
+              <p className="text-sm font-bold text-neutral-textMain mt-0.5 font-headings">N/A</p>
             </div>
             <div className="p-3 rounded-xl bg-slate-50/80 border border-neutral-border/40">
               <p className="text-[10px] text-neutral-textMuted uppercase font-semibold">Live Speed</p>
@@ -381,7 +366,7 @@ export default function TodaysRoute() {
             </div>
             <div className="p-3 rounded-xl bg-slate-50/80 border border-neutral-border/40">
               <p className="text-[10px] text-neutral-textMuted uppercase font-semibold">Condition</p>
-              <p className="text-sm font-bold text-success mt-0.5">Expressway Ok</p>
+              <p className="text-sm font-bold text-success mt-0.5">N/A</p>
             </div>
           </div>
 

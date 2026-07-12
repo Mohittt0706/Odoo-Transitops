@@ -5,6 +5,7 @@ import ChartCard from "../../components/charts/ChartCard";
 import DonutChart from "../../components/charts/PieChart";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
+import { useState, useMemo } from "react";
 import {
   Truck,
   CheckCircle,
@@ -18,42 +19,23 @@ import {
   FileText,
   Download,
   MapPin,
+  Calendar,
 } from "lucide-react";
 
-const fleetUtilizationData = [
-  { label: "Active", value: 18, color: "#059669" },
-  { label: "Maintenance", value: 2, color: "#D97706" },
-  { label: "Idle", value: 4, color: "#94A3B8" },
-];
+const fleetUtilizationData = [];
 
-const vehicleStatusData = [
-  { label: "Mon", value: 16 },
-  { label: "Tue", value: 18 },
-  { label: "Wed", value: 15 },
-  { label: "Thu", value: 19 },
-  { label: "Fri", value: 17 },
-  { label: "Sat", value: 14 },
-];
+const vehicleStatusData = [];
 
-const tripAnalyticsData = [
-  { label: "Mon", value: 8 },
-  { label: "Tue", value: 12 },
-  { label: "Wed", value: 10 },
-  { label: "Thu", value: 14 },
-  { label: "Fri", value: 11 },
-  { label: "Sat", value: 7 },
-];
+const tripAnalyticsData = [];
 
-const quickActions = [
-  { title: "Register Vehicle", icon: Truck, color: "bg-blue-50 text-blue-600" },
-  { title: "Create Trip", icon: Route, color: "bg-emerald-50 text-emerald-600" },
-  { title: "Add Driver", icon: Users, color: "bg-purple-50 text-purple-600" },
-  { title: "Schedule Maintenance", icon: Wrench, color: "bg-amber-50 text-amber-600" },
-  { title: "Generate Report", icon: FileText, color: "bg-rose-50 text-rose-600" },
-  { title: "View Map", icon: MapPin, color: "bg-cyan-50 text-cyan-600" },
-];
+const quickActions = [];
 
 export default function OperationsDashboard() {
+  const demoCount = useMemo(() => {
+    try { return JSON.parse(localStorage.getItem("demo_requests") || "[]").filter(r => r.status === "Pending").length; }
+    catch { return 0; }
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -78,15 +60,16 @@ export default function OperationsDashboard() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-        <KPICard title="Active Vehicles" value="18" change="12%" changeType="up" icon={Truck} color="bg-primary/10 text-primary" delay={0} />
-        <KPICard title="Available" value="4" change="Neutral" changeType="neutral" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
-        <KPICard title="In Maintenance" value="2" change="1 vehicle" changeType="down" icon={Wrench} color="bg-amber-50 text-amber-600" delay={0.1} />
-        <KPICard title="Active Trips" value="6" change="8%" changeType="up" icon={Route} color="bg-purple-50 text-purple-600" delay={0.15} />
-        <KPICard title="Pending Trips" value="3" change="Neutral" changeType="neutral" icon={Clock} color="bg-cyan-50 text-cyan-600" delay={0.2} />
-        <KPICard title="Drivers On Duty" value="14" change="5%" changeType="up" icon={Users} color="bg-indigo-50 text-indigo-600" delay={0.25} />
-        <KPICard title="Fleet Utilization" value="78%" change="3%" changeType="up" icon={Gauge} color="bg-emerald-50 text-emerald-600" delay={0.3} />
-        <KPICard title="Revenue" value="₹12.4L" change="15%" changeType="up" icon={IndianRupee} color="bg-amber-50 text-amber-600" delay={0.35} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
+        <KPICard title="Active Vehicles" value="0" change="0" changeType="up" icon={Truck} color="bg-primary/10 text-primary" delay={0} />
+        <KPICard title="Available" value="0" change="0" changeType="neutral" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
+        <KPICard title="In Maintenance" value="0" change="0" changeType="down" icon={Wrench} color="bg-amber-50 text-amber-600" delay={0.1} />
+        <KPICard title="Active Trips" value="0" change="0" changeType="up" icon={Route} color="bg-purple-50 text-purple-600" delay={0.15} />
+        <KPICard title="Pending Trips" value="0" change="0" changeType="neutral" icon={Clock} color="bg-cyan-50 text-cyan-600" delay={0.2} />
+        <KPICard title="Drivers On Duty" value="0" change="0" changeType="up" icon={Users} color="bg-indigo-50 text-indigo-600" delay={0.25} />
+        <KPICard title="Fleet Utilization" value="0" change="0" changeType="up" icon={Gauge} color="bg-emerald-50 text-emerald-600" delay={0.3} />
+        <KPICard title="Revenue" value="0" change="0" changeType="up" icon={IndianRupee} color="bg-amber-50 text-amber-600" delay={0.35} />
+        <KPICard title="Demo Requests" value={demoCount} change={demoCount > 0 ? "Pending" : "None"} changeType={demoCount > 0 ? "up" : "neutral"} icon={Calendar} color="bg-rose-50 text-rose-600" delay={0.4} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-5">

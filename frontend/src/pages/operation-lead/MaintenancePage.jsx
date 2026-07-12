@@ -14,17 +14,12 @@ import { maintenance, maintStats } from "../../data/maintenanceData";
 import { Wrench, Clock, CheckCircle, AlertCircle, DollarSign, Truck, Timer, CalendarPlus, Plus, Download } from "lucide-react";
 import { cn } from "../../utils/utils";
 
-const months = ["Jan","Feb","Mar","Apr","May","Jun"];
-const monthlyCost = months.map(m => ({ label: m, value: 25000 + Math.floor(Math.random() * 60000) }));
-const maintTrend = months.map(m => ({ label: m, value: 3 + Math.floor(Math.random() * 6) }));
-const completionRate = months.map(m => ({ label: m, value: 60 + Math.floor(Math.random() * 35) }));
+const months = [];
+const monthlyCost = [];
+const maintTrend = [];
+const completionRate = [];
 
-const categoryDist = [
-  { label: "Preventive", value: maintenance.filter(j => j.category === "Preventive").length, color: "#22C55E" },
-  { label: "Repair", value: maintenance.filter(j => j.category === "Repair" || j.category === "Major Repair").length, color: "#F59E0B" },
-  { label: "Service", value: maintenance.filter(j => j.category === "Service").length, color: "#3B82F6" },
-  { label: "Inspections", value: maintenance.filter(j => j.category === "Inspections").length, color: "#8B5CF6" },
-];
+const categoryDist = [];
 
 const columns = [
   { key: "id", label: "ID", width: "75px" },

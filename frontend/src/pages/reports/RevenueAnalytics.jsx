@@ -31,26 +31,26 @@ export default function RevenueAnalytics() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-5">
-        <StatCard title="Monthly Revenue" value={`₹${(lastMonthRevenue / 1000).toFixed(0)}K`} icon={IndianRupee} change="+8.3%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-emerald-50 text-emerald-600" delay={0} />
-        <StatCard title="Quarterly Revenue" value={`₹${(quarterlyRevenue[quarterlyRevenue.length - 1].value / 1000).toFixed(0)}K`} icon={BarChart3} change="+6.5%" changeType="up" sparklineData={quarterlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-blue-50 text-blue-600" delay={0.02} />
-        <StatCard title="Annual Revenue" value={`₹${(annualRevenue[annualRevenue.length - 1].value / 10000000).toFixed(1)}Cr`} icon={TrendingUp} change="+10.8%" changeType="up" sparklineData={annualRevenue.map(d => Math.round(d.value / 100000))} color="bg-primary/10 text-primary" delay={0.04} />
-        <StatCard title="Revenue / Trip" value={`₹${avgRevenuePerTrip.toLocaleString()}`} icon={Target} change="+3.2%" changeType="up" sparklineData={[1250, 1280, 1300, 1320, 1340, 1350, avgRevenuePerTrip]} color="bg-purple-50 text-purple-600" delay={0.06} />
-        <StatCard title="Revenue / Vehicle" value={`₹${avgRevenuePerVehicle.toLocaleString()}`} icon={DollarSign} change="+5.1%" changeType="up" sparklineData={[180, 185, 190, 195, 198, 200, Math.round(avgRevenuePerVehicle / 1000)]} color="bg-cyan-50 text-cyan-600" delay={0.08} />
-        <StatCard title="Net Profit" value={`₹${(totalProfit / 100000).toFixed(1)}L`} icon={Wallet} change="+12.4%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.1} />
-        <StatCard title="Gross Profit" value={`₹${((totalRevenue - monthlyExpenses[monthlyExpenses.length - 1].value) / 1000).toFixed(0)}K`} icon={TrendingUp} change="+6.8%" changeType="up" sparklineData={[120, 125, 130, 135, 140, 142, 148]} color="bg-green-50 text-green-600" delay={0.12} />
-        <StatCard title="Profit Margin" value={`${profitMargin}%`} icon={PieChart} change="+2.3%" changeType="up" sparklineData={[28, 29, 30, 30, 31, 31, profitMargin]} color="bg-indigo-50 text-indigo-600" delay={0.14} />
+        <StatCard title="Monthly Revenue" value={`₹${(lastMonthRevenue / 1000).toFixed(0)}K`} icon={IndianRupee} change="" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-emerald-50 text-emerald-600" delay={0} />
+        <StatCard title="Quarterly Revenue" value={`₹${(quarterlyRevenue[quarterlyRevenue.length - 1].value / 1000).toFixed(0)}K`} icon={BarChart3} change="" changeType="up" sparklineData={quarterlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-blue-50 text-blue-600" delay={0.02} />
+        <StatCard title="Annual Revenue" value={`₹${(annualRevenue[annualRevenue.length - 1].value / 10000000).toFixed(1)}Cr`} icon={TrendingUp} change="" changeType="up" sparklineData={annualRevenue.map(d => Math.round(d.value / 100000))} color="bg-primary/10 text-primary" delay={0.04} />
+        <StatCard title="Revenue / Trip" value={`₹${avgRevenuePerTrip.toLocaleString()}`} icon={Target} change="" changeType="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.06} />
+        <StatCard title="Revenue / Vehicle" value={`₹${avgRevenuePerVehicle.toLocaleString()}`} icon={DollarSign} change="" changeType="up" sparklineData={[]} color="bg-cyan-50 text-cyan-600" delay={0.08} />
+        <StatCard title="Net Profit" value={`₹${(totalProfit / 100000).toFixed(1)}L`} icon={Wallet} change="" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.1} />
+        <StatCard title="Gross Profit" value="" icon={TrendingUp} change="" changeType="up" sparklineData={[]} color="bg-green-50 text-green-600" delay={0.12} />
+        <StatCard title="Profit Margin" value={`${profitMargin}%`} icon={PieChart} change="" changeType="up" sparklineData={[]} color="bg-indigo-50 text-indigo-600" delay={0.14} />
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Revenue Growth" subtitle="Monthly revenue trend" delay={0.2}
-          actions={<TrendIndicator value="+12.4% YoY" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={monthlyRevenue.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#059669" height={180} />
         </ChartCard>
 
-        <ChartCard title="Monthly Income" subtitle="Last 12 months" delay={0.25}
-          actions={<TrendIndicator value="₹49.8L avg" type="up" />}
+        <ChartCard title="Monthly Income" subtitle="" delay={0.25}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={monthlyRevenue.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#1E3A5F" height={180} />
         </ChartCard>
@@ -59,7 +59,7 @@ export default function RevenueAnalytics() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Profit Margin" subtitle="Monthly profit vs revenue" delay={0.3}
-          actions={<TrendIndicator value={`${profitMargin}% avg`} type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={monthlyRevenue.map(d => ({ label: d.label, value: Math.round((d.profit / d.value) * 100) }))} color="#7C3AED" height={180} />
         </ChartCard>
@@ -71,14 +71,10 @@ export default function RevenueAnalytics() {
 
       {/* Revenue Forecast */}
       <ChartCard title="Revenue Forecast" subtitle="Projected revenue for next 3 months" delay={0.4}
-        actions={<TrendIndicator value="+8.5% projected" type="up" />}
+        actions={<TrendIndicator value="" type="up" />}
       >
         <div className="grid grid-cols-3 gap-4">
-          {[
-            { month: "August 2026", projected: 628000, low: 585000, high: 655000 },
-            { month: "September 2026", projected: 645000, low: 600000, high: 675000 },
-            { month: "October 2026", projected: 668000, low: 620000, high: 700000 },
-          ].map((forecast, i) => (
+          {[].map((forecast, i) => (
             <motion.div
               key={forecast.month}
               initial={{ opacity: 0, y: 10 }}

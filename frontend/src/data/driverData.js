@@ -1,24 +1,13 @@
-export const drivers = [
-  { id: "DR-001", name: "Rajesh Kumar", email: "rajesh.k@transitops.in", phone: "+91 98765 43210", address: "Mumbai, Maharashtra", licenseNo: "KL-2019-4521", licenseType: "Heavy Vehicle", licenseExpiry: "2027-03-15", dob: "1987-06-12", joiningDate: "2020-01-15", status: "Active", rating: 4.8, trips: 342, completed: 328, cancelled: 8, distance: "142,500 km", avgRating: 4.8, safetyScore: 96, experience: "8 years", vehicle: "Tata Prima 4040.S (KL-07-AU-4521)", emergencyContact: "Priya Kumar (+91 98765 43220)", compliance: 98, licenseStatus: "Valid", availability: "Available", avatar: null, documents: ["License", "Insurance", "Medical", "Background Check"], currentTrip: { id: "TR-0081", from: "Kochi", to: "Coimbatore", status: "Pending" } },
-  { id: "DR-002", name: "Suresh Patel", email: "suresh.p@transitops.in", phone: "+91 98765 43211", address: "Bangalore, Karnataka", licenseNo: "KA-2020-3312", licenseType: "Heavy Vehicle", licenseExpiry: "2027-06-20", dob: "1990-09-25", joiningDate: "2020-06-01", status: "Active", rating: 4.6, trips: 287, completed: 272, cancelled: 5, distance: "98,200 km", avgRating: 4.6, safetyScore: 93, experience: "6 years", vehicle: "Ashok Leyland 4220 (KA-01-MN-3312)", emergencyContact: "Neha Patel (+91 98765 43221)", compliance: 95, licenseStatus: "Valid", availability: "Available", avatar: null, documents: ["License", "Insurance", "Medical"], currentTrip: { id: "TR-0082", from: "Bangalore", to: "Chennai", status: "In Transit" } },
-  { id: "DR-003", name: "Vikram Singh", email: "vikram.s@transitops.in", phone: "+91 98765 43212", address: "Mumbai, Maharashtra", licenseNo: "MH-2018-2244", licenseType: "Heavy Vehicle", licenseExpiry: "2026-09-10", dob: "1985-01-08", joiningDate: "2018-03-20", status: "Active", rating: 4.9, trips: 512, completed: 498, cancelled: 3, distance: "215,000 km", avgRating: 4.9, safetyScore: 98, experience: "12 years", vehicle: "Mahindra Blazo X25 (MH-12-RT-2244)", emergencyContact: "Kiran Singh (+91 98765 43222)", compliance: 99, licenseStatus: "Expiring Soon", availability: "Available", avatar: null, documents: ["License", "Insurance", "Medical", "Background Check", "HazMat"], currentTrip: { id: "TR-0084", from: "Mumbai", to: "Pune", status: "In Transit" } },
-  { id: "DR-004", name: "Anil Sharma", email: "anil.s@transitops.in", phone: "+91 98765 43213", address: "Delhi, NCR", licenseNo: "DL-2021-5567", licenseType: "Medium Vehicle", licenseExpiry: "2027-01-25", dob: "1992-11-30", joiningDate: "2021-02-10", status: "Active", rating: 4.3, trips: 198, completed: 185, cancelled: 6, distance: "67,300 km", avgRating: 4.3, safetyScore: 85, experience: "4 years", vehicle: "BharatBenz 2528 (DL-03-KP-5567)", emergencyContact: "Ritu Sharma (+91 98765 43223)", compliance: 88, licenseStatus: "Valid", availability: "Available", avatar: null, documents: ["License", "Insurance"], currentTrip: null },
-  { id: "DR-005", name: "Mohammed Ali", email: "mohammed.a@transitops.in", phone: "+91 98765 43214", address: "Jaipur, Rajasthan", licenseNo: "RJ-2017-9988", licenseType: "Heavy Vehicle", licenseExpiry: "2026-08-30", dob: "1983-04-15", joiningDate: "2017-05-01", status: "On Leave", rating: 4.7, trips: 621, completed: 605, cancelled: 7, distance: "289,000 km", avgRating: 4.7, safetyScore: 95, experience: "10 years", vehicle: "Volvo FH16 (RJ-14-AB-9988)", emergencyContact: "Fatima Ali (+91 98765 43224)", compliance: 97, licenseStatus: "Expiring Soon", availability: "On Leave", avatar: null, documents: ["License", "Insurance", "Medical", "Background Check"], currentTrip: null },
-  { id: "DR-006", name: "Deepak Verma", email: "deepak.v@transitops.in", phone: "+91 98765 43215", address: "Lucknow, UP", licenseNo: "UP-2020-6677", licenseType: "Heavy Vehicle", licenseExpiry: "2027-04-18", dob: "1989-07-22", joiningDate: "2020-08-15", status: "Active", rating: 4.5, trips: 256, completed: 242, cancelled: 4, distance: "178,900 km", avgRating: 4.5, safetyScore: 91, experience: "5 years", vehicle: "Scania R450 (UP-32-CD-6677)", emergencyContact: "Sonia Verma (+91 98765 43225)", compliance: 94, licenseStatus: "Valid", availability: "Available", avatar: null, documents: ["License", "Insurance", "Medical"], currentTrip: { id: "TR-0079", from: "Hyderabad", to: "Visakhapatnam", status: "In Transit" } },
-  { id: "DR-007", name: "Jose Thomas", email: "jose.t@transitops.in", phone: "+91 98765 43216", address: "Kochi, Kerala", licenseNo: "KL-2019-3344", licenseType: "Heavy Vehicle", licenseExpiry: "2027-02-28", dob: "1986-12-03", joiningDate: "2019-03-01", status: "Active", rating: 4.8, trips: 389, completed: 378, cancelled: 2, distance: "112,700 km", avgRating: 4.8, safetyScore: 97, experience: "7 years", vehicle: "AMW 2523 (KL-03-GH-3344)", emergencyContact: "Mary Thomas (+91 98765 43226)", compliance: 96, licenseStatus: "Valid", availability: "Available", avatar: null, documents: ["License", "Insurance", "Medical", "Background Check"], currentTrip: null },
-  { id: "DR-008", name: "Arun Nair", email: "arun.n@transitops.in", phone: "+91 98765 43217", address: "Chennai, Tamil Nadu", licenseNo: "TN-2021-1188", licenseType: "Light Vehicle", licenseExpiry: "2026-07-20", dob: "1995-08-19", joiningDate: "2021-07-01", status: "Suspended", rating: 3.9, trips: 87, completed: 72, cancelled: 5, distance: "34,500 km", avgRating: 3.9, safetyScore: 68, experience: "2 years", vehicle: "Not Assigned", emergencyContact: "Lakshmi Nair (+91 98765 43227)", compliance: 42, licenseStatus: "Expired", availability: "Unavailable", avatar: null, documents: ["License"], currentTrip: null },
-];
-
+export const drivers = [];
 export const driverStats = {
-  total: drivers.length,
-  active: drivers.filter(d => d.status === "Active").length,
-  onLeave: drivers.filter(d => d.status === "On Leave").length,
-  suspended: drivers.filter(d => d.status === "Suspended").length,
+  total: 0,
+  active: 0,
+  onLeave: 0,
+  suspended: 0,
 };
-
 export const licenseStats = {
-  total: drivers.length,
-  valid: drivers.filter(d => d.licenseStatus === "Valid").length,
-  expiringSoon: drivers.filter(d => d.licenseStatus === "Expiring Soon").length,
-  expired: drivers.filter(d => d.licenseStatus === "Expired").length,
+  total: 0,
+  valid: 0,
+  expiringSoon: 0,
+  expired: 0,
 };

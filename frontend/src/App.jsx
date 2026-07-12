@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, useLocation, Navigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -144,9 +145,12 @@ import ReceiversPage from "./pages/destination-control/ReceiversPage";
 import ProofOfDeliveryPage from "./pages/destination-control/ProofOfDeliveryPage";
 import DestinationReportsPage from "./pages/destination-control/DestinationReportsPage";
 import DestinationSettings from "./pages/destination-control/DestinationSettings";
-
+import RequestDemoModal from "./components/landing/RequestDemoModal";
 function LandingPage() {
+  const [showDemoModal, setShowDemoModal] = useState(false);
+
   return (
+    <>
     <div className="bg-neutral-light min-h-screen text-neutral-textMain flex flex-col font-sans">
       <Navbar />
       <HeroSection />
@@ -175,14 +179,16 @@ function LandingPage() {
               <Link to="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
                 Start Free Trial
               </Link>
-              <Link to="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
+              <button onClick={() => setShowDemoModal(true)} className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
                 Request Live Demo <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
           </div>
         </div>
       </section>
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+      <RequestDemoModal open={showDemoModal} onClose={() => setShowDemoModal(false)} />
+    </>
   );
 }
 

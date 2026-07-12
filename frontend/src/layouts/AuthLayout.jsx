@@ -145,9 +145,9 @@ export default function AuthLayout({ children }) {
               {/* Stats row */}
               <div className="grid grid-cols-3 gap-2.5">
                 {[
-                  { label: "Active", value: "24", color: "text-success" },
-                  { label: "Routes", value: "18", color: "text-white" },
-                  { label: "Alerts", value: "3", color: "text-warning" },
+                  { label: "Active", value: "0", color: "text-success" },
+                  { label: "Routes", value: "0", color: "text-white" },
+                  { label: "Alerts", value: "0", color: "text-warning" },
                 ].map((stat, i) => (
                   <motion.div
                     key={i}

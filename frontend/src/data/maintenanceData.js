@@ -1,38 +1,11 @@
-export const maintenance = [
-  { id: "MT-001", vehicle: "Tata Prima 4040.S", plate: "KL-07-AU-4521", vehicleId: "VH-001", issue: "Oil Change", description: "Routine oil change and filter replacement", priority: "Medium", category: "Preventive", mechanic: "Rajesh Mechanic", mechanicExp: "12 yrs", mechanicRating: 4.8, mechanicPhone: "+91 98765 11111", mechanicEmail: "rajesh@garage.in", mechanicAvail: "Available", garage: "Ravi Mechanicals", estimatedCost: "₹12,500", actualCost: null, labourCost: null, partsCost: null, tax: null, discount: null, totalCost: null, status: "Scheduled", date: "2026-07-15", completedDate: null, duration: null, invoice: null, documents: [], images: [], warranty: "6 months", notes: "", approvalStatus: "Approved", reportedBy: "Fleet Manager", timeline: [
-    { stage: "Created", date: "2026-07-10", person: "Fleet Manager", notes: "Routine maintenance scheduled" },
-    { stage: "Approved", date: "2026-07-11", person: "Operations Head", notes: "Approved for scheduled date" }] },
-  { id: "MT-002", vehicle: "Eicher Pro 6036", plate: "TN-09-BC-7890", vehicleId: "VH-003", issue: "Engine Overhaul", description: "Complete engine overhaul due to performance issues", priority: "High", category: "Major Repair", mechanic: "Suresh Auto", mechanicExp: "18 yrs", mechanicRating: 4.9, mechanicPhone: "+91 98765 22222", mechanicEmail: "suresh@garage.in", mechanicAvail: "Busy", garage: "Transit Auto Care", estimatedCost: "₹85,000", actualCost: "₹82,000", labourCost: "₹35,000", partsCost: "₹40,000", tax: "₹5,000", discount: "₹2,000", totalCost: "₹78,000", status: "In Progress", date: "2026-07-10", completedDate: null, duration: "4 days", invoice: "INV-MT-002", documents: ["Engine Report", "Parts List"], images: ["engine1.jpg"], warranty: "12 months", notes: "Parts sourced from OEM", approvalStatus: "Approved", reportedBy: "Driver", timeline: [
-    { stage: "Created", date: "2026-07-08", person: "Driver", notes: "Engine knocking noise reported" },
-    { stage: "Inspected", date: "2026-07-09", person: "Suresh Auto", notes: "Engine damage confirmed" },
-    { stage: "In Progress", date: "2026-07-10", person: "Suresh Auto", notes: "Engine disassembly in progress" }] },
-  { id: "MT-003", vehicle: "Isuzu FVR", plate: "AP-08-EF-4455", vehicleId: "VH-009", issue: "Brake Replacement", description: "Brake pad and rotor replacement", priority: "Critical", category: "Repair", mechanic: "Anil Brakes", mechanicExp: "8 yrs", mechanicRating: 4.6, mechanicPhone: "+91 98765 33333", mechanicEmail: "anil@garage.in", mechanicAvail: "Available", garage: "FleetFix Pro", estimatedCost: "₹34,200", actualCost: "₹32,000", labourCost: "₹8,000", partsCost: "₹20,000", tax: "₹2,000", discount: null, totalCost: "₹30,000", status: "In Progress", date: "2026-07-11", completedDate: null, duration: "2 days", invoice: null, documents: ["Inspection Report"], images: [], warranty: "3 months", notes: "Both front and rear brakes", approvalStatus: "Pending", reportedBy: "Safety Officer", timeline: [
-    { stage: "Created", date: "2026-07-10", person: "Safety Officer", notes: "Brake wear detected during inspection" },
-    { stage: "Inspected", date: "2026-07-11", person: "Anil Brakes", notes: "Pads and rotors need replacement" }] },
-  { id: "MT-004", vehicle: "Mahindra Blazo X25", plate: "MH-12-RT-2244", vehicleId: "VH-004", issue: "Tire Rotation", description: "Regular tire rotation and alignment", priority: "Low", category: "Preventive", mechanic: "Rajesh Mechanic", mechanicExp: "12 yrs", mechanicRating: 4.8, mechanicPhone: "+91 98765 11111", mechanicEmail: "rajesh@garage.in", mechanicAvail: "Available", garage: "Ravi Mechanicals", estimatedCost: "₹8,400", actualCost: "₹8,400", labourCost: "₹2,000", partsCost: "₹5,000", tax: "₹500", discount: null, totalCost: "₹7,500", status: "Completed", date: "2026-07-08", completedDate: "2026-07-08", duration: "4 hours", invoice: "INV-MT-004", documents: ["Service Report"], images: [], warranty: "N/A", notes: "", approvalStatus: "Approved", reportedBy: "Fleet Manager", timeline: [
-    { stage: "Created", date: "2026-07-07", person: "Fleet Manager", notes: "Scheduled rotation" },
-    { stage: "Inspected", date: "2026-07-08", person: "Rajesh Mechanic", notes: "Tires inspected" },
-    { stage: "Completed", date: "2026-07-08", person: "Rajesh Mechanic", notes: "Rotation done" }] },
-  { id: "MT-005", vehicle: "Volvo FH16", plate: "RJ-14-AB-9988", vehicleId: "VH-007", issue: "AC Servicing", description: "Air conditioning system servicing and gas refill", priority: "Medium", category: "Service", mechanic: "CoolTech Kumar", mechanicExp: "6 yrs", mechanicRating: 4.5, mechanicPhone: "+91 98765 44444", mechanicEmail: "kumar@garage.in", mechanicAvail: "Available", garage: "CoolTech Services", estimatedCost: "₹15,600", actualCost: null, labourCost: null, partsCost: null, tax: null, discount: null, totalCost: null, status: "Scheduled", date: "2026-07-18", completedDate: null, duration: null, invoice: null, documents: [], images: [], warranty: "3 months", notes: "Driver reported weak AC", approvalStatus: "Pending", reportedBy: "Driver", timeline: [
-    { stage: "Created", date: "2026-07-12", person: "Driver", notes: "AC not cooling properly" }] },
-  { id: "MT-006", vehicle: "BharatBenz 2528", plate: "DL-03-KP-5567", vehicleId: "VH-005", issue: "Battery Replacement", description: "Battery replacement and electrical check", priority: "High", category: "Repair", mechanic: "PowerCell Sharma", mechanicExp: "10 yrs", mechanicRating: 4.7, mechanicPhone: "+91 98765 55555", mechanicEmail: "sharma@garage.in", mechanicAvail: "Available", garage: "PowerCell India", estimatedCost: "₹22,000", actualCost: "₹22,000", labourCost: "₹3,000", partsCost: "₹16,000", tax: "₹1,500", discount: "₹500", totalCost: "₹20,000", status: "Completed", date: "2026-07-05", completedDate: "2026-07-05", duration: "3 hours", invoice: "INV-MT-006", documents: ["Battery Report", "Electrical Check"], images: [], warranty: "24 months", notes: "Recommended alternator check in 6 months", approvalStatus: "Approved", reportedBy: "Fleet Manager", timeline: [
-    { stage: "Created", date: "2026-07-04", person: "Fleet Manager", notes: "Battery failing tests" },
-    { stage: "Inspected", date: "2026-07-05", person: "PowerCell Sharma", notes: "Battery at 30% capacity" },
-    { stage: "Completed", date: "2026-07-05", person: "PowerCell Sharma", notes: "New battery installed" }] },
-  { id: "MT-007", vehicle: "Ashok Leyland 4220", plate: "KA-01-MN-3312", vehicleId: "VH-002", issue: "Transmission Repair", description: "Gear slipping - transmission rebuild needed", priority: "Critical", category: "Major Repair", mechanic: "Suresh Auto", mechanicExp: "18 yrs", mechanicRating: 4.9, mechanicPhone: "+91 98765 22222", mechanicEmail: "suresh@garage.in", mechanicAvail: "Busy", garage: "Transit Auto Care", estimatedCost: "₹1,20,000", actualCost: null, labourCost: null, partsCost: null, tax: null, discount: null, totalCost: null, status: "Waiting Parts", date: "2026-07-14", completedDate: null, duration: null, invoice: null, documents: ["Diagnostic Report"], images: [], warranty: null, notes: "Parts on order - 2 weeks ETA", approvalStatus: "Approved", reportedBy: "Driver", timeline: [
-    { stage: "Created", date: "2026-07-12", person: "Driver", notes: "Gear slipping in 3rd" },
-    { stage: "Inspected", date: "2026-07-13", person: "Suresh Auto", notes: "Transmission needs rebuild" },
-    { stage: "Parts Ordered", date: "2026-07-13", person: "Suresh Auto", notes: "Gearkit ordered from OEM" }] },
-  { id: "MT-008", vehicle: "Scania R450", plate: "UP-32-CD-6677", vehicleId: "VH-008", issue: "Annual Service", description: "Complete annual maintenance as per schedule", priority: "Low", category: "Inspections", mechanic: "Rajesh Mechanic", mechanicExp: "12 yrs", mechanicRating: 4.8, mechanicPhone: "+91 98765 11111", mechanicEmail: "rajesh@garage.in", mechanicAvail: "Available", garage: "Ravi Mechanicals", estimatedCost: "₹45,000", actualCost: null, labourCost: null, partsCost: null, tax: null, discount: null, totalCost: null, status: "Scheduled", date: "2026-07-25", completedDate: null, duration: null, invoice: null, documents: [], images: [], warranty: null, notes: "Annual comprehensive service", approvalStatus: "Pending", reportedBy: "System", timeline: [
-    { stage: "Created", date: "2026-07-01", person: "System", notes: "Auto-generated from schedule" }] },
-];
-
-const m = maintenance;
+export const maintenance = [];
 export const maintStats = {
-  total: m.length, pending: m.filter(j => j.status === "Scheduled" || j.status === "Waiting Parts").length,
-  inProgress: m.filter(j => j.status === "In Progress").length,
-  completed: m.filter(j => j.status === "Completed").length,
-  totalCost: m.reduce((s, j) => s + (parseInt(j.totalCost?.replace(/[₹,]/g,"") || "0")), 0),
-  underService: m.filter(j => j.status !== "Completed" && j.status !== "Scheduled").length,
-  avgTime: "2.5 days", upcoming: m.filter(j => j.status === "Scheduled").length,
+  total: 0,
+  pending: 0,
+  inProgress: 0,
+  completed: 0,
+  totalCost: 0,
+  underService: 0,
+  avgTime: "0",
+  upcoming: 0,
 };

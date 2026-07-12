@@ -111,25 +111,25 @@ export default function DestinationSettings() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card title="Warehouse Information" icon={Warehouse} color="bg-primary/10 text-primary" delay={0.05}>
-          <Input label="Warehouse Name" value="Mumbai Central Hub" />
-          <Input label="Location" value="Mumbai, Maharashtra" />
-          <Input label="Total Capacity (sq ft)" value="51,500" />
-          <Input label="Working Hours" value="06:00 - 22:00" />
-          <Select label="Time Zone" value="Asia/Kolkata (IST)" options={["Asia/Kolkata (IST)", "UTC"]} />
+          <Input label="Warehouse Name" value="" />
+          <Input label="Location" value="" />
+          <Input label="Total Capacity (sq ft)" value="0" />
+          <Input label="Working Hours" value="" />
+          <Select label="Time Zone" value="" options={[]} />
         </Card>
 
         <Card title="Company Details" icon={Truck} color="bg-emerald-50 text-emerald-600" delay={0.08}>
-          <Input label="Company Name" value="TransitOps Logistics" />
-          <Input label="GST Number" value="27AABCU9603R1Z1" />
-          <Input label="Contact Email" value="warehouse@transitops.com" />
-          <Input label="Contact Phone" value="+91 1800-123-4567" />
-          <Input label="Address" value="Plot 42, Industrial Area, Andheri East" />
+          <Input label="Company Name" value="" />
+          <Input label="GST Number" value="" />
+          <Input label="Contact Email" value="" />
+          <Input label="Contact Phone" value="" />
+          <Input label="Address" value="" />
         </Card>
 
         <Card title="Dock Configuration" icon={Warehouse} color="bg-blue-50 text-blue-600" delay={0.1}>
-          <Input label="Total Docks" value="25" />
-          <Select label="Auto-Assign Logic" value="Nearest Available" options={["Nearest Available", "Least Utilized", "Cargo Type Match", "Manual Only"]} />
-          <Input label="Max Dock Occupancy (hrs)" value="4" />
+          <Input label="Total Docks" value="0" />
+          <Select label="Auto-Assign Logic" value="" options={[]} />
+          <Input label="Max Dock Occupancy (hrs)" value="0" />
           <Toggle label="Auto-Assign on Arrival" desc="Automatically assign dock when truck arrives" enabled={warehouseSettings.autoAssignDock}
             onChange={() => setWarehouseSettings(p => ({ ...p, autoAssignDock: !p.autoAssignDock }))} />
           <Toggle label="Temperature Alerts" desc="Alert when cold storage temps deviate" enabled={warehouseSettings.tempAlerts}
@@ -137,9 +137,9 @@ export default function DestinationSettings() {
         </Card>
 
         <Card title="Delivery Rules" icon={Truck} color="bg-amber-50 text-amber-600" delay={0.12}>
-          <Select label="ETA Tolerance" value="30 minutes" options={["15 minutes", "30 minutes", "45 minutes", "1 hour"]} />
-          <Select label="Delayed Threshold" value="30 min" options={["15 min", "30 min", "45 min", "1 hour"]} />
-          <Input label="Grace Period" value="15 minutes" />
+          <Select label="ETA Tolerance" value="" options={[]} />
+          <Select label="Delayed Threshold" value="" options={[]} />
+          <Input label="Grace Period" value="0" />
           <Toggle label="Auto-Confirm Deliveries" desc="Auto-confirm when POD is uploaded" enabled={deliveryRules.autoConfirm}
             onChange={() => setDeliveryRules(p => ({ ...p, autoConfirm: !p.autoConfirm }))} />
           <Toggle label="Notify on Arrival" desc="Alert staff when truck arrives" enabled={deliveryRules.notifyOnArrival}
@@ -149,10 +149,10 @@ export default function DestinationSettings() {
         </Card>
 
         <Card title="POD Preferences" icon={Warehouse} color="bg-purple-50 text-purple-600" delay={0.14}>
-          <Select label="Photo Requirement" value="Required - All Deliveries" options={["Required - All Deliveries", "Optional", "Not Required"]} />
-          <Input label="Max Photos per POD" value="5" />
-          <Select label="Document Format" value="PDF" options={["PDF", "JPEG", "PNG", "All Formats"]} />
-          <Input label="Storage Retention (days)" value="365" />
+          <Select label="Photo Requirement" value="" options={[]} />
+          <Input label="Max Photos per POD" value="0" />
+          <Select label="Document Format" value="" options={[]} />
+          <Input label="Storage Retention (days)" value="0" />
         </Card>
 
         <Card title="Notification Settings" icon={Bell} color="bg-amber-50 text-amber-600" delay={0.16}>
@@ -164,7 +164,7 @@ export default function DestinationSettings() {
             onChange={() => setNotifications(p => ({ ...p, push: !p.push }))} />
           <Toggle label="WhatsApp Alerts" desc="WhatsApp delivery notifications" enabled={notifications.whatsapp}
             onChange={() => setNotifications(p => ({ ...p, whatsapp: !p.whatsapp }))} />
-          <Select label="Alert Frequency" value="Immediate" options={["Immediate", "Every 15 min", "Hourly", "Daily Digest"]} />
+          <Select label="Alert Frequency" value="" options={[]} />
         </Card>
 
         <Card title="Security Settings" icon={Shield} color="bg-red-50 text-red-600" delay={0.18}>
@@ -174,7 +174,7 @@ export default function DestinationSettings() {
             onChange={() => setSecurity(p => ({ ...p, requireApproval: !p.requireApproval }))} />
           <Toggle label="Audit Log" desc="Track all warehouse operations" enabled={security.auditLog}
             onChange={() => setSecurity(p => ({ ...p, auditLog: !p.auditLog }))} />
-          <Select label="Session Timeout" value="30 minutes" options={["15 minutes", "30 minutes", "1 hour", "4 hours", "Never"]} />
+          <Select label="Session Timeout" value="" options={[]} />
         </Card>
 
         <Card title="Backup Settings" icon={Database} color="bg-cyan-50 text-cyan-600" delay={0.2}>
@@ -182,8 +182,8 @@ export default function DestinationSettings() {
             onChange={() => setBackup(p => ({ ...p, autoBackup: !p.autoBackup }))} />
           <Toggle label="Daily Digest" desc="Email daily operations summary" enabled={backup.dailyDigest}
             onChange={() => setBackup(p => ({ ...p, dailyDigest: !p.dailyDigest }))} />
-          <Select label="Backup Frequency" value="Daily" options={["Hourly", "Daily", "Weekly", "Monthly"]} />
-          <Input label="Retention Period" value="90 days" />
+          <Select label="Backup Frequency" value="" options={[]} />
+          <Input label="Retention Period" value="0" />
         </Card>
 
 

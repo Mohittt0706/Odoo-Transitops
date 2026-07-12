@@ -8,35 +8,16 @@ import { drivers, incidents, licenses } from "../../data/mockData";
 import { cn } from "../../utils/utils";
 import { AlertTriangle, Shield, FileText, Calendar, UserX, TrendingUp, CheckCircle, Clock } from "lucide-react";
 
-const complianceTrend = [
-  { label: "Jan", value: 88 },
-  { label: "Feb", value: 90 },
-  { label: "Mar", value: 91 },
-  { label: "Apr", value: 93 },
-  { label: "May", value: 92 },
-  { label: "Jun", value: 94 },
-];
+const complianceTrend = [];
 
-const incidentTrend = [
-  { label: "Jan", value: 3 },
-  { label: "Feb", value: 2 },
-  { label: "Mar", value: 4 },
-  { label: "Apr", value: 1 },
-  { label: "May", value: 3 },
-  { label: "Jun", value: 2 },
-];
+const incidentTrend = [];
 
 const driverSafetyScores = drivers.map((d) => ({
   label: d.name.split(" ")[0],
   value: d.compliance,
 }));
 
-const recentAlerts = [
-  { msg: "Driver Rajesh Kumar — License expires in 12 days", severity: "warning", time: "2h ago" },
-  { msg: "Vehicle KL-07-AU-4521 — Brake inspection overdue", severity: "danger",  time: "5h ago" },
-  { msg: "Trip #TRP-0088 — Deviation from approved route",  severity: "warning", time: "Yesterday" },
-  { msg: "Driver Suresh Nair — Passed safety re-certification", severity: "success", time: "Yesterday" },
-];
+const recentAlerts = [];
 
 const severityConfig = {
   warning: { cls: "bg-warning-light text-warning border-amber-200/60",   icon: AlertTriangle, dot: "#D97706" },
@@ -63,11 +44,11 @@ export default function SafetyDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <KPICard title="Drivers At Risk"   value={driversAtRisk}      icon={AlertTriangle} changeType="down" change="+1 this month" color="bg-danger/10 text-danger"     delay={0}    />
-        <KPICard title="License Expiry"    value={licenseExpiring}    icon={FileText}      changeType="down" change="Within 30 days" color="bg-warning/10 text-warning"   delay={0.05} />
-        <KPICard title="Compliance Score"  value="94%"                icon={Shield}        changeType="up"   change="+2% vs last"  color="bg-success/10 text-success"     delay={0.1}  />
-        <KPICard title="Incidents MTD"     value={incidents.length}   icon={AlertTriangle} changeType="up"   change="-2 vs last"   color="bg-primary/10 text-primary"     delay={0.15} />
-        <KPICard title="Safety Rating"     value="A+"                 icon={TrendingUp}    changeType="up"   change="Maintained"   color="bg-emerald-50 text-emerald-600" delay={0.2}  />
+        <KPICard title="Drivers At Risk"   value={driversAtRisk}      icon={AlertTriangle} changeType="down" change="0"              color="bg-danger/10 text-danger"     delay={0}    />
+        <KPICard title="License Expiry"    value={licenseExpiring}    icon={FileText}      changeType="down" change="N/A"           color="bg-warning/10 text-warning"   delay={0.05} />
+        <KPICard title="Compliance Score"  value="0"                  icon={Shield}        changeType="up"   change="0"            color="bg-success/10 text-success"     delay={0.1}  />
+        <KPICard title="Incidents MTD"     value={incidents.length}   icon={AlertTriangle} changeType="up"   change="0"            color="bg-primary/10 text-primary"     delay={0.15} />
+        <KPICard title="Safety Rating"     value="N/A"                icon={TrendingUp}    changeType="up"   change="N/A"          color="bg-emerald-50 text-emerald-600" delay={0.2}  />
       </div>
 
       {/* Charts */}

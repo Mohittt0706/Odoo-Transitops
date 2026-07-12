@@ -3,18 +3,9 @@ import { Truck, MapPin, Battery, ShieldAlert, ArrowRight } from 'lucide-react';
 import TelemetryChart from '../charts/TelemetryChart';
 
 export default function DashboardPreview() {
-  const kpis = [
-    { label: 'Active Fleet', value: '48/52 Vehicles', change: '+4.5% en route' },
-    { label: 'Today\'s Trips', value: '142 Dispatches', change: '98% on-time' },
-    { label: 'Fuel Target', value: '8.4 km/L', change: '+1.2% efficiency' },
-    { label: 'Active Alerts', value: '1 Maintenance', change: 'In Columbus Shop' }
-  ];
+  const kpis = [];
 
-  const vehicles = [
-    { id: 'TRK-204', driver: 'Marcus Vance', destination: 'Chicago Hub', fuel: 78, status: 'En Route' },
-    { id: 'TRK-109', driver: 'Sarah Jenkins', destination: 'Detroit Depot', fuel: 45, status: 'En Route' },
-    { id: 'VAN-512', driver: 'David Chen', destination: 'Cleveland Yards', fuel: 92, status: 'Available' }
-  ];
+  const vehicles = [];
 
   return (
     <section className="py-20 bg-slate-50 border-b border-neutral-border">

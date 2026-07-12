@@ -15,7 +15,7 @@ export default function FleetAnalytics() {
   const avgMaintScore = Math.round(vehiclePerformance.reduce((s, v) => s + v.maintenanceScore, 0) / vehiclePerformance.length);
   const totalMaintCost = monthlyExpenses.reduce((s, d) => s + d.maintenance, 0);
   const totalServiceCost = monthlyExpenses.reduce((s, d) => s + d.maintenance + d.other, 0);
-  const avgDowntime = 8.5;
+  const avgDowntime = 0;
 
   const sortedByUsage = [...vehiclePerformance].sort((a, b) => b.usage - a.usage);
   const topVehicles = sortedByUsage.slice(0, 5);
@@ -34,26 +34,26 @@ export default function FleetAnalytics() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-5">
-        <StatCard title="Fleet Size" value="58" icon={Truck} change="+3" changeType="up" sparklineData={[48, 50, 52, 54, 55, 56, 58]} color="bg-primary/10 text-primary" delay={0} />
-        <StatCard title="Vehicle Utilization" value={`${avgUtilization}%`} icon={Gauge} change="+5.2%" changeType="up" sparklineData={[72, 75, 78, 80, 82, 85, avgUtilization]} color="bg-emerald-50 text-emerald-600" delay={0.02} />
-        <StatCard title="Avg Distance (km)" value={`${(totalDistance / vehiclePerformance.length / 100).toFixed(1)}K`} icon={Route} change="+8.3%" changeType="up" sparklineData={[12, 12.5, 13, 13.2, 13.8, 14, 14.2]} color="bg-blue-50 text-blue-600" delay={0.04} />
-        <StatCard title="Availability" value="86%" icon={Clock} change="+2.1%" changeType="up" sparklineData={[80, 82, 83, 84, 85, 85, 86]} color="bg-cyan-50 text-cyan-600" delay={0.06} />
-        <StatCard title="Maintenance Score" value={`${avgMaintScore}%`} icon={Wrench} change="+1.5%" changeType="up" sparklineData={[78, 80, 81, 82, 83, 84, avgMaintScore]} color="bg-amber-50 text-amber-600" delay={0.08} />
-        <StatCard title="Downtime (avg hrs)" value={`${avgDowntime}h`} icon={TrendingDown} change="-0.5h" changeType="down" sparklineData={[12, 11, 10.5, 10, 9.5, 9, avgDowntime]} color="bg-rose-50 text-rose-600" delay={0.1} />
-        <StatCard title="Service Cost (YTD)" value={`₹${(totalServiceCost / 1000).toFixed(0)}K`} icon={DollarSign} change="+4.8%" changeType="up" sparklineData={[280, 295, 310, 325, 340, 350, Math.round(totalServiceCost / 1000)]} color="bg-purple-50 text-purple-600" delay={0.12} />
-        <StatCard title="Maintenance Cost" value={`₹${(totalMaintCost / 1000).toFixed(0)}K`} icon={Wrench} change="+3.2%" changeType="up" sparklineData={[82, 86, 90, 94, 98, 102, Math.round(totalMaintCost / 1000)]} color="bg-orange-50 text-orange-600" delay={0.14} />
+        <StatCard title="Fleet Size" value="" icon={Truck} change="" changeType="up" sparklineData={[]} color="bg-primary/10 text-primary" delay={0} />
+        <StatCard title="Vehicle Utilization" value={`${avgUtilization}%`} icon={Gauge} change="" changeType="up" sparklineData={[]} color="bg-emerald-50 text-emerald-600" delay={0.02} />
+        <StatCard title="Avg Distance (km)" value={`${(totalDistance / vehiclePerformance.length / 100).toFixed(1)}K`} icon={Route} change="" changeType="up" sparklineData={[]} color="bg-blue-50 text-blue-600" delay={0.04} />
+        <StatCard title="Availability" value="" icon={Clock} change="" changeType="up" sparklineData={[]} color="bg-cyan-50 text-cyan-600" delay={0.06} />
+        <StatCard title="Maintenance Score" value={`${avgMaintScore}%`} icon={Wrench} change="" changeType="up" sparklineData={[]} color="bg-amber-50 text-amber-600" delay={0.08} />
+        <StatCard title="Downtime (avg hrs)" value={`${avgDowntime}h`} icon={TrendingDown} change="" changeType="down" sparklineData={[]} color="bg-rose-50 text-rose-600" delay={0.1} />
+        <StatCard title="Service Cost (YTD)" value={`₹${(totalServiceCost / 1000).toFixed(0)}K`} icon={DollarSign} change="" changeType="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.12} />
+        <StatCard title="Maintenance Cost" value={`₹${(totalMaintCost / 1000).toFixed(0)}K`} icon={Wrench} change="" changeType="up" sparklineData={[]} color="bg-orange-50 text-orange-600" delay={0.14} />
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Vehicle Usage" subtitle="Utilization by vehicle" delay={0.2}
-          actions={<TrendIndicator value="+5.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={vehiclePerformance.slice(0, 8).map(v => ({ label: v.name.split(' ')[1], value: v.usage }))} color="#1E3A5F" height={160} />
         </ChartCard>
 
-        <ChartCard title="Fleet Growth" subtitle="Year over year" delay={0.25}
-          actions={<TrendIndicator value="+5 veh" type="up" />}
+        <ChartCard title="Fleet Growth" subtitle="" delay={0.25}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={fleetGrowthData} color="#059669" height={160} />
         </ChartCard>
@@ -66,7 +66,7 @@ export default function FleetAnalytics() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Fleet Utilization Trend" subtitle="Monthly utilization %" delay={0.35}
-          actions={<TrendIndicator value="+8.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={fleetUtilization} color="#1E3A5F" height={180} />
         </ChartCard>

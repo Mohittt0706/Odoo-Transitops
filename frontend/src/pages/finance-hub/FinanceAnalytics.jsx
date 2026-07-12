@@ -9,19 +9,9 @@ import { monthlyRevenue, monthlyExpenses, expenseDist, roiData, vehicles } from 
 import { TrendingUp, TrendingDown, IndianRupee, Fuel, Wrench, DollarSign, BarChart3, Target, PieChart, LineChart } from "lucide-react";
 import { useState } from "react";
 
-const costPerKm = vehicles.slice(0, 8).map((v) => ({ label: v.name.split(" ")[0], value: parseFloat((14 + Math.random() * 16).toFixed(1)) }));
-const profitabilityByClient = [
-  { label: "Amazon India", value: 345 }, { label: "Reliance Retail", value: 280 },
-  { label: "Flipkart", value: 220 }, { label: "Wipro", value: 180 },
-  { label: "HUL", value: 150 }, { label: "Tata Chemicals", value: 90 },
-  { label: "ITC Limited", value: 75 }, { label: "Mahindra Logistics", value: 60 },
-];
-const budgetUtilization = [
-  { label: "Fuel", value: 88 }, { label: "Maintenance", value: 72 },
-  { label: "Salaries", value: 95 }, { label: "Insurance", value: 100 },
-  { label: "Toll & Parking", value: 65 }, { label: "Admin", value: 45 },
-  { label: "Permits", value: 55 }, { label: "Misc", value: 30 },
-];
+const costPerKm = [];
+const profitabilityByClient = [];
+const budgetUtilization = [];
 
 const monthlyProfit = monthlyRevenue.map((r, i) => ({ label: r.label, value: r.value - monthlyExpenses[i].value }));
 

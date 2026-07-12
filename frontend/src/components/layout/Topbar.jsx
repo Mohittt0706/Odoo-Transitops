@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/utils";
@@ -47,11 +47,18 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
 
   const crumbs = getBreadcrumbs(location.pathname);
 
+  const demoRequests = useMemo(() => {
+    try { return JSON.parse(localStorage.getItem("demo_requests") || "[]"); }
+    catch { return []; }
+  }, [notificationsOpen]);
+
   const notifications = [
-    { id: 1, title: "Vehicle KL-07-AU-4521 maintenance due", time: "5 min ago", unread: true },
-    { id: 2, title: "Driver license expiry in 15 days", time: "1 hr ago", unread: true },
-    { id: 3, title: "Trip #TR-0084 completed successfully", time: "2 hrs ago", unread: false },
-    { id: 4, title: "Fuel expense report ready for review", time: "3 hrs ago", unread: false },
+    ...demoRequests.filter(r => r.status === "Pending").map(r => ({
+      id: `demo-${r.id}`,
+      title: `Demo Request: ${r.company}`,
+      time: new Date(r.createdAt).toLocaleDateString(),
+      unread: true,
+    })),
   ];
 
   const unreadCount = notifications.filter((n) => n.unread).length;

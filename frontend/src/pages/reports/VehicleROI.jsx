@@ -38,24 +38,24 @@ export default function VehicleROI() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
-        <StatCard title="Total Purchase Cost" value={`₹${(totalPurchaseCost / 100000).toFixed(1)}L`} icon={Wallet} change="+2 veh" changeType="up" sparklineData={[18, 20, 22, 24, 25, 27, Math.round(totalPurchaseCost / 100000)]} color="bg-primary/10 text-primary" delay={0} />
-        <StatCard title="Operational Cost" value={`₹${(totalOperationalCost / 100000).toFixed(1)}L`} icon={DollarSign} change="+4.8%" changeType="up" sparklineData={[145, 150, 155, 160, 162, 165, Math.round(totalOperationalCost / 100000)]} color="bg-amber-50 text-amber-600" delay={0.02} />
-        <StatCard title="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} icon={IndianRupee} change="+12.4%" changeType="up" sparklineData={[185, 195, 205, 215, 225, 235, Math.round(totalRevenue / 100000)]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
-        <StatCard title="Net Profit" value={`₹${(totalNetProfit / 100000).toFixed(1)}L`} icon={TrendingUp} change="+18.2%" changeType="up" sparklineData={[35, 40, 45, 50, 55, 60, Math.round(totalNetProfit / 100000)]} color="bg-cyan-50 text-cyan-600" delay={0.06} />
-        <StatCard title="Avg ROI" value={`${avgROI}%`} icon={Target} change="+5.3%" changeType="up" sparklineData={[28, 30, 32, 34, 35, 37, avgROI]} color="bg-purple-50 text-purple-600" delay={0.08} />
-        <StatCard title="Lifetime Value" value={`₹${(totalLifetimeValue / 10000000).toFixed(1)}Cr`} icon={PieChart} change="+8.5%" changeType="up" sparklineData={[75, 80, 85, 88, 92, 95, Math.round(totalLifetimeValue / 100000)]} color="bg-blue-50 text-blue-600" delay={0.1} />
+        <StatCard title="Total Purchase Cost" value={`₹${(totalPurchaseCost / 100000).toFixed(1)}L`} icon={Wallet} change="" changeType="up" sparklineData={[]} color="bg-primary/10 text-primary" delay={0} />
+        <StatCard title="Operational Cost" value={`₹${(totalOperationalCost / 100000).toFixed(1)}L`} icon={DollarSign} change="" changeType="up" sparklineData={[]} color="bg-amber-50 text-amber-600" delay={0.02} />
+        <StatCard title="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} icon={IndianRupee} change="" changeType="up" sparklineData={[]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
+        <StatCard title="Net Profit" value={`₹${(totalNetProfit / 100000).toFixed(1)}L`} icon={TrendingUp} change="" changeType="up" sparklineData={[]} color="bg-cyan-50 text-cyan-600" delay={0.06} />
+        <StatCard title="Avg ROI" value={`${avgROI}%`} icon={Target} change="" changeType="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.08} />
+        <StatCard title="Lifetime Value" value={`₹${(totalLifetimeValue / 10000000).toFixed(1)}Cr`} icon={PieChart} change="" changeType="up" sparklineData={[]} color="bg-blue-50 text-blue-600" delay={0.1} />
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="ROI Comparison" subtitle="ROI % by vehicle" delay={0.2}
-          actions={<TrendIndicator value={`${avgROI}% avg`} type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={sortedByROI.map(v => ({ label: v.name.split(' ')[1], value: v.roi }))} color="#7C3AED" height={180} />
         </ChartCard>
 
         <ChartCard title="Vehicle Profitability" subtitle="Net profit by vehicle" delay={0.25}
-          actions={<TrendIndicator value="+18.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={sortedByROI.map(v => ({ label: v.name.split(' ')[1], value: Math.round(v.netProfit / 1000) }))} color="#059669" height={180} />
         </ChartCard>
@@ -63,7 +63,7 @@ export default function VehicleROI() {
 
       {/* Charts Row 2 */}
       <ChartCard title="Lifetime Revenue" subtitle="Monthly net profit trend" delay={0.3}
-        actions={<TrendIndicator value="+15.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
       >
         <AreaChart data={netProfitMonthly.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#059669" height={200} />
       </ChartCard>

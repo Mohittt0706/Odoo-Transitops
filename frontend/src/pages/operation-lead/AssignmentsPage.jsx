@@ -39,9 +39,9 @@ export default function AssignmentsPage() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <KPICard title="Total Assignments" value="6" icon={ClipboardList} color="bg-primary/10 text-primary" delay={0} />
-        <KPICard title="Active" value="3" change="Ongoing" changeType="up" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
-        <KPICard title="Scheduled" value="1" icon={CalendarClock} color="bg-purple-50 text-purple-600" delay={0.1} />
+        <KPICard title="Total Assignments" value="0" icon={ClipboardList} color="bg-primary/10 text-primary" delay={0} />
+        <KPICard title="Active" value="0" change="0" changeType="up" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
+        <KPICard title="Scheduled" value="0" icon={CalendarClock} color="bg-purple-50 text-purple-600" delay={0.1} />
       </div>
 
       <DataTable

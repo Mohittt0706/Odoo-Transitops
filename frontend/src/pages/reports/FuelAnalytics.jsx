@@ -31,30 +31,30 @@ export default function FuelAnalytics() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
-        <StatCard title="Total Fuel Cost" value={`₹${(totalFuelCost / 1000).toFixed(0)}K`} icon={DollarSign} change="+5.8%" changeType="up" sparklineData={[320, 340, 355, 370, 385, 395, Math.round(totalFuelCost / 1000)]} color="bg-rose-50 text-rose-600" delay={0} />
-        <StatCard title="Total Consumption" value={`${(totalConsumption / 1000).toFixed(1)}K L`} icon={Fuel} change="+4.2%" changeType="up" sparklineData={[48, 50, 52, 54, 56, 57, Math.round(totalConsumption / 1000)]} color="bg-amber-50 text-amber-600" delay={0.02} />
-        <StatCard title="Avg Fuel Efficiency" value={`${avgEfficiency} km/L`} icon={Gauge} change="+3.5%" changeType="up" sparklineData={[5.2, 5.4, 5.6, 5.8, 6.0, 6.1, parseFloat(avgEfficiency)]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
-        <StatCard title="Average Mileage" value={`${avgMileage.toLocaleString()} km`} icon={Route} change="+6.1%" changeType="up" sparklineData={[11, 11.5, 12, 12.5, 13, 13.5, Math.round(avgMileage / 1000)]} color="bg-blue-50 text-blue-600" delay={0.06} />
-        <StatCard title="Fuel Expense (YTD)" value={`₹${(totalFuelExpense / 1000).toFixed(0)}K`} icon={TrendingUp} change="+5.2%" changeType="up" sparklineData={[1200, 1250, 1300, 1350, 1400, 1450, Math.round(totalFuelExpense / 1000)]} color="bg-purple-50 text-purple-600" delay={0.08} />
-        <StatCard title="Waste Estimate" value={`${wasteEstimate.toLocaleString()} L`} icon={Zap} change="-2.1%" changeType="down" sparklineData={[4200, 4100, 4000, 3950, 3900, 3850, wasteEstimate]} color="bg-orange-50 text-orange-600" delay={0.1} />
+        <StatCard title="Total Fuel Cost" value={`₹${(totalFuelCost / 1000).toFixed(0)}K`} icon={DollarSign} change="" changeType="up" sparklineData={[]} color="bg-rose-50 text-rose-600" delay={0} />
+        <StatCard title="Total Consumption" value={`${(totalConsumption / 1000).toFixed(1)}K L`} icon={Fuel} change="" changeType="up" sparklineData={[]} color="bg-amber-50 text-amber-600" delay={0.02} />
+        <StatCard title="Avg Fuel Efficiency" value={`${avgEfficiency} km/L`} icon={Gauge} change="" changeType="up" sparklineData={[]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
+        <StatCard title="Average Mileage" value={`${avgMileage.toLocaleString()} km`} icon={Route} change="" changeType="up" sparklineData={[]} color="bg-blue-50 text-blue-600" delay={0.06} />
+        <StatCard title="Fuel Expense (YTD)" value={`₹${(totalFuelExpense / 1000).toFixed(0)}K`} icon={TrendingUp} change="" changeType="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.08} />
+        <StatCard title="Waste Estimate" value={`${wasteEstimate.toLocaleString()} L`} icon={Zap} change="" changeType="down" sparklineData={[]} color="bg-orange-50 text-orange-600" delay={0.1} />
       </div>
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Fuel Consumption Trend" subtitle="Monthly fuel usage (L)" delay={0.2}
-          actions={<TrendIndicator value="+4.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={fuelConsumption.map(d => ({ label: d.label, value: Math.round(d.value / 100) }))} color="#D97706" height={160} />
         </ChartCard>
 
-        <ChartCard title="Fuel Cost Trend" subtitle="Monthly fuel expenses" delay={0.25}
-          actions={<TrendIndicator value="+5.8%" type="up" />}
+        <ChartCard title="Fuel Cost Trend" subtitle="" delay={0.25}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={monthlyExpenses.map(d => ({ label: d.label, value: Math.round(d.fuel / 1000) }))} color="#DC2626" height={160} />
         </ChartCard>
 
         <ChartCard title="Fuel Efficiency" subtitle="km/L by vehicle" delay={0.3}
-          actions={<TrendIndicator value={`${avgEfficiency} avg`} type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={sortedByEfficiency.map(f => ({ label: f.vehicle.split(' ')[1], value: Math.round(f.efficiency * 10) }))} color="#059669" height={160} />
         </ChartCard>
@@ -64,7 +64,7 @@ export default function FuelAnalytics() {
       <ChartCard title="Fuel Per Vehicle" subtitle="Detailed fuel consumption analysis" delay={0.35}
         actions={
           <div className="flex items-center gap-2">
-            <TrendIndicator value="Best: DAF XF" type="up" />
+            <TrendIndicator value="" type="up" />
           </div>
         }
       >
