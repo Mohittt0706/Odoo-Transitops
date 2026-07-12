@@ -11,6 +11,7 @@ const maintenanceRoutes = require('./maintenance.routes');
 const fuelRoutes = require('./fuel.routes');
 const expenseRoutes = require('./expense.routes');
 const dashboardRoutes = require('./dashboard.routes');
+const reportRoutes = require('./report.routes');
 
 router.get('/health', (req, res) => {
   res.status(200).json({
@@ -28,5 +29,6 @@ router.use('/maintenance', maintenanceRoutes);
 router.use('/fuel', fuelRoutes);
 router.use('/expenses', expenseRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/reports', reportRoutes);
 
 module.exports = router;
