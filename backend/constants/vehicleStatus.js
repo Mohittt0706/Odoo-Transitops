@@ -1,1 +1,10 @@
-// Vehicle status constants
+const VEHICLE_STATUS = {
+  AVAILABLE: 'AVAILABLE',
+  ON_TRIP: 'ON_TRIP',
+  IN_SHOP: 'IN_SHOP',
+  RETIRED: 'RETIRED',
+};
+
+const VEHICLE_STATUS_ARRAY = Object.values(VEHICLE_STATUS);
+
+module.exports = { VEHICLE_STATUS, VEHICLE_STATUS_ARRAY };
