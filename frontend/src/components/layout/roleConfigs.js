@@ -32,7 +32,7 @@ export const roleConfigs = {
   operations: {
     title: "Mission Control",
     subtitle: "Operations Lead",
-    color: "bg-primary",
+    color: "bg-[#1E3A5F]",
     items: [
       { label: "Dashboard", path: "/dashboard/operations", icon: LayoutDashboard },
       { label: "Fleet", path: "/dashboard/operations/fleet", icon: Truck },
@@ -50,7 +50,7 @@ export const roleConfigs = {
   "road-captain": {
     title: "Driver Cockpit",
     subtitle: "Road Captain",
-    color: "bg-success",
+    color: "bg-[#059669]",
     items: [
       { label: "Dashboard", path: "/dashboard/road-captain", icon: LayoutDashboard },
       { label: "My Trips", path: "/dashboard/road-captain/my-trips", icon: Route },
@@ -67,7 +67,7 @@ export const roleConfigs = {
   safety: {
     title: "Safety Command",
     subtitle: "Safety Officer",
-    color: "bg-warning",
+    color: "bg-[#D97706]",
     items: [
       { label: "Dashboard", path: "/dashboard/safety", icon: LayoutDashboard },
       { label: "Drivers", path: "/dashboard/safety/drivers", icon: Users },
@@ -83,7 +83,7 @@ export const roleConfigs = {
   finance: {
     title: "Finance Command",
     subtitle: "Finance Hub",
-    color: "bg-purple-600",
+    color: "bg-[#7C3AED]",
     items: [
       { label: "Dashboard", path: "/dashboard/finance", icon: LayoutDashboard },
       { label: "Expenses", path: "/dashboard/finance/expenses", icon: DollarSign },
@@ -100,7 +100,7 @@ export const roleConfigs = {
   destination: {
     title: "Arrival Hub",
     subtitle: "Destination Control",
-    color: "bg-rose-600",
+    color: "bg-[#BE123C]",
     items: [
       { label: "Dashboard", path: "/dashboard/destination", icon: LayoutDashboard },
       { label: "Incoming", path: "/dashboard/destination/incoming", icon: Inbox },
