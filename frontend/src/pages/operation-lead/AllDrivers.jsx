@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -22,12 +22,15 @@ import {
 import { cn } from '../../utils/utils';
 import StatusBadge from '../../components/drivers/StatusBadge';
 import SafetyScoreBadge from '../../components/drivers/SafetyScoreBadge';
-import { drivers, driverStatuses, licenseCategories } from '../../data/drivers';
+import { driverService } from '../../services/driver.service';
 
 const ROWS_PER_PAGE = 8;
 
 export default function AllDrivers() {
   const navigate = useNavigate();
+  const [drivers, setDrivers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -36,113 +39,49 @@ export default function AllDrivers() {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
-  const stats = useMemo(() => ({
-    total: drivers.length,
-    available: drivers.filter((d) => d.operationalStatus === 'Available').length,
-    onTrip: drivers.filter((d) => d.operationalStatus === 'On Trip').length,
-    offDuty: drivers.filter((d) => d.operationalStatus === 'Off Duty').length,
-    suspended: drivers.filter((d) => d.operationalStatus === 'Suspended').length,
-  }), []);
-
-  const filteredDrivers = useMemo(() => {
-    let result = drivers.filter((d) => {
-      const matchesSearch =
-        d.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.employeeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.license.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.phone.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'All' || d.operationalStatus === statusFilter;
-      const matchesCategory = categoryFilter === 'All' || d.license.category === categoryFilter;
-      return matchesSearch && matchesStatus && matchesCategory;
-    });
-
-    if (sortColumn) {
-      result = [...result].sort((a, b) => {
-        let aVal, bVal;
-        switch (sortColumn) {
-          case 'driver':
-            aVal = a.fullName.toLowerCase();
-            bVal = b.fullName.toLowerCase();
-            break;
-          case 'licenseNumber':
-            aVal = a.license.number.toLowerCase();
-            bVal = b.license.number.toLowerCase();
-            break;
-          case 'licenseCategory':
-            aVal = a.license.category.toLowerCase();
-            bVal = b.license.category.toLowerCase();
-            break;
-          case 'licenseExpiry':
-            aVal = new Date(a.license.expiryDate).getTime();
-            bVal = new Date(b.license.expiryDate).getTime();
-            break;
-          case 'phone':
-            aVal = a.phone.toLowerCase();
-            bVal = b.phone.toLowerCase();
-            break;
-          case 'safetyScore':
-            aVal = a.safetyScore;
-            bVal = b.safetyScore;
-            break;
-          case 'vehicle':
-            aVal = (a.assignedVehicle || 'zzz').toLowerCase();
-            bVal = (b.assignedVehicle || 'zzz').toLowerCase();
-            break;
-          case 'status':
-            aVal = a.operationalStatus.toLowerCase();
-            bVal = b.operationalStatus.toLowerCase();
-            break;
-          default:
-            return 0;
-        }
-        if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
-        if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
+  const fetchDrivers = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = { page: currentPage, limit: ROWS_PER_PAGE };
+      if (searchTerm) params.search = searchTerm;
+      if (statusFilter !== 'All') params.status = statusFilter;
+      if (categoryFilter !== 'All') params.licenseCategory = categoryFilter;
+      const res = await driverService.getAll(params);
+      setDrivers(res.data.drivers || []);
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message || 'Failed to load drivers');
+    } finally {
+      setLoading(false);
     }
+  }, [currentPage, searchTerm, statusFilter, categoryFilter]);
 
-    return result;
-  }, [searchTerm, statusFilter, categoryFilter, sortColumn, sortDirection]);
+  useEffect(() => {
+    fetchDrivers();
+  }, [fetchDrivers]);
 
-  const totalPages = Math.ceil(filteredDrivers.length / ROWS_PER_PAGE);
-  const paginatedDrivers = filteredDrivers.slice(
-    (currentPage - 1) * ROWS_PER_PAGE,
-    currentPage * ROWS_PER_PAGE
-  );
+  const stats = useMemo(() => {
+    return {
+      total: drivers.length,
+      available: drivers.filter((d) => d.status === 'AVAILABLE').length,
+      onTrip: drivers.filter((d) => d.status === 'ON_TRIP').length,
+      offDuty: drivers.filter((d) => d.status === 'OFF_DUTY').length,
+      suspended: drivers.filter((d) => d.status === 'SUSPENDED').length,
+    };
+  }, [drivers]);
 
-  const handleSort = (column) => {
-    if (sortColumn === column) {
-      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortColumn(column);
-      setSortDirection('asc');
-    }
+  const getInitials = (name) => {
+    if (!name) return '?';
+    return name.split(' ').map((p) => p[0]).join('').toUpperCase().slice(0, 2);
   };
 
-  const toggleSelectAll = () => {
-    if (selectedDrivers.size === paginatedDrivers.length) {
-      setSelectedDrivers(new Set());
-    } else {
-      setSelectedDrivers(new Set(paginatedDrivers.map((d) => d.id)));
-    }
+  const getStatusLabel = (status) => {
+    if (!status) return 'Unknown';
+    return status.replace(/_/g, ' ');
   };
-
-  const toggleSelectDriver = (id) => {
-    setSelectedDrivers((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const isAllSelected = paginatedDrivers.length > 0 && selectedDrivers.size === paginatedDrivers.length;
-  const isPartialSelected = selectedDrivers.size > 0 && selectedDrivers.size < paginatedDrivers.length;
 
   const getLicenseExpiryBadge = (expiryDate) => {
+    if (!expiryDate) return null;
     const now = new Date();
     const expiry = new Date(expiryDate);
     const daysUntilExpiry = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
@@ -165,6 +104,17 @@ export default function AllDrivers() {
     );
   };
 
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <p className="text-sm text-danger">{error}</p>
+        <button onClick={fetchDrivers} className="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary-dark">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5">
@@ -183,7 +133,7 @@ export default function AllDrivers() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {[
-          { label: 'Total Drivers', value: stats.total, icon: Users, color: 'text-primary bg-primary-light' },
+          { label: 'Total Drivers', value: drivers.length, icon: Users, color: 'text-primary bg-primary-light' },
           { label: 'Available', value: stats.available, icon: UserCheck, color: 'text-emerald-600 bg-emerald-50' },
           { label: 'On Trip', value: stats.onTrip, icon: Truck, color: 'text-blue-600 bg-blue-50' },
           { label: 'Off Duty', value: stats.offDuty, icon: UserX, color: 'text-slate-500 bg-slate-100' },
@@ -217,7 +167,7 @@ export default function AllDrivers() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search drivers, IDs, licenses..."
+                placeholder="Search drivers, licenses..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -236,9 +186,10 @@ export default function AllDrivers() {
                 className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 px-4 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-slate-100 transition-colors appearance-none pr-8"
               >
                 <option value="All">All Statuses</option>
-                {driverStatuses.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                <option value="AVAILABLE">Available</option>
+                <option value="ON_TRIP">On Trip</option>
+                <option value="OFF_DUTY">Off Duty</option>
+                <option value="SUSPENDED">Suspended</option>
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
             </div>
@@ -252,22 +203,12 @@ export default function AllDrivers() {
                 className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 px-4 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-slate-100 transition-colors appearance-none pr-8"
               >
                 <option value="All">All Categories</option>
-                {licenseCategories.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                <option value="LMV">LMV</option>
+                <option value="HMV">HMV</option>
+                <option value="MCW">MCW</option>
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
             </div>
-            {selectedDrivers.size > 0 && (
-              <motion.span
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-1.5 text-[10px] font-black text-primary bg-primary-light border border-blue-200 px-3 py-1.5 rounded-full"
-              >
-                <Check className="w-3 h-3" />
-                {selectedDrivers.size} selected
-              </motion.span>
-            )}
           </div>
           <button className="flex items-center gap-2 bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 px-4 py-2.5 rounded-lg hover:bg-slate-100 hover:border-slate-300 transition-all">
             <Download className="w-3.5 h-3.5" />
@@ -280,72 +221,34 @@ export default function AllDrivers() {
             <thead>
               <tr className="border-b border-slate-100 text-[9px] font-black text-slate-400 uppercase tracking-wider">
                 <th className="pb-3 pr-2 w-10">
-                  <div className="relative flex items-center justify-center">
-                    <input
-                      type="checkbox"
-                      checked={isAllSelected}
-                      ref={(el) => { if (el) el.indeterminate = isPartialSelected; }}
-                      onChange={toggleSelectAll}
-                      className="w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer accent-primary"
-                    />
-                  </div>
+                  <input
+                    type="checkbox"
+                    className="w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer accent-primary"
+                  />
                 </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('driver')}
-                >
-                  Driver<SortIndicator column="driver" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('licenseNumber')}
-                >
-                  License Number<SortIndicator column="licenseNumber" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('licenseCategory')}
-                >
-                  Category<SortIndicator column="licenseCategory" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('licenseExpiry')}
-                >
-                  License Expiry<SortIndicator column="licenseExpiry" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('phone')}
-                >
-                  Phone<SortIndicator column="phone" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('safetyScore')}
-                >
-                  Safety Score<SortIndicator column="safetyScore" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('vehicle')}
-                >
-                  Vehicle<SortIndicator column="vehicle" />
-                </th>
-                <th
-                  className="pb-3 cursor-pointer hover:text-slate-600 transition-colors"
-                  onClick={() => handleSort('status')}
-                >
-                  Status<SortIndicator column="status" />
-                </th>
+                <th className="pb-3">Driver</th>
+                <th className="pb-3">License Number</th>
+                <th className="pb-3">Category</th>
+                <th className="pb-3">License Expiry</th>
+                <th className="pb-3">Phone</th>
+                <th className="pb-3">Safety Score</th>
+                <th className="pb-3">Status</th>
                 <th className="pb-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               <AnimatePresence>
-                {paginatedDrivers.length === 0 ? (
+                {loading ? (
                   <tr>
-                    <td colSpan="10" className="py-16 text-center">
+                    <td colSpan="9" className="py-16 text-center">
+                      <div className="flex justify-center">
+                        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    </td>
+                  </tr>
+                ) : drivers.length === 0 ? (
+                  <tr>
+                    <td colSpan="9" className="py-16 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
                           <FileSpreadsheet className="w-7 h-7 text-slate-300" />
@@ -354,67 +257,47 @@ export default function AllDrivers() {
                           <p className="text-xs font-bold text-slate-500">No drivers found</p>
                           <p className="text-[10px] text-slate-400 font-semibold mt-1">Try adjusting your search or filter criteria</p>
                         </div>
-                        {(searchTerm || statusFilter !== 'All' || categoryFilter !== 'All') && (
-                          <button
-                            onClick={() => {
-                              setSearchTerm('');
-                              setStatusFilter('All');
-                              setCategoryFilter('All');
-                              setCurrentPage(1);
-                            }}
-                            className="flex items-center gap-1.5 text-[10px] font-bold text-primary hover:text-primary-hover transition-colors mt-1"
-                          >
-                            <X className="w-3 h-3" />
-                            Clear all filters
-                          </button>
-                        )}
                       </div>
                     </td>
                   </tr>
                 ) : (
-                  paginatedDrivers.map((driver) => {
-                    const expiryBadge = getLicenseExpiryBadge(driver.license.expiryDate);
+                  drivers.map((driver) => {
+                    const expiryBadge = getLicenseExpiryBadge(driver.licenseExpiry);
                     return (
                       <motion.tr
-                        key={driver.id}
+                        key={driver._id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="hover:bg-slate-50/50 transition-colors cursor-pointer"
-                        onClick={() => navigate(`/drivers/profile/${driver.id}`)}
+                        onClick={() => navigate(`/drivers/profile/${driver._id}`)}
                       >
-                        <td
-                          className="py-4 pr-2"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <td className="py-4 pr-2">
                           <input
                             type="checkbox"
-                            checked={selectedDrivers.has(driver.id)}
-                            onChange={() => toggleSelectDriver(driver.id)}
                             className="w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary/20 cursor-pointer accent-primary"
                           />
                         </td>
                         <td className="py-4">
                           <div className="flex items-center gap-3">
                             <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white flex items-center justify-center font-bold text-[10px] shadow-sm shrink-0">
-                              {driver.initials}
+                              {getInitials(driver.fullName)}
                             </div>
                             <div className="min-w-0">
                               <p className="text-xs font-bold text-slate-900 font-headings truncate">{driver.fullName}</p>
-                              <p className="text-[10px] text-slate-400 font-semibold">{driver.employeeId}</p>
                             </div>
                           </div>
                         </td>
                         <td className="py-4">
-                          <span className="text-xs font-mono font-bold text-slate-700">{driver.license.number}</span>
+                          <span className="text-xs font-mono font-bold text-slate-700">{driver.licenseNumber}</span>
                         </td>
                         <td className="py-4">
-                          <span className="text-[10px] font-bold text-slate-600">{driver.license.category}</span>
+                          <span className="text-[10px] font-bold text-slate-600">{driver.licenseCategory}</span>
                         </td>
                         <td className="py-4">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-bold text-slate-600">
-                              {new Date(driver.license.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              {driver.licenseExpiry ? new Date(driver.licenseExpiry).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-'}
                             </span>
                             {expiryBadge && (
                               <StatusBadge status={expiryBadge} size="sm" />
@@ -422,35 +305,25 @@ export default function AllDrivers() {
                           </div>
                         </td>
                         <td className="py-4">
-                          <span className="text-[10px] font-bold text-slate-600">{driver.phone}</span>
+                          <span className="text-[10px] font-bold text-slate-600">{driver.contactNumber || '-'}</span>
                         </td>
                         <td className="py-4">
                           <SafetyScoreBadge score={driver.safetyScore} size="sm" showLabel={false} />
                         </td>
                         <td className="py-4">
-                          {driver.assignedVehicle ? (
-                            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-700 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg">
-                              <Truck className="w-3 h-3 text-slate-400" />
-                              {driver.assignedVehicle}
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-bold text-slate-400 italic">Unassigned</span>
-                          )}
-                        </td>
-                        <td className="py-4">
-                          <StatusBadge status={driver.operationalStatus} size="sm" />
+                          <StatusBadge status={getStatusLabel(driver.status)} size="sm" />
                         </td>
                         <td className="py-4 text-right" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1.5">
                             <button
-                              onClick={() => navigate(`/drivers/profile/${driver.id}`)}
+                              onClick={() => navigate(`/drivers/profile/${driver._id}`)}
                               className="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 hover:bg-primary-light transition-all"
                               title="View Driver"
                             >
                               <Eye className="w-3.5 h-3.5" />
                             </button>
                             <button
-                              onClick={() => navigate(`/drivers/edit/${driver.id}`)}
+                              onClick={() => navigate(`/drivers/edit/${driver._id}`)}
                               className="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-50 transition-all"
                               title="Edit Driver"
                             >
@@ -466,54 +339,6 @@ export default function AllDrivers() {
             </tbody>
           </table>
         </div>
-
-        {filteredDrivers.length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-5 border-t border-slate-100">
-            <p className="text-[10px] font-bold text-slate-400">
-              Showing {((currentPage - 1) * ROWS_PER_PAGE) + 1} to {Math.min(currentPage * ROWS_PER_PAGE, filteredDrivers.length)} of {filteredDrivers.length} drivers
-            </p>
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={cn(
-                  'p-2 rounded-lg border transition-all',
-                  currentPage === 1
-                    ? 'bg-slate-50 border-slate-200 text-slate-300 cursor-not-allowed'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 cursor-pointer'
-                )}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={cn(
-                    'min-w-[32px] h-8 rounded-lg text-[10px] font-black border transition-all',
-                    page === currentPage
-                      ? 'bg-primary text-white border-primary shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 cursor-pointer'
-                  )}
-                >
-                  {page}
-                </button>
-              ))}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={cn(
-                  'p-2 rounded-lg border transition-all',
-                  currentPage === totalPages
-                    ? 'bg-slate-50 border-slate-200 text-slate-300 cursor-not-allowed'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 cursor-pointer'
-                )}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
