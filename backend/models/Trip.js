@@ -58,6 +58,10 @@ const tripSchema = new mongoose.Schema(
     completionTime: {
       type: Date,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
