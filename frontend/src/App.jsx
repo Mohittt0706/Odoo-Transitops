@@ -22,7 +22,17 @@ import Footer from "./components/landing/Footer";
 import { ArrowRight } from "lucide-react";
 
 import OperationsDashboard from "./pages/operations/OperationsDashboard";
-import FleetPage from "./pages/operations/FleetPage";
+import FleetLayout from "./components/fleet/FleetLayout";
+import VehicleOverview from "./pages/operations/fleet/VehicleOverview";
+import AllVehicles from "./pages/operations/fleet/AllVehicles";
+import RegisterVehicle from "./pages/operations/fleet/RegisterVehicle";
+import VehicleDetails from "./pages/operations/fleet/VehicleDetails";
+import EditVehicle from "./pages/operations/fleet/EditVehicle";
+import VehicleDocuments from "./pages/operations/fleet/VehicleDocuments";
+import VehicleAnalytics from "./pages/operations/fleet/VehicleAnalytics";
+import VehicleHistory from "./pages/operations/fleet/VehicleHistory";
+import FleetStatus from "./pages/operations/fleet/FleetStatus";
+import VehicleSettings from "./pages/operations/fleet/VehicleSettings";
 import VehiclesPage from "./pages/operations/VehiclesPage";
 import DriversPage from "./pages/operations/DriversPage";
 import TripsPage from "./pages/operations/TripsPage";
@@ -159,7 +169,18 @@ export default function App() {
 
         <Route path="/dashboard/operations" element={<DashboardLayout role="operations" />}>
           <Route index element={<OperationsDashboard />} />
-          <Route path="fleet" element={<FleetPage />} />
+          <Route path="fleet" element={<FleetLayout />}>
+            <Route index element={<VehicleOverview />} />
+            <Route path="all" element={<AllVehicles />} />
+            <Route path="register" element={<RegisterVehicle />} />
+            <Route path="details/:id" element={<VehicleDetails />} />
+            <Route path="edit/:id" element={<EditVehicle />} />
+            <Route path="documents" element={<VehicleDocuments />} />
+            <Route path="analytics" element={<VehicleAnalytics />} />
+            <Route path="history" element={<VehicleHistory />} />
+            <Route path="status" element={<FleetStatus />} />
+            <Route path="settings" element={<VehicleSettings />} />
+          </Route>
           <Route path="vehicles" element={<VehiclesPage />} />
           <Route path="drivers" element={<DriversPage />} />
           <Route path="trips" element={<TripsPage />} />
