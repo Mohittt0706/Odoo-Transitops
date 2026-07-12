@@ -71,9 +71,6 @@ const createLiveIcon = () => L.divIcon({
 });
 
 export default function TodaysRoute() {
-<<<<<<< HEAD
-  const routeStops = [];
-=======
   const [currentPosIndex, setCurrentPosIndex] = useState(0);
   const [currentSpeed, setCurrentSpeed] = useState(62);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -89,7 +86,6 @@ export default function TodaysRoute() {
     { name: "Food Plaza Lonavala", dist: "96 km", type: "Rest" },
     { name: "BPCL Station Pimpri", dist: "128 km", type: "Fuel" },
   ];
->>>>>>> 90419a56f07a1c3e5e8232fb608c5213f033379b
 
   // 1. Initialize Map
   useEffect(() => {
