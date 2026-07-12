@@ -6,6 +6,12 @@ const create = async (data) => {
     error.statusCode = 400;
     throw error;
   }
+  const existing = await Driver.findOne({ licenseNumber: data.licenseNumber, isActive: { $ne: false } });
+  if (existing) {
+    const error = new Error('A driver with this license number already exists');
+    error.statusCode = 409;
+    throw error;
+  }
   const driver = await Driver.create(data);
   return driver;
 };
