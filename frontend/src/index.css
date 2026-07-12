@@ -1,40 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
+  /* ── PRIMARY: Enterprise Navy ── */
+  --color-primary: #1E3A5F;
+  --color-primary-hover: #162D4A;
   --color-primary-light: #EFF6FF;
-  
-  --color-accent: #111827;
-  --color-accent-hover: #1F2937;
-  --color-accent-light: #F3F4F6;
-  
-  --color-success: #22C55E;
-  --color-success-light: #DCFCE7;
-  
-  --color-warning: #F59E0B;
-  --color-warning-light: #FEF3C7;
-  
-  --color-danger: #EF4444;
-  --color-danger-light: #FEE2E2;
-  
+
+  /* ── ACCENT: Sky Blue CTA ── */
+  --color-accent: #0369A1;
+  --color-accent-hover: #0284C7;
+  --color-accent-light: #F0F9FF;
+
+  /* ── SEMANTIC STATUS ── */
+  --color-success: #059669;
+  --color-success-light: #ECFDF5;
+
+  --color-warning: #D97706;
+  --color-warning-light: #FFFBEB;
+
+  --color-danger: #DC2626;
+  --color-danger-light: #FEF2F2;
+
+  /* ── NEUTRAL SURFACE ── */
   --color-neutral-light: #F8FAFC;
-  --color-neutral-border: #E5E7EB;
-  --color-neutral-textMuted: #6B7280;
-  --color-neutral-textMain: #111827;
+  --color-neutral-border: #E2E8F0;
+  --color-neutral-textMuted: #64748B;
+  --color-neutral-textMain: #0F172A;
+  --color-neutral-muted: #E8ECF1;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-headings: 'Manrope', sans-serif;
+  /* ── TYPOGRAPHY: Plus Jakarta Sans ── */
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-headings: 'Plus Jakarta Sans', sans-serif;
 
-  --shadow-soft-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  --shadow-soft-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --shadow-soft-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.04), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  /* ── ELEVATION: Soft UI Evolution ── */
+  --shadow-soft-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-soft-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-soft-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+
+  /* ── DENSITY: Dashboard-optimized ── */
+  --spacing-card: 16px;
+  --spacing-grid: 12px;
+  --spacing-row: 36px;
 }
 
 @layer base {
   body {
     @apply bg-neutral-light text-neutral-textMain font-sans antialiased;
     scroll-behavior: smooth;
+    font-feature-settings: "tnum"; /* tabular numbers for KPI alignment */
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -42,9 +55,9 @@
   }
 }
 
-/* Custom button classes to map colors cleanly */
+/* ── BUTTON SYSTEM ── */
 .btn {
-  @apply inline-flex items-center justify-center font-headings font-semibold text-xs px-5 py-2.5 rounded-lg transition-all duration-150 cursor-pointer;
+  @apply inline-flex items-center justify-center font-sans font-semibold text-xs px-4 py-2 rounded-lg transition-all duration-150 cursor-pointer;
 }
 
 .btn-primary {
@@ -52,11 +65,15 @@
 }
 
 .btn-secondary {
-  @apply bg-accent-light text-accent hover:bg-neutral-border border border-neutral-border shadow-soft-sm;
+  @apply bg-white text-neutral-textMain hover:bg-neutral-light border border-neutral-border shadow-soft-sm;
+}
+
+.btn-accent {
+  @apply bg-accent text-white hover:bg-accent-hover shadow-soft-sm;
 }
 
 .btn-danger {
-  @apply bg-danger text-white hover:bg-red-600 shadow-soft-sm;
+  @apply bg-danger text-white hover:bg-red-700 shadow-soft-sm;
 }
 
 .btn-ghost {
@@ -64,64 +81,91 @@
 }
 
 .btn-icon {
-  @apply p-2 rounded-lg bg-white border border-neutral-border text-neutral-textMuted hover:bg-accent-light hover:text-accent transition-all duration-150 cursor-pointer;
+  @apply p-2 rounded-lg bg-white border border-neutral-border text-neutral-textMuted hover:bg-neutral-light hover:text-neutral-textMain transition-all duration-150 cursor-pointer;
 }
 
+/* ── CARD SYSTEM: Soft UI Evolution ── */
 .card {
-  @apply bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm transition-all duration-300;
+  @apply bg-white border border-neutral-border rounded-[10px] p-4 shadow-soft-sm transition-all duration-200;
 }
 
 .card-interactive {
-  @apply hover:-translate-y-0.5 hover:shadow-soft-md;
+  @apply hover:-translate-y-0.5 hover:shadow-soft-md cursor-pointer;
 }
 
+/* ── BADGE SYSTEM ── */
 .badge {
   @apply inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border;
 }
 
 .badge-success {
-  @apply bg-success-light text-success border-emerald-200/50;
+  @apply bg-success-light text-success border-emerald-200/60;
 }
 
 .badge-warning {
-  @apply bg-warning-light text-warning border-amber-200/50;
+  @apply bg-warning-light text-warning border-amber-200/60;
 }
 
 .badge-danger {
-  @apply bg-danger-light text-danger border-red-200/50;
+  @apply bg-danger-light text-danger border-red-200/60;
 }
 
 .badge-muted {
-  @apply bg-accent-light text-neutral-textMuted border-slate-200/50;
+  @apply bg-neutral-muted text-neutral-textMuted border-slate-200/60;
 }
 
-/* Floating label base (used by InputField) */
+.badge-primary {
+  @apply bg-primary-light text-primary border-blue-200/60;
+}
+
+/* ── INPUT SYSTEM ── */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px white inset;
-  -webkit-text-fill-color: #111827;
+  -webkit-text-fill-color: #0F172A;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Focus ring removal for peer */
 input.peer:focus {
   box-shadow: none;
 }
 
-/* Custom scroll bar */
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400;
+  @apply bg-neutral-border rounded-full hover:bg-neutral-textMuted/30;
 }
 
-/* Smooth page transitions */
+/* ── TABULAR NUMBERS: KPI Cards ── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ── FOCUS RING ── */
+:focus-visible {
+  outline: 2px solid #0369A1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── ROOT ── */
 #root {
   min-height: 100vh;
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

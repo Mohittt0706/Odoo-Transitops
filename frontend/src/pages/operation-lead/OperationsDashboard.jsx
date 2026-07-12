@@ -4,6 +4,7 @@ import KPICard from "../../components/dashboard/KPICard";
 import ChartCard from "../../components/charts/ChartCard";
 import DonutChart from "../../components/charts/PieChart";
 import SimpleBarChart from "../../components/charts/BarChart";
+import AreaChart from "../../components/charts/AreaChart";
 import {
   Truck,
   CheckCircle,
@@ -20,8 +21,8 @@ import {
 } from "lucide-react";
 
 const fleetUtilizationData = [
-  { label: "Active", value: 18, color: "#22C55E" },
-  { label: "Maintenance", value: 2, color: "#F59E0B" },
+  { label: "Active", value: 18, color: "#059669" },
+  { label: "Maintenance", value: 2, color: "#D97706" },
   { label: "Idle", value: 4, color: "#94A3B8" },
 ];
 
@@ -77,7 +78,7 @@ export default function OperationsDashboard() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         <KPICard title="Active Vehicles" value="18" change="12%" changeType="up" icon={Truck} color="bg-primary/10 text-primary" delay={0} />
         <KPICard title="Available" value="4" change="Neutral" changeType="neutral" icon={CheckCircle} color="bg-emerald-50 text-emerald-600" delay={0.05} />
         <KPICard title="In Maintenance" value="2" change="1 vehicle" changeType="down" icon={Wrench} color="bg-amber-50 text-amber-600" delay={0.1} />
@@ -88,32 +89,33 @@ export default function OperationsDashboard() {
         <KPICard title="Revenue" value="₹12.4L" change="15%" changeType="up" icon={IndianRupee} color="bg-amber-50 text-amber-600" delay={0.35} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-5">
         <ChartCard title="Fleet Utilization" subtitle="Current vehicle distribution" delay={0.4}>
           <DonutChart data={fleetUtilizationData} />
         </ChartCard>
         <ChartCard title="Vehicle Status" subtitle="Active vehicles per day" delay={0.45}>
-          <SimpleBarChart data={vehicleStatusData} color="#2563EB" />
+          <SimpleBarChart data={vehicleStatusData} color="#1E3A5F" />
         </ChartCard>
-        <ChartCard title="Trip Analytics" subtitle="Trips completed per day" delay={0.5}>
-          <SimpleBarChart data={tripAnalyticsData} color="#22C55E" />
+        <ChartCard title="Trip Analytics" subtitle="Trips completed this week" delay={0.5}>
+          <AreaChart data={tripAnalyticsData} color="#059669" />
         </ChartCard>
       </div>
 
       <ChartCard title="Quick Actions" subtitle="Common operations" delay={0.55}>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           {quickActions.map((action, i) => (
             <motion.button
               key={action.title}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 + i * 0.04 }}
-              className="flex flex-col items-center gap-2.5 p-4 rounded-xl border border-neutral-border hover:border-primary/30 hover:shadow-soft-md transition-all duration-200 bg-white"
+              whileHover={{ y: -2 }}
+              className="flex flex-col items-center gap-2 p-3.5 rounded-lg border border-neutral-border hover:border-primary/20 hover:shadow-soft-md transition-all duration-200 bg-white cursor-pointer"
             >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${action.color}`}>
-                <action.icon className="w-5 h-5" strokeWidth={1.8} />
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${action.color}`}>
+                <action.icon className="w-[18px] h-[18px]" strokeWidth={1.8} />
               </div>
-              <span className="text-xs font-semibold text-neutral-textMain text-center">{action.title}</span>
+              <span className="text-[11px] font-semibold text-neutral-textMain text-center leading-tight">{action.title}</span>
             </motion.button>
           ))}
         </div>

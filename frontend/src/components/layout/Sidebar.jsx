@@ -22,14 +22,14 @@ export default function Sidebar({ role, collapsed, mobileOpen, onMobileClose }) 
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className={cn("flex items-center gap-3 px-4 py-5 border-b border-neutral-border", collapsed && "justify-center px-2")}>
+      <div className={cn("flex items-center gap-3 px-4 py-4 border-b border-neutral-border", collapsed && "justify-center px-2")}>
         <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0", config.color)}>
-          <Truck className="w-4.5 h-4.5" strokeWidth={2.5} />
+          <Truck className="w-4 h-4" strokeWidth={2.5} />
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <div className="text-sm font-bold font-headings text-neutral-textMain tracking-tight truncate">
-              Transit<span className="text-primary">Ops</span>
+            <div className="text-sm font-bold text-neutral-textMain tracking-tight truncate">
+              Transit<span className="text-accent">Ops</span>
             </div>
             <div className="text-[10px] text-neutral-textMuted font-medium truncate">{config.subtitle}</div>
           </div>
@@ -48,21 +48,21 @@ export default function Sidebar({ role, collapsed, mobileOpen, onMobileClose }) 
                 to={item.path}
                 onClick={onMobileClose}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group relative",
+                  "flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 group relative",
                   active
-                    ? "bg-primary/10 text-primary"
-                    : "text-neutral-textMuted hover:bg-accent-light hover:text-accent",
+                    ? "bg-primary-light text-primary font-semibold"
+                    : "text-neutral-textMuted hover:bg-neutral-light hover:text-neutral-textMain",
                   collapsed && "justify-center px-2"
                 )}
               >
                 {active && (
                   <motion.div
                     layoutId="sidebar-active"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-primary rounded-r-full"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[22px] bg-primary rounded-r-full"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                <Icon className={cn("w-[18px] h-[18px] flex-shrink-0", active && "text-primary")} strokeWidth={active ? 2.2 : 1.8} />
+                <Icon className={cn("w-[17px] h-[17px] flex-shrink-0", active ? "text-primary" : "text-neutral-textMuted group-hover:text-neutral-textMain")} strokeWidth={active ? 2.2 : 1.8} />
                 {!collapsed && <span className="truncate">{item.label}</span>}
               </NavLink>
             );
@@ -71,15 +71,15 @@ export default function Sidebar({ role, collapsed, mobileOpen, onMobileClose }) 
       </nav>
 
       {/* Bottom */}
-      <div className="border-t border-neutral-border p-2.5">
+      <div className="border-t border-neutral-border p-2">
         <button
           onClick={logout}
           className={cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-textMuted hover:bg-danger-light hover:text-danger transition-all duration-150 w-full",
+            "flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-neutral-textMuted hover:bg-danger-light hover:text-danger transition-all duration-150 w-full",
             collapsed && "justify-center px-2"
           )}
         >
-          <LogOut className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={1.8} />
+          <LogOut className="w-[17px] h-[17px] flex-shrink-0" strokeWidth={1.8} />
           {!collapsed && <span>Sign Out</span>}
         </button>
       </div>
