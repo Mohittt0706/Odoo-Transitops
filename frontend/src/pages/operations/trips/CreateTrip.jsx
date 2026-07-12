@@ -8,20 +8,23 @@ import { Form, FormSection, FormRow, FormInput, FormSelect, FormDatePicker, Form
 import { useToast } from "../../../components/common/Toast";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { tripSchema } from "../../../lib/validations";
+import { tripService } from "../../../services/trip.service";
 import { ArrowLeft, Route, Package, AlertTriangle, FileText } from "lucide-react";
 
 export default function CreateTrip() {
   const navigate = useNavigate();
   const toast = useToast();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [apiError, setApiError] = useState(null);
 
   const methods = useForm({
     resolver: zodResolver(tripSchema),
     defaultValues: {
-      title: "", vehicle: "", driver: "", origin: "", destination: "",
-      scheduledStart: "", scheduledEnd: "", cargoType: "", cargoWeight: "",
-      cargoValue: "", tripType: "", priority: "", notes: "",
+      source: "", destination: "", cargoWeight: "", plannedDistance: "", cargoType: "", notes: "",
+      vehicleId: "", driverId: "", receiverId: "",
+      scheduledStart: "", scheduledEnd: "", priority: "NORMAL",
     },
   });
 
@@ -29,11 +32,33 @@ export default function CreateTrip() {
 
   const onSubmit = () => setShowConfirm(true);
 
-  const confirmSubmit = () => {
+  const confirmSubmit = async () => {
     setShowConfirm(false);
-    setSaved(true);
-    toast("Trip created successfully!", "success");
-    setTimeout(() => navigate("/dashboard/operations/trips"), 1200);
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      const fd = methods.getValues();
+      await tripService.create({
+        source: fd.source,
+        destination: fd.destination,
+        cargoWeight: Number(fd.cargoWeight) || 0,
+        plannedDistance: Number(fd.plannedDistance) || 0,
+        cargoType: fd.cargoType,
+        vehicleId: fd.vehicleId,
+        driverId: fd.driverId,
+        receiverId: fd.receiverId,
+        notes: fd.notes,
+      });
+      setSaved(true);
+      toast("Trip created successfully!", "success");
+      setTimeout(() => navigate("/dashboard/operations/trips"), 1200);
+    } catch (err) {
+      const msg = err?.response?.data?.message || err.message || "Failed to create trip";
+      setApiError(msg);
+      toast(msg, "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
@@ -43,49 +68,30 @@ export default function CreateTrip() {
       <PageHeader title="Create Trip" subtitle="Schedule a new delivery trip"
         actions={<button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>}
       />
+      {apiError && (
+        <div className="mb-4 p-3 text-sm text-danger bg-danger-light border border-danger/20 rounded-lg">{apiError}</div>
+      )}
       <Form methods={methods} onSubmit={onSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <FormSection title="Trip Details" description="Basic trip information" icon={Route} delay={0.05}>
+          <FormSection title="Route" description="Origin and destination" icon={Route} delay={0.05}>
             <FormRow>
-              <FormInput name="title" label="Trip Title *" placeholder="Delhi to Mumbai Freight" />
-              <FormSelect name="tripType" label="Trip Type *" placeholder="Select type"
-                options={[{ value: "Freight", label: "Freight" }, { value: "Express", label: "Express" }, { value: "Container", label: "Container" }, { value: "Special", label: "Special" }]} />
-            </FormRow>
-            <FormRow cols={1}>
-              <FormSelect name="priority" label="Priority *" placeholder="Select priority"
-                options={[{ value: "Low", label: "Low" }, { value: "Normal", label: "Normal" }, { value: "Medium", label: "Medium" }, { value: "High", label: "High" }, { value: "Critical", label: "Critical" }]} />
-            </FormRow>
-          </FormSection>
-
-          <FormSection title="Route" description="Origin and destination" icon={Route} delay={0.1}>
-            <FormRow>
-              <FormInput name="origin" label="Origin *" placeholder="Mumbai, Maharashtra" />
+              <FormInput name="source" label="Origin *" placeholder="Mumbai, Maharashtra" />
               <FormInput name="destination" label="Destination *" placeholder="Delhi, NCR" />
             </FormRow>
             <FormRow>
-              <FormDatePicker name="scheduledStart" label="Scheduled Start *" />
-              <FormDatePicker name="scheduledEnd" label="Scheduled End *" />
+              <FormInput name="plannedDistance" label="Distance (km) *" placeholder="1400" type="number" />
+              <FormInput name="cargoWeight" label="Cargo Weight (kg) *" placeholder="25000" type="number" />
             </FormRow>
           </FormSection>
 
-          <FormSection title="Assignment" description="Vehicle and driver assignment" icon={AlertTriangle} delay={0.15}>
+          <FormSection title="Assignment" description="Vehicle, driver, receiver" icon={AlertTriangle} delay={0.1}>
             <FormRow>
-              <FormSelect name="vehicle" label="Vehicle *" placeholder="Select vehicle"
-                options={[{ value: "KL-07-AU-4521", label: "KL-07-AU-4521 — Tata Prima" }, { value: "KA-01-MN-3312", label: "KA-01-MN-3312 — Ashok Leyland" }, { value: "MH-12-RT-2244", label: "MH-12-RT-2244 — Mahindra Blazo" }, { value: "DL-03-KP-5567", label: "DL-03-KP-5567 — BharatBenz" }, { value: "UP-32-CD-6677", label: "UP-32-CD-6677 — Scania R450" }]}
-                searchable />
-              <FormSelect name="driver" label="Driver *" placeholder="Select driver"
-                options={[{ value: "Rajesh Kumar", label: "Rajesh Kumar" }, { value: "Amit Singh", label: "Amit Singh" }, { value: "Suresh Reddy", label: "Suresh Reddy" }, { value: "Vikram Patel", label: "Vikram Patel" }, { value: "Manish Verma", label: "Manish Verma" }]}
-                searchable />
-            </FormRow>
-          </FormSection>
-
-          <FormSection title="Cargo Information" description="Cargo details" icon={Package} delay={0.2}>
-            <FormRow>
-              <FormInput name="cargoType" label="Cargo Type *" placeholder="Electronics, Garments, etc." />
-              <FormInput name="cargoWeight" label="Cargo Weight" placeholder="2.5 tons" />
+              <FormInput name="vehicleId" label="Vehicle ID *" placeholder="Vehicle ObjectId" />
+              <FormInput name="driverId" label="Driver ID *" placeholder="Driver ObjectId" />
             </FormRow>
             <FormRow>
-              <FormInput name="cargoValue" label="Cargo Value" placeholder="₹5,00,000" />
+              <FormInput name="receiverId" label="Receiver ID" placeholder="Receiver ObjectId" />
+              <FormInput name="cargoType" label="Cargo Type" placeholder="Electronics, Garments..." />
             </FormRow>
           </FormSection>
         </div>
@@ -94,7 +100,7 @@ export default function CreateTrip() {
           <FormTextarea name="notes" label="Notes" rows={3} />
         </FormSection>
 
-        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Create Trip" loading={isSubmitting} success={saved} />
+        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Create Trip" loading={isSubmitting || submitting} success={saved} />
       </Form>
 
       <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}
