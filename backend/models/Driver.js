@@ -44,6 +44,10 @@ const driverSchema = new mongoose.Schema(
       },
       default: 'AVAILABLE',
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

@@ -4,6 +4,7 @@ const router = express.Router();
 
 const authRoutes = require('./auth.routes');
 const vehicleRoutes = require('./vehicle.routes');
+const driverRoutes = require('./driver.routes');
 
 router.get('/health', (req, res) => {
   res.status(200).json({
@@ -14,5 +15,6 @@ router.get('/health', (req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/vehicles', vehicleRoutes);
+router.use('/drivers', driverRoutes);
 
 module.exports = router;
