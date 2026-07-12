@@ -21,7 +21,7 @@ export default function DashboardLayout({ role }) {
           onToggleSidebar={() => setCollapsed(!collapsed)}
           onMobileMenu={() => setMobileOpen(true)}
         />
-        <main className="flex-1 p-4 sm:p-6 overflow-auto">
+        <main className="flex-1 p-3 sm:p-4 overflow-auto bg-neutral-light">
           <Outlet />
         </main>
       </div>
