@@ -54,7 +54,7 @@ export const roleConfigs = {
       { label: "Cost", path: "/dashboard/operations/reports/operational-cost", icon: Wallet },
       { label: "Export", path: "/dashboard/operations/reports/export", icon: Download },
       { label: "Analytics", path: "/dashboard/operations/analytics", icon: BarChart3 },
-      { label: "Notifications", path: "/dashboard/operations/notifications", icon: Bell },
+      { label: "Notifications", path: "/dashboard/notifications", icon: Bell },
       { label: "Settings", path: "/dashboard/operations/settings", icon: Settings },
     ],
   },
