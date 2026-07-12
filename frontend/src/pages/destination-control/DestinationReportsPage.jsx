@@ -5,12 +5,14 @@ import {
   BarChart3, Warehouse, Package, Users, Dock, AlertTriangle,
   Download, FileText, Printer, Send, Eye, Calendar, Clock,
 } from "lucide-react";
+import ExportAllModal from "./ExportAllModal";
 
 const reportTypes = [];
 
 export default function DestinationReportsPage() {
   const [selectedReport, setSelectedReport] = useState(null);
   const [generating, setGenerating] = useState(false);
+  const [showExportAll, setShowExportAll] = useState(false);
 
   const handleGenerate = (title) => {
     setSelectedReport(title);
@@ -25,7 +27,8 @@ export default function DestinationReportsPage() {
         subtitle="Generate, preview, download, and schedule destination control reports"
         actions={
           <div className="flex items-center gap-2">
-            <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-soft-sm">
+            <button onClick={() => setShowExportAll(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-soft-sm">
               <Download className="w-4 h-4" /> Export All
             </button>
             <button className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-border text-neutral-textMain text-sm font-bold rounded-lg hover:bg-accent-light transition-colors">
@@ -131,6 +134,8 @@ export default function DestinationReportsPage() {
           ))}
         </div>
       </div>
+
+      <ExportAllModal open={showExportAll} onClose={() => setShowExportAll(false)} />
     </motion.div>
   );
 }

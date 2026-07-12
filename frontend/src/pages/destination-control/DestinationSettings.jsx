@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
-import { Bell, Monitor, Warehouse, Truck, Shield, Clock, Database, Palette, Save } from "lucide-react";
+import { useToast } from "../../components/common/Toast";
+import { Bell, Warehouse, Truck, Shield, Database, Save, Loader } from "lucide-react";
 
 function Toggle({ label, desc, enabled, onChange }) {
   return (
@@ -65,18 +66,45 @@ function Card({ title, icon: Icon, color, children, delay = 0, wide }) {
 }
 
 export default function DestinationSettings() {
-  const [warehouseSettings, setWarehouseSettings] = useState({ autoAssignDock: true, capacityAlerts: true, tempAlerts: false });
-  const [deliveryRules, setDeliveryRules] = useState({ autoConfirm: false, notifyOnArrival: true, requireSignature: true });
-  const [notifications, setNotifications] = useState({ email: true, sms: false, push: true, whatsapp: false });
-  const [security, setSecurity] = useState({ twoFactor: false, requireApproval: true, auditLog: true });
-  const [backup, setBackup] = useState({ autoBackup: true, dailyDigest: false });
+  const toast = useToast();
+  const [saving, setSaving] = useState(false);
+  const [warehouseSettings, setWarehouseSettings] = useState(
+    () => JSON.parse(localStorage.getItem("dest_warehouseSettings") || '{"autoAssignDock":true,"capacityAlerts":true,"tempAlerts":false}')
+  );
+  const [deliveryRules, setDeliveryRules] = useState(
+    () => JSON.parse(localStorage.getItem("dest_deliveryRules") || '{"autoConfirm":false,"notifyOnArrival":true,"requireSignature":true}')
+  );
+  const [notifications, setNotifications] = useState(
+    () => JSON.parse(localStorage.getItem("dest_notifications") || '{"email":true,"sms":false,"push":true,"whatsapp":false}')
+  );
+  const [security, setSecurity] = useState(
+    () => JSON.parse(localStorage.getItem("dest_security") || '{"twoFactor":false,"requireApproval":true,"auditLog":true}')
+  );
+  const [backup, setBackup] = useState(
+    () => JSON.parse(localStorage.getItem("dest_backup") || '{"autoBackup":true,"dailyDigest":false}')
+  );
+
+  const handleSave = () => {
+    setSaving(true);
+    localStorage.setItem("dest_warehouseSettings", JSON.stringify(warehouseSettings));
+    localStorage.setItem("dest_deliveryRules", JSON.stringify(deliveryRules));
+    localStorage.setItem("dest_notifications", JSON.stringify(notifications));
+    localStorage.setItem("dest_security", JSON.stringify(security));
+    localStorage.setItem("dest_backup", JSON.stringify(backup));
+    setTimeout(() => {
+      setSaving(false);
+      toast("Settings saved successfully!", "success");
+    }, 800);
+  };
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
       <PageHeader title="Settings" subtitle="Configure warehouse, delivery, notification, and security preferences"
         actions={
-          <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-soft-sm">
-            <Save className="w-4 h-4" /> Save Changes
+          <button onClick={handleSave} disabled={saving}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-soft-sm disabled:opacity-60">
+            {saving ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         }
       />
@@ -158,13 +186,7 @@ export default function DestinationSettings() {
           <Input label="Retention Period" value="90 days" />
         </Card>
 
-        <Card title="Theme Settings" icon={Palette} color="bg-purple-50 text-purple-600" delay={0.22}>
-          <Select label="Theme" value="Light" options={["Light", "Dark", "System"]} />
-          <Select label="Primary Color" value="Blue" options={["Blue", "Indigo", "Emerald", "Purple"]} />
-          <Select label="Date Format" value="DD/MM/YYYY" options={["DD/MM/YYYY", "MM/DD/YYYY", "YYYY-MM-DD"]} />
-          <Select label="Time Format" value="12-hour" options={["12-hour", "24-hour"]} />
-          <Select label="Rows per Page" value="10" options={["5", "10", "25", "50", "100"]} />
-        </Card>
+
       </div>
     </motion.div>
   );
