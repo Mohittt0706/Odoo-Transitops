@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 import { FileText, Download, Trash2, Replace } from "lucide-react";
 
 export default function DocumentCard({ document, index = 0 }) {

@@ -12,7 +12,7 @@ import TelemetryChart from '../../components/charts/TelemetryChart';
 import BarChart from '../../components/charts/BarChart';
 import AreaChart from '../../components/charts/AreaChart';
 import SafetyScoreBadge from '../../components/drivers/SafetyScoreBadge';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 
 export default function DriverPerformance() {
   const { driverId } = useParams();

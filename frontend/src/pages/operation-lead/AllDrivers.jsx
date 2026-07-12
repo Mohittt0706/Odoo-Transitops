@@ -19,7 +19,7 @@ import {
   X,
   Check,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import StatusBadge from '../../components/drivers/StatusBadge';
 import SafetyScoreBadge from '../../components/drivers/SafetyScoreBadge';
 import { drivers, driverStatuses, licenseCategories } from '../../data/drivers';

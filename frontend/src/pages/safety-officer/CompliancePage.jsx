@@ -5,7 +5,7 @@ import DataTable from "../../components/ui/DataTable"
 import StatusBadge from "../../components/ui/StatusBadge"
 import { drivers, compliance } from "../../data/mockData"
 import { motion } from "framer-motion"
-import { cn } from "../../lib/utils"
+import { cn } from "../../utils/utils"
 import { Shield, CheckCircle } from "lucide-react"
 
 const complianceData = drivers.map((d) => {

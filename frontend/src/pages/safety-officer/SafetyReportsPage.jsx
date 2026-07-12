@@ -1,6 +1,6 @@
 import PageHeader from "../../components/ui/PageHeader"
 import { motion } from "framer-motion"
-import { cn } from "../../lib/utils"
+import { cn } from "../../utils/utils"
 import { Shield, BookOpen, ClipboardCheck, Car, UserCheck, AlertTriangle } from "lucide-react"
 
 const reports = [

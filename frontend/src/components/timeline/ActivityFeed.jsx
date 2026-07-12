@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 import { Truck, Wrench, Fuel, Route, UserCheck, Clock } from "lucide-react";
 
 const typeIcons = {

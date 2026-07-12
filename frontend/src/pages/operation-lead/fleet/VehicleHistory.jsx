@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../utils/utils";
 import PageHeader from "../../../components/ui/PageHeader";
 import TimelineItem from "../../../components/fleet/TimelineItem";
 import { vehicles } from "../../../data/vehicleData";

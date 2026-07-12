@@ -4,7 +4,7 @@ import ChartCard from "../../components/ui/ChartCard"
 import SimpleBarChart from "../../components/ui/SimpleBarChart"
 import { drivers, incidents, licenses } from "../../data/mockData"
 import { motion } from "framer-motion"
-import { cn } from "../../lib/utils"
+import { cn } from "../../utils/utils"
 import { AlertTriangle, Shield, FileText, Calendar, UserX, TrendingUp } from "lucide-react"
 
 const complianceTrend = [

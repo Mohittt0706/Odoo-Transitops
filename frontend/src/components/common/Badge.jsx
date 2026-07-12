@@ -1,4 +1,4 @@
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/utils";
 
 const variants = {
   success: "bg-success-light text-success border-emerald-200/50",

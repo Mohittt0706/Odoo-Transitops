@@ -5,7 +5,7 @@ import {
   FileText, Upload, ChevronDown, CheckCircle, AlertCircle,
   Filter, Search, Bell, X
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import { drivers } from '../../data/drivers';
 import DocumentCard from '../../components/drivers/DocumentCard';
 
