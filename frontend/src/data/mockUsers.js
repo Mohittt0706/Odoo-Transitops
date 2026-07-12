@@ -31,11 +31,9 @@ export const roleIcons = {
 };
 
 export const mockUsers = [
-  { id: 1, email: "admin@transitops.com", password: "admin123", role: "operations", name: "Admin User" },
-  { id: 2, email: "operations@transitops.com", password: "password123", role: "operations", name: "Sarah Chen" },
-  { id: 3, email: "captain@transitops.com", password: "password123", role: "road-captain", name: "Mike Johnson" },
-  { id: 4, email: "safety@transitops.com", password: "password123", role: "safety", name: "Emma Wilson" },
-  { id: 5, email: "finance@transitops.com", password: "password123", role: "finance", name: "James Miller" },
-  { id: 6, email: "destination@transitops.com", password: "password123", role: "destination", name: "Lisa Brown" },
-  { id: 7, email: "demo@transitops.com", password: "demo123", role: "operations", name: "Demo User" },
+  { id: 1, email: "admin@transitops.com", password: "Admin@123", role: "operations", name: "Operation Lead" },
+  { id: 2, email: "driver@transitops.com", password: "Driver@123", role: "road-captain", name: "Road Captain" },
+  { id: 3, email: "safety@transitops.com", password: "Safety@123", role: "safety", name: "Safety Officer" },
+  { id: 4, email: "finance@transitops.com", password: "Finance@123", role: "finance", name: "Finance Hub" },
+  { id: 5, email: "receiver@transitops.com", password: "Receiver@123", role: "destination", name: "Destination Control" },
 ];

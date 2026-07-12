@@ -5,31 +5,31 @@ const User = require('../models/User');
 const users = [
   {
     fullName: 'Operation Lead',
-    email: 'admin@fleetpilot.com',
+    email: 'admin@transitops.com',
     password: 'Admin@123',
     role: 'OPERATION_LEAD',
   },
   {
     fullName: 'Road Captain',
-    email: 'driver@fleetpilot.com',
+    email: 'driver@transitops.com',
     password: 'Driver@123',
     role: 'ROAD_CAPTAIN',
   },
   {
     fullName: 'Safety Officer',
-    email: 'safety@fleetpilot.com',
+    email: 'safety@transitops.com',
     password: 'Safety@123',
     role: 'SAFETY_OFFICER',
   },
   {
     fullName: 'Finance Hub',
-    email: 'finance@fleetpilot.com',
+    email: 'finance@transitops.com',
     password: 'Finance@123',
     role: 'FINANCE_HUB',
   },
   {
     fullName: 'Destination Control',
-    email: 'receiver@fleetpilot.com',
+    email: 'receiver@transitops.com',
     password: 'Receiver@123',
     role: 'DESTINATION_CONTROL',
   },
