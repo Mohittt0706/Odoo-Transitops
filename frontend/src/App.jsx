@@ -35,7 +35,18 @@ import FleetStatus from "./pages/operations/fleet/FleetStatus";
 import VehicleSettings from "./pages/operations/fleet/VehicleSettings";
 import VehiclesPage from "./pages/operations/VehiclesPage";
 import DriversPage from "./pages/operations/DriversPage";
+import DriverLayout from "./components/drivers/DriverLayout";
+import DriverProfile from "./pages/operations/drivers/DriverProfile";
+import DriverForm from "./pages/operations/drivers/DriverForm";
+import DriverAnalytics from "./pages/operations/drivers/DriverAnalytics";
+import LicenseDetailsPage from "./pages/operations/drivers/LicenseDetailsPage";
 import TripsPage from "./pages/operations/TripsPage";
+import TripLayout from "./components/trips/TripLayout";
+import CreateTrip from "./pages/operations/trips/CreateTrip";
+import TripDetails from "./pages/operations/trips/TripDetails";
+import TripTimelinePage from "./pages/operations/trips/TripTimeline";
+import CompletedTrips from "./pages/operations/trips/CompletedTrips";
+import CancelledTrips from "./pages/operations/trips/CancelledTrips";
 import AssignmentsPage from "./pages/operations/AssignmentsPage";
 import MaintenancePage from "./pages/operations/MaintenancePage";
 import ReportsPage from "./pages/operations/ReportsPage";
@@ -182,8 +193,22 @@ export default function App() {
             <Route path="settings" element={<VehicleSettings />} />
           </Route>
           <Route path="vehicles" element={<VehiclesPage />} />
-          <Route path="drivers" element={<DriversPage />} />
-          <Route path="trips" element={<TripsPage />} />
+          <Route path="drivers" element={<DriverLayout />}>
+            <Route index element={<DriversPage />} />
+            <Route path="profile/:id" element={<DriverProfile />} />
+            <Route path="add" element={<DriverForm />} />
+            <Route path="edit/:id" element={<DriverForm />} />
+            <Route path="analytics" element={<DriverAnalytics />} />
+            <Route path="license/:id" element={<LicenseDetailsPage />} />
+          </Route>
+          <Route path="trips" element={<TripLayout />}>
+            <Route index element={<TripsPage />} />
+            <Route path="create" element={<CreateTrip />} />
+            <Route path="details/:id" element={<TripDetails />} />
+            <Route path="timeline/:id" element={<TripTimelinePage />} />
+            <Route path="completed" element={<CompletedTrips />} />
+            <Route path="cancelled" element={<CancelledTrips />} />
+          </Route>
           <Route path="assignments" element={<AssignmentsPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
           <Route path="reports" element={<ReportsPage />} />
