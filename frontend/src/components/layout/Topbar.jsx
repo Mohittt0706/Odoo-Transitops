@@ -38,7 +38,7 @@ function getBreadcrumbs(pathname) {
 export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onMobileMenu }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
@@ -200,8 +200,8 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
                 <User className="w-3.5 h-3.5 text-primary" />
               </div>
               <div className="hidden sm:block text-left">
-                <div className="text-[12px] font-semibold text-neutral-textMain leading-tight">John Admin</div>
-                <div className="text-[10px] text-neutral-textMuted">Admin</div>
+                <div className="text-[12px] font-semibold text-neutral-textMain leading-tight">{user?.name || "User"}</div>
+                <div className="text-[10px] text-neutral-textMuted capitalize">{user?.role || ""}</div>
               </div>
               <ChevronDown className="w-3 h-3 text-neutral-textMuted hidden sm:block" />
             </button>

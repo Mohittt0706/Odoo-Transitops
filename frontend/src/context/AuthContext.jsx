@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockUsers } from "../data/mockUsers";
+import { authService } from "../services/auth.service";
 
 const AuthContext = createContext(null);
 
@@ -20,28 +20,48 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLoading(false);
+    const token = localStorage.getItem("authToken");
+    if (token && !user) {
+      authService.getProfile()
+        .then((res) => {
+          const u = res.data.user;
+          if (u) {
+            const userData = { id: u._id || u.id, email: u.email, role: u.role, name: u.name };
+            localStorage.setItem("transitops_auth", JSON.stringify(userData));
+            setUser(userData);
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("transitops_auth");
+          setUser(null);
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
-  const login = useCallback((email, password, expectedRole) => {
-    const found = mockUsers.find(
-      (u) => u.email === email && u.password === password && u.role === expectedRole
-    );
-    if (!found) {
-      return { success: false, error: "Invalid email or password for this role." };
+  const login = useCallback(async (email, password, expectedRole) => {
+    try {
+      const res = await authService.login({ email, password });
+      const { token, user: u } = res.data;
+      if (!token || !u) {
+        return { success: false, error: "Invalid response from server." };
+      }
+      localStorage.setItem("authToken", token);
+      const userData = { id: u._id || u.id, email: u.email, role: u.role, name: u.name };
+      localStorage.setItem("transitops_auth", JSON.stringify(userData));
+      setUser(userData);
+      return { success: true, role: u.role };
+    } catch (err) {
+      const msg = err?.response?.data?.message || "Invalid email or password.";
+      return { success: false, error: msg };
     }
-    const userData = {
-      id: found.id,
-      email: found.email,
-      role: found.role,
-      name: found.name,
-    };
-    localStorage.setItem("transitops_auth", JSON.stringify(userData));
-    setUser(userData);
-    return { success: true, role: found.role };
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem("authToken");
     localStorage.removeItem("transitops_auth");
     setUser(null);
     navigate("/login");

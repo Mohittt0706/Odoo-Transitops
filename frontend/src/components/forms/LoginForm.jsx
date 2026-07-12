@@ -108,9 +108,7 @@ export default function LoginForm() {
     if (!validate()) return;
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-
-    const result = login(form.email, form.password, selectedRole);
+    const result = await login(form.email, form.password, selectedRole);
     setLoading(false);
 
     if (result.success) {
