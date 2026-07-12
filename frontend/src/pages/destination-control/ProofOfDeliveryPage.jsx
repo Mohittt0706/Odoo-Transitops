@@ -270,7 +270,7 @@ export default function ProofOfDeliveryPage() {
             <button onClick={() => setPreviewPod(null)} className="text-xs font-bold text-primary hover:underline">Close</button>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {Array.from({ length: Math.min(podRecords.find(r => r.id === previewPod)?.photos || 3, 5) }, (_, i) => (
+            {Array.from({ length: Math.min(podRecords.find(r => r.id === previewPod)?.photos || 0, 5) }, (_, i) => (
               <div key={i} className="aspect-square rounded-xl bg-neutral-light border border-neutral-border flex items-center justify-center hover:border-primary transition-colors cursor-pointer">
                 <Camera className="w-8 h-8 text-neutral-textMuted/40" />
               </div>

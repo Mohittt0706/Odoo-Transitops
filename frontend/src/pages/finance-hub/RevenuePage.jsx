@@ -14,12 +14,7 @@ export default function RevenuePage() {
   const byVehicle = revenueStats.byVehicle;
   const growth = revenueStats.growth;
 
-  const distData = [
-    { label: "Transport", value: 45, color: "#2563EB" },
-    { label: "Logistics", value: 25, color: "#22C55E" },
-    { label: "Warehousing", value: 18, color: "#F59E0B" },
-    { label: "Express", value: 12, color: "#8B5CF6" },
-  ];
+  const distData = [];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">

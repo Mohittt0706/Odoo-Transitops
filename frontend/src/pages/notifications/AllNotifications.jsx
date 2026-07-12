@@ -32,10 +32,11 @@ export default function AllNotifications() {
   const [sortBy, setSortBy] = useState("date");
   const [sortDir, setSortDir] = useState("desc");
   const [page, setPage] = useState(1);
+  const [notifVersion, setNotifVersion] = useState(0);
   const pageSize = 10;
 
   const filtered = useMemo(() => {
-    let result = [...allNotifications];
+    let result = [...allNotifications]; // eslint-disable-line
 
     if (search) {
       const q = search.toLowerCase();
@@ -63,7 +64,7 @@ export default function AllNotifications() {
     });
 
     return result;
-  }, [search, catFilter, priFilter, statusFilter, sortBy, sortDir]);
+  }, [search, catFilter, priFilter, statusFilter, sortBy, sortDir, notifVersion]);
 
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -126,6 +127,35 @@ export default function AllNotifications() {
       if (idx !== -1) allNotifications.splice(idx, 1);
     });
     setSelected(new Set());
+  };
+
+  const handleDemoAction = (id, action) => {
+    const n = allNotifications.find((x) => x.id === id);
+    if (!n || !n.demoRequestId) return;
+    const requests = JSON.parse(localStorage.getItem("demo_requests") || "[]");
+    const req = requests.find((r) => r.id === n.demoRequestId);
+    if (!req) return;
+    if (action === "view") {
+      alert(`Demo Request Details:\n\nName: ${req.fullName}\nCompany: ${req.company}\nEmail: ${req.email}\nPhone: ${req.phone}\nDate: ${req.demoDate}\nTime: ${req.demoTime}\nMessage: ${req.message || "N/A"}`);
+    } else if (action === "accept") {
+      n.demoStatus = "Accepted";
+      req.status = "Accepted";
+      localStorage.setItem("demo_requests", JSON.stringify(requests));
+    } else if (action === "reject") {
+      n.demoStatus = "Rejected";
+      req.status = "Rejected";
+      localStorage.setItem("demo_requests", JSON.stringify(requests));
+    } else if (action === "schedule") {
+      const newDate = prompt("Enter scheduled date (YYYY-MM-DD):", req.demoDate);
+      if (newDate) {
+        req.demoDate = newDate;
+        req.status = "Scheduled";
+        n.demoStatus = "Scheduled";
+        n.description += ` Scheduled for ${newDate}.`;
+        localStorage.setItem("demo_requests", JSON.stringify(requests));
+      }
+    }
+    setNotifVersion((v) => v + 1);
   };
 
   const handleBulkMarkRead = () => {
@@ -219,6 +249,7 @@ export default function AllNotifications() {
           {paginated.map((n, i) => (
             <NotificationCard key={n.id} notification={n} selected={selected.has(n.id)}
               onToggleSelect={handleSelect} onMarkRead={handleMarkRead} onArchive={handleArchive} onDelete={handleDelete} onPin={handlePin}
+              onDemoAction={handleDemoAction}
               delay={i * 0.02}
             />
           ))}

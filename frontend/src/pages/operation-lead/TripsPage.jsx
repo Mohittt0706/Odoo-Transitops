@@ -11,17 +11,11 @@ import { trips, tripStats } from "../../data/tripData";
 import { Navigation, CheckCircle, Clock, Package, Gauge, Plus, Download, AlertCircle } from "lucide-react";
 import { cn } from "../../lib/utils";
 
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-const monthlyDeliveries = months.map(m => ({ label: m, value: 30 + Math.floor(Math.random() * 45) }));
-const activeTrend = months.map(m => ({ label: m, value: 8 + Math.floor(Math.random() * 12) }));
+const months = [];
+const monthlyDeliveries = [];
+const activeTrend = [];
 
-const statusDist = [
-  { label: "In Transit", value: tripStats.inTransit, color: "#3B82F6" },
-  { label: "Completed", value: tripStats.completed, color: "#22C55E" },
-  { label: "Delayed", value: tripStats.delayed, color: "#F59E0B" },
-  { label: "Cancelled", value: tripStats.cancelled, color: "#EF4444" },
-  { label: "Pending", value: tripStats.pending, color: "#8B5CF6" },
-];
+const statusDist = [];
 
 const columns = [
   { key: "id", label: "Trip ID", width: "80px" },

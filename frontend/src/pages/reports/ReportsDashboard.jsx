@@ -45,14 +45,7 @@ export default function ReportsDashboard() {
   const activeVehicles = vehiclePerformance.filter(v => v.status === "Active").length;
   const avgSafety = Math.round(driverPerformance.reduce((s, d) => s + d.score, 0) / driverPerformance.length);
 
-  const quickNav = [
-    { label: "Fleet Analytics", path: "/dashboard/operations/reports/fleet", icon: Truck, color: "bg-primary/10 text-primary" },
-    { label: "Fuel Analytics", path: "/dashboard/operations/reports/fuel", icon: Fuel, color: "bg-rose-50 text-rose-600" },
-    { label: "Revenue Analytics", path: "/dashboard/operations/reports/revenue", icon: IndianRupee, color: "bg-emerald-50 text-emerald-600" },
-    { label: "Vehicle ROI", path: "/dashboard/operations/reports/roi", icon: TrendingUp, color: "bg-purple-50 text-purple-600" },
-    { label: "Operational Cost", path: "/dashboard/operations/reports/operational-cost", icon: Wallet, color: "bg-amber-50 text-amber-600" },
-    { label: "Export Reports", path: "/dashboard/operations/reports/export", icon: Download, color: "bg-cyan-50 text-cyan-600" },
-  ];
+  const quickNav = [];
 
   return (
     <motion.div
@@ -74,14 +67,14 @@ export default function ReportsDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-5">
-        <StatCard title="Total Fleet" value="58" icon={Truck} change="+5.2%" changeType="up" sparklineData={[48, 50, 52, 54, 55, 56, 58]} color="bg-primary/10 text-primary" delay={0} />
-        <StatCard title="Active Vehicles" value={activeVehicles} icon={Building2} change="+3" changeType="up" sparklineData={[38, 40, 39, 42, 41, 43, activeVehicles]} color="bg-emerald-50 text-emerald-600" delay={0.02} />
-        <StatCard title="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} icon={IndianRupee} change="+12.4%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 10000))} color="bg-blue-50 text-blue-600" delay={0.04} />
-        <StatCard title="Monthly Profit" value={`₹${(monthlyRevenue[monthlyRevenue.length - 1].profit / 1000).toFixed(0)}K`} icon={TrendingUp} change="+8.3%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.06} />
-        <StatCard title="Monthly Expenses" value={`₹${(monthlyExpenses[monthlyExpenses.length - 1].value / 1000).toFixed(0)}K`} icon={Wallet} change="+3.2%" changeType="up" sparklineData={monthlyExpenses.map(d => Math.round(d.value / 1000))} color="bg-amber-50 text-amber-600" delay={0.08} />
-        <StatCard title="Active Trips" value="128" icon={Route} change="+12" changeType="up" sparklineData={[95, 102, 110, 115, 118, 124, 128]} color="bg-purple-50 text-purple-600" delay={0.1} />
-        <StatCard title="Completed Trips" value="3,450" icon={CheckCircle2} change="+8.5%" changeType="up" sparklineData={[2800, 2950, 3100, 3200, 3350, 3400, 3450]} color="bg-cyan-50 text-cyan-600" delay={0.12} />
-        <StatCard title="Safety Score" value={`${avgSafety}%`} icon={ShieldCheck} change="+2.1%" changeType="up" sparklineData={[88, 90, 91, 92, 93, 94, avgSafety]} color="bg-green-50 text-green-600" delay={0.14} />
+        <StatCard title="Total Fleet" value="0" icon={Truck} change="0%" changeType="up" sparklineData={[]} color="bg-primary/10 text-primary" delay={0} />
+        <StatCard title="Active Vehicles" value={activeVehicles} icon={Building2} change="0%" changeType="up" sparklineData={[]} color="bg-emerald-50 text-emerald-600" delay={0.02} />
+        <StatCard title="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} icon={IndianRupee} change="0%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 10000))} color="bg-blue-50 text-blue-600" delay={0.04} />
+        <StatCard title="Monthly Profit" value={`₹${(monthlyRevenue[monthlyRevenue.length - 1].profit / 1000).toFixed(0)}K`} icon={TrendingUp} change="0%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.06} />
+        <StatCard title="Monthly Expenses" value={`₹${(monthlyExpenses[monthlyExpenses.length - 1].value / 1000).toFixed(0)}K`} icon={Wallet} change="0%" changeType="up" sparklineData={monthlyExpenses.map(d => Math.round(d.value / 1000))} color="bg-amber-50 text-amber-600" delay={0.08} />
+        <StatCard title="Active Trips" value="0" icon={Route} change="0" changeType="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.1} />
+        <StatCard title="Completed Trips" value="0" icon={CheckCircle2} change="0%" changeType="up" sparklineData={[]} color="bg-cyan-50 text-cyan-600" delay={0.12} />
+        <StatCard title="Safety Score" value={`${avgSafety}%`} icon={ShieldCheck} change="0%" changeType="up" sparklineData={[]} color="bg-green-50 text-green-600" delay={0.14} />
       </div>
 
       {/* Quick Navigation */}
@@ -113,19 +106,19 @@ export default function ReportsDashboard() {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Monthly Revenue" subtitle="Last 12 months" delay={0.2}
-          actions={<TrendIndicator value="+12.4%" type="up" />}
+          actions={<TrendIndicator value="0%" type="up" />}
         >
           <SimpleBarChart data={monthlyRevenue.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#1E3A5F" height={160} />
         </ChartCard>
 
         <ChartCard title="Fleet Utilization" subtitle="Monthly utilization %" delay={0.25}
-          actions={<TrendIndicator value="+8.2%" type="up" />}
+          actions={<TrendIndicator value="0%" type="up" />}
         >
           <SimpleBarChart data={fleetUtilization} color="#059669" height={160} />
         </ChartCard>
 
         <ChartCard title="Fuel Consumption" subtitle="Monthly fuel usage (L)" delay={0.3}
-          actions={<TrendIndicator value="+5.8%" type="up" />}
+          actions={<TrendIndicator value="0%" type="up" />}
         >
           <SimpleBarChart data={fuelConsumption.map(d => ({ label: d.label, value: Math.round(d.value / 100) }))} color="#D97706" height={160} />
         </ChartCard>
@@ -134,13 +127,13 @@ export default function ReportsDashboard() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Expense Trend" subtitle="Monthly operational costs" delay={0.35}
-          actions={<TrendIndicator value="+3.2%" type="up" />}
+          actions={<TrendIndicator value="0%" type="up" />}
         >
           <AreaChart data={monthlyExpenses.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#DC2626" height={180} />
         </ChartCard>
 
         <ChartCard title="Maintenance Trend" subtitle="Monthly maintenance costs" delay={0.4}
-          actions={<TrendIndicator value="+5.1%" type="up" />}
+          actions={<TrendIndicator value="0%" type="up" />}
         >
           <AreaChart data={maintenanceTrend.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#D97706" height={180} />
         </ChartCard>

@@ -97,7 +97,7 @@ export default function CompliancePage() {
       <PageHeader title="Compliance" subtitle="Track document compliance for all drivers" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Overall Score" value="94%" icon={Shield} color="green" />
+        <KPICard title="Overall Score" value="0" icon={Shield} color="green" />
         <KPICard title="Insurance Valid" value={`${insuranceValid}/${drivers.length}`} icon={CheckCircle} color="blue" />
         <KPICard title="Fitness Valid" value={`${fitnessValid}/${drivers.length}`} icon={CheckCircle} color="emerald" />
         <KPICard title="Pollution Valid" value={`${pollutionValid}/${drivers.length}`} icon={CheckCircle} color="teal" />

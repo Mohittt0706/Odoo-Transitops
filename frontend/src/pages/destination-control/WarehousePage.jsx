@@ -66,14 +66,14 @@ export default function WarehousePage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-5">
-        <StatCard title="Total Capacity" value={`${(totalCapacity / 1000).toFixed(0)}K sqft`} icon={Ruler} change="+5%" type="up" sparklineData={[48, 50, 52, 54, 55, 56, Math.round(totalCapacity / 1000)]} color="bg-primary/10 text-primary" delay={0} />
-        <StatCard title="Occupied Space" value={`${(totalUsed / 1000).toFixed(0)}K sqft`} icon={HardDrive} change="+3%" type="up" sparklineData={[32, 34, 36, 37, 38, 39, Math.round(totalUsed / 1000)]} color="bg-amber-50 text-amber-600" delay={0.02} />
-        <StatCard title="Available Space" value={`${(availableSpace / 1000).toFixed(0)}K sqft`} icon={Warehouse} change="+2%" type="up" sparklineData={[16, 16, 16, 17, 17, 17, Math.round(availableSpace / 1000)]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
-        <StatCard title="Active Docks" value={`${activeDocks}/${dockList.length}`} icon={Dock} change="+3" type="up" sparklineData={[12, 14, 15, 13, 16, 17, activeDocks]} color="bg-blue-50 text-blue-600" delay={0.06} />
-        <StatCard title="Available Docks" value={availableDocks} icon={Loader} change={availableDocks < 5 ? "-2" : "+1"} type={availableDocks < 5 ? "down" : "up"} sparklineData={[8, 7, 6, 5, 4, 3, availableDocks]} color="bg-cyan-50 text-cyan-600" delay={0.08} />
-        <StatCard title="Active Workers" value={activeWorkers} icon={Users} change="+2" type="up" sparklineData={[22, 23, 24, 24, 25, 26, activeWorkers]} color="bg-purple-50 text-purple-600" delay={0.1} />
-        <StatCard title="Pending Shipments" value={pendingShipments} icon={Package} change="-3" type="down" sparklineData={[18, 16, 14, 12, 11, 10, pendingShipments]} color="bg-orange-50 text-orange-600" delay={0.12} />
-        <StatCard title="Efficiency" value={`${avgEfficiency}%`} icon={Gauge} change="+4%" type="up" sparklineData={[78, 80, 82, 83, 85, 86, avgEfficiency]} color="bg-teal-50 text-teal-600" delay={0.14} />
+        <StatCard title="Total Capacity" value={`${(totalCapacity / 1000).toFixed(0)}K sqft`} icon={Ruler} change="0" type="up" sparklineData={[]} color="bg-primary/10 text-primary" delay={0} />
+        <StatCard title="Occupied Space" value={`${(totalUsed / 1000).toFixed(0)}K sqft`} icon={HardDrive} change="0" type="up" sparklineData={[]} color="bg-amber-50 text-amber-600" delay={0.02} />
+        <StatCard title="Available Space" value={`${(availableSpace / 1000).toFixed(0)}K sqft`} icon={Warehouse} change="0" type="up" sparklineData={[]} color="bg-emerald-50 text-emerald-600" delay={0.04} />
+        <StatCard title="Active Docks" value={`${activeDocks}/${dockList.length}`} icon={Dock} change="0" type="up" sparklineData={[]} color="bg-blue-50 text-blue-600" delay={0.06} />
+        <StatCard title="Available Docks" value={availableDocks} icon={Loader} change="0" type="up" sparklineData={[]} color="bg-cyan-50 text-cyan-600" delay={0.08} />
+        <StatCard title="Active Workers" value={activeWorkers} icon={Users} change="0" type="up" sparklineData={[]} color="bg-purple-50 text-purple-600" delay={0.1} />
+        <StatCard title="Pending Shipments" value={pendingShipments} icon={Package} change="0" type="down" sparklineData={[]} color="bg-orange-50 text-orange-600" delay={0.12} />
+        <StatCard title="Efficiency" value={`${avgEfficiency}%`} icon={Gauge} change="0" type="up" sparklineData={[]} color="bg-teal-50 text-teal-600" delay={0.14} />
       </div>
 
       {/* Utilization Overview */}
@@ -92,12 +92,12 @@ export default function WarehousePage() {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Warehouse Load Trend" subtitle="Monthly capacity utilization" delay={0.2}
-          actions={<TrendIndicator value={`${occupancyPct}% now`} type={occupancyPct > 80 ? "up" : "neutral"} />}>
+          actions={<TrendIndicator value="0" type={occupancyPct > 80 ? "up" : "neutral"} />}>
           <SimpleBarChart data={warehouseCapacityHistory} color="#1E3A5F" height={160} />
         </ChartCard>
 
         <ChartCard title="Dock Usage" subtitle={`Current dock utilization — ${avgDockUtil}% avg`} delay={0.25}
-          actions={<TrendIndicator value={`${avgDockUtil}% avg`} type="neutral" />}>
+          actions={<TrendIndicator value="0" type="neutral" />}>
           <SimpleBarChart data={dockUtilizationHistory} color="#7C3AED" height={160} />
         </ChartCard>
 
@@ -109,7 +109,7 @@ export default function WarehousePage() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Incoming vs Outgoing" subtitle="Daily warehouse flow" delay={0.35}
-          actions={<TrendIndicator value="+12% incoming" type="up" />}>
+          actions={<TrendIndicator value="0" type="up" />}>
           <div className="flex items-end gap-1.5" style={{ height: 160 }}>
             {incomingOutgoing.map((d, i) => {
               const max = Math.max(...incomingOutgoing.flatMap(d => [d.incoming, d.outgoing]));
@@ -131,14 +131,14 @@ export default function WarehousePage() {
         </ChartCard>
 
         <ChartCard title="Worker Productivity" subtitle="Top performing workers" delay={0.4}
-          actions={<TrendIndicator value={`${avgEfficiency}% avg`} type="up" />}>
+          actions={<TrendIndicator value="0" type="up" />}>
           <SimpleBarChart data={workerProductivity.slice(0, 6).map(w => ({ label: w.name.split(" ")[0], value: w.value }))} color="#059669" height={160} />
         </ChartCard>
       </div>
 
       {/* Dock Status Grid */}
       <ChartCard title="Dock Status Overview" subtitle={`${dockList.length} docks — ${activeDocks} active`} delay={0.45}
-        actions={<TrendIndicator value={`${availableDocks} available`} type={availableDocks > 3 ? "up" : "down"} />}>
+        actions={<TrendIndicator value="0" type={availableDocks > 3 ? "up" : "down"} />}>
         <div className="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-10 gap-2">
           {dockList.map((dock, i) => (
             <motion.div key={dock.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}

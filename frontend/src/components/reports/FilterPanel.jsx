@@ -10,23 +10,14 @@ import {
   Search,
 } from "lucide-react";
 
-const datePresets = [
-  { label: "Today", days: 0 },
-  { label: "Yesterday", days: 1 },
-  { label: "Last 7 Days", days: 7 },
-  { label: "Last 30 Days", days: 30 },
-  { label: "This Month", days: null },
-  { label: "Previous Month", days: null },
-  { label: "Quarter", days: 90 },
-  { label: "Year", days: 365 },
-];
+const datePresets = [];
 
-const vehicles = ["All Vehicles", "Volvo FH16", "Scania R500", "Mercedes Actros", "MAN TGX", "DAF XF", "Kenworth T680"];
-const drivers = ["All Drivers", "Rajesh Kumar", "Suresh Patel", "Vikram Singh", "Anil Sharma", "Deepak Verma", "Jose Garcia"];
-const departments = ["All Departments", "Transport", "Logistics", "Warehouse", "Maintenance", "Admin"];
-const categories = ["All Categories", "Fleet", "Fuel", "Revenue", "Maintenance", "Driver", "Trip", "Safety"];
-const statuses = ["All Statuses", "Active", "Pending", "Completed", "Cancelled"];
-const fuelTypes = ["All Types", "Diesel", "Gasoline", "Electric", "Hybrid", "CNG"];
+const vehicles = [];
+const drivers = [];
+const departments = [];
+const categories = [];
+const statuses = [];
+const fuelTypes = [];
 
 export default function FilterPanel({ onFilterChange, className }) {
   const [isOpen, setIsOpen] = useState(false);

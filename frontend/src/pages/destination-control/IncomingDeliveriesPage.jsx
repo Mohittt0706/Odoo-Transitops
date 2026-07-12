@@ -202,26 +202,20 @@ export default function IncomingDeliveriesPage() {
 
   const kpiData = useMemo(() => [
     { label: 'Incoming Trucks', value: incomingDeliveries.length, icon: Truck, color: 'bg-primary/10 text-primary',
-      change: '+12%', changeType: 'up' },
+      change: '0', changeType: 'up' },
     { label: 'Expected Today', value: incomingDeliveries.filter(d => {
       const today = new Date().toISOString().split('T')[0];
       return d.arrivalTime.startsWith(today);
     }).length, icon: Calendar, color: 'bg-blue-50 text-blue-600',
-      change: '+5%', changeType: 'up' },
+      change: '0', changeType: 'up' },
     { label: 'Delayed Trucks', value: incomingDeliveries.filter(d => d.status === 'Delayed').length, icon: AlertTriangle, color: 'bg-red-50 text-red-600',
-      change: '-2%', changeType: 'down' },
+      change: '0', changeType: 'down' },
     { label: 'Waiting for Dock', value: incomingDeliveries.filter(d => d.status === 'Waiting Dock').length, icon: Clock, color: 'bg-orange-50 text-orange-600',
-      change: '+3%', changeType: 'up' },
+      change: '0', changeType: 'up' },
     { label: 'Assigned Dock', value: incomingDeliveries.filter(d => d.status === 'Dock Assigned' || d.status === 'Unloading').length, icon: Anchor, color: 'bg-cyan-50 text-cyan-600',
-      change: '+8%', changeType: 'up' },
-    { label: 'Avg Arrival Time', value: `${Math.round(incomingDeliveries.reduce((s, d) => {
-      const [h, m] = d.eta.split(':').map(Number);
-      return s + h * 60 + m;
-    }, 0) / incomingDeliveries.length / 60)}h ${Math.round(incomingDeliveries.reduce((s, d) => {
-      const [h, m] = d.eta.split(':').map(Number);
-      return s + h * 60 + m;
-    }, 0) / incomingDeliveries.length % 60)}m`, icon: Clock, color: 'bg-purple-50 text-purple-600',
-      change: '-5m', changeType: 'down' },
+      change: '0', changeType: 'up' },
+    { label: 'Avg Arrival Time', value: '0', icon: Clock, color: 'bg-purple-50 text-purple-600',
+      change: '0', changeType: 'down' },
   ], []);
 
   const cols = [
@@ -316,12 +310,7 @@ export default function IncomingDeliveriesPage() {
         </div>
         <div className="bg-white border border-neutral-border rounded-xl p-4 shadow-soft-sm sm:col-span-2">
           <h3 className="text-xs font-bold text-neutral-textMain mb-3">Cargo Distribution</h3>
-          <DonutChart data={[
-            { label: 'Electronics', value: 8 }, { label: 'Textiles', value: 6 },
-            { label: 'Auto Parts', value: 7 }, { label: 'Pharma', value: 5 },
-            { label: 'Chemicals', value: 4 }, { label: 'Steel', value: 3 },
-            { label: 'FMCG', value: 9 }, { label: 'Other', value: 8 },
-          ]} />
+          <DonutChart data={[]} />
         </div>
       </div>
 

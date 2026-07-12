@@ -7,14 +7,14 @@ import {
   User, Warehouse, Clock, Shield, Camera, Upload, Plus,
 } from "lucide-react";
 
-const companyTypes = ["Private Limited", "Public Limited", "LLP", "Sole Proprietorship", "Partnership", "Government", "NGO", "Other"];
-const deliveryZones = ["Zone A - North", "Zone B - South", "Zone C - East", "Zone D - West", "Zone E - Central", "Pan India"];
-const warehouses = ["Mumbai Central Hub", "Chennai Distribution", "Delhi North Facility", "Bangalore Tech Park", "Kochi Port Terminal", "Pune Logistics Center", "Jaipur Warehouse", "Hyderabad Hub", "Ahmedabad Depot", "Lucknow Distribution"];
-const docks = ["Dock 1", "Dock 2", "Dock 3", "Dock 4", "Dock 5", "Dock 6", "Dock 7", "Dock 8", "Dock 9", "Dock 10"];
-const timeSlots = ["06:00 - 10:00", "10:00 - 14:00", "14:00 - 18:00", "18:00 - 22:00", "Flexible"];
-const rmList = ["Rajesh Mehta", "Priya Gupta", "Vikash Singh", "Meena Patel", "Suresh Iyer", "Anita Desai", "Rahul Verma", "Deepa Nair"];
+const companyTypes = [];
+const deliveryZones = [];
+const warehouses = [];
+const docks = [];
+const timeSlots = [];
+const rmList = [];
 
-let receiverCounter = 51;
+let receiverCounter = 0;
 
 function generateCode(name) {
   const prefix = name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 4) || "RCVR";

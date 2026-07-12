@@ -30,18 +30,18 @@ export default function DestinationDashboard() {
   const completedToday = completedDeliveries.filter(d => d.completionTime.startsWith(new Date().toISOString().split('T')[0])).length;
 
   const kpiCards = [
-    { title: "Incoming Trucks", value: incomingDeliveries.length, icon: Truck, change: "+3", type: "up", spark: [28, 32, 35, 30, 38, 36, incomingDeliveries.length], color: "bg-primary/10 text-primary", delay: 0 },
-    { title: "Completed Today", value: completedToday || 12, icon: CheckCircle, change: "+18%", type: "up", spark: [8, 10, 7, 12, 9, 11, 12], color: "bg-emerald-50 text-emerald-600", delay: 0.02 },
-    { title: "Pending Deliveries", value: incomingDeliveries.filter(d => d.status === 'Arrived' || d.status === 'Docked').length, icon: Clock, change: "-2", type: "down", spark: [12, 10, 8, 9, 7, 6, 5], color: "bg-amber-50 text-amber-600", delay: 0.04 },
-    { title: "Delayed Deliveries", value: incomingDeliveries.filter(d => d.status === 'Delayed').length + completedDeliveries.filter(d => d.status === 'Rejected').length, icon: AlertTriangle, change: "-5%", type: "down", spark: [8, 7, 6, 5, 4, 4, 3], color: "bg-red-50 text-red-600", delay: 0.06 },
-    { title: "Dock Utilization", value: Math.round(dockData.reduce((s, d) => s + d.utilization, 0) / dockData.length) + "%", icon: Gauge, change: "+4%", type: "up", spark: [68, 72, 70, 74, 73, 76, 75], color: "bg-blue-50 text-blue-600", delay: 0.08 },
-    { title: "Warehouse Capacity", value: warehousePct + "%", icon: Warehouse, change: "+2%", type: "up", spark: [78, 79, 80, 81, 82, 83, warehousePct], color: "bg-purple-50 text-purple-600", delay: 0.1 },
-    { title: "Active Docks", value: activeDocks + "/" + dockData.length, icon: Truck, change: "+3", type: "up", spark: [12, 14, 15, 13, 16, 17, activeDocks], color: "bg-cyan-50 text-cyan-600", delay: 0.12 },
-    { title: "Avg Unloading Time", value: avgUnloading + " min", icon: Hourglass, change: "-8 min", type: "down", spark: [95, 88, 82, 78, 75, 72, avgUnloading], color: "bg-orange-50 text-orange-600", delay: 0.14 },
-    { title: "Pending POD", value: podRecords.filter(r => r.status === 'Pending' || r.status === 'Awaiting Photo').length, icon: Upload, change: "-3", type: "down", spark: [18, 16, 14, 12, 11, 10, 8], color: "bg-indigo-50 text-indigo-600", delay: 0.16 },
-    { title: "Confirmed Today", value: completedDeliveries.filter(d => d.status === 'Confirmed').length || 8, icon: PackageCheck, change: "+15%", type: "up", spark: [5, 6, 7, 8, 7, 9, 8], color: "bg-emerald-50 text-emerald-600", delay: 0.18 },
-    { title: "Rejected Today", value: completedDeliveries.filter(d => d.status === 'Rejected').length || 1, icon: XCircle, change: "-1", type: "down", spark: [3, 2, 2, 1, 1, 1, 0], color: "bg-red-50 text-red-600", delay: 0.2 },
-    { title: "Warehouse Load", value: Math.round((totalUsed / totalCapacity) * 100) + "%", icon: Users, change: "+2%", type: "up", spark: [72, 74, 76, 78, 79, 80, 82], color: "bg-teal-50 text-teal-600", delay: 0.22 },
+    { title: "Incoming Trucks", value: incomingDeliveries.length, icon: Truck, change: "0", type: "up", spark: [], color: "bg-primary/10 text-primary", delay: 0 },
+    { title: "Completed Today", value: completedToday || 0, icon: CheckCircle, change: "0", type: "up", spark: [], color: "bg-emerald-50 text-emerald-600", delay: 0.02 },
+    { title: "Pending Deliveries", value: incomingDeliveries.filter(d => d.status === 'Arrived' || d.status === 'Docked').length, icon: Clock, change: "0", type: "down", spark: [], color: "bg-amber-50 text-amber-600", delay: 0.04 },
+    { title: "Delayed Deliveries", value: incomingDeliveries.filter(d => d.status === 'Delayed').length + completedDeliveries.filter(d => d.status === 'Rejected').length, icon: AlertTriangle, change: "0", type: "down", spark: [], color: "bg-red-50 text-red-600", delay: 0.06 },
+    { title: "Dock Utilization", value: Math.round(dockData.reduce((s, d) => s + d.utilization, 0) / dockData.length) + "%", icon: Gauge, change: "0", type: "up", spark: [], color: "bg-blue-50 text-blue-600", delay: 0.08 },
+    { title: "Warehouse Capacity", value: warehousePct + "%", icon: Warehouse, change: "0", type: "up", spark: [], color: "bg-purple-50 text-purple-600", delay: 0.1 },
+    { title: "Active Docks", value: activeDocks + "/" + dockData.length, icon: Truck, change: "0", type: "up", spark: [], color: "bg-cyan-50 text-cyan-600", delay: 0.12 },
+    { title: "Avg Unloading Time", value: avgUnloading + " min", icon: Hourglass, change: "0", type: "down", spark: [], color: "bg-orange-50 text-orange-600", delay: 0.14 },
+    { title: "Pending POD", value: podRecords.filter(r => r.status === 'Pending' || r.status === 'Awaiting Photo').length, icon: Upload, change: "0", type: "down", spark: [], color: "bg-indigo-50 text-indigo-600", delay: 0.16 },
+    { title: "Confirmed Today", value: completedDeliveries.filter(d => d.status === 'Confirmed').length || 0, icon: PackageCheck, change: "0", type: "up", spark: [], color: "bg-emerald-50 text-emerald-600", delay: 0.18 },
+    { title: "Rejected Today", value: completedDeliveries.filter(d => d.status === 'Rejected').length || 0, icon: XCircle, change: "0", type: "down", spark: [], color: "bg-red-50 text-red-600", delay: 0.2 },
+    { title: "Warehouse Load", value: Math.round((totalUsed / totalCapacity) * 100) + "%", icon: Users, change: "0", type: "up", spark: [], color: "bg-teal-50 text-teal-600", delay: 0.22 },
   ];
 
   return (
@@ -95,7 +95,7 @@ export default function DestinationDashboard() {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Daily Deliveries" subtitle="Incoming vs completed per day" delay={0.3}
-          actions={<TrendIndicator value="+12.5% vs LW" type="up" />}>
+          actions={<TrendIndicator value="0" type="up" />}>
           <div className="flex items-end gap-1.5" style={{ height: 160 }}>
             {dailyDeliveries.map((d, i) => {
               const max = Math.max(...dailyDeliveries.flatMap(d => [d.incoming, d.completed]));
@@ -119,7 +119,7 @@ export default function DestinationDashboard() {
         </ChartCard>
 
         <ChartCard title="Dock Utilization" subtitle="Average dock usage this week" delay={0.35}
-          actions={<TrendIndicator value="72% avg" type="up" />}>
+          actions={<TrendIndicator value="0" type="up" />}>
           <SimpleBarChart data={dockUtilizationHistory} color="#7C3AED" height={160} />
         </ChartCard>
 
@@ -131,7 +131,7 @@ export default function DestinationDashboard() {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Warehouse Capacity Trend" subtitle="Monthly utilization %" delay={0.45}
-          actions={<TrendIndicator value="+5.2%" type="up" />}>
+          actions={<TrendIndicator value="0" type="up" />}>
           <AreaChart data={warehouseCapacityHistory} color="#1E3A5F" height={180} />
         </ChartCard>
 

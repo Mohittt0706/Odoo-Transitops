@@ -10,68 +10,7 @@ import {
 } from "lucide-react";
 import Logo from "../components/common/Logo";
 
-const dashboards = {
-  operations: {
-    title: "Operations Lead Dashboard",
-    description: "Fleet management, vehicle assignments, driver coordination, and operational reports.",
-    icon: LayoutDashboard,
-    color: "bg-primary/10 text-primary",
-    stats: [
-      { label: "Active Vehicles", value: "24" },
-      { label: "On Route", value: "18" },
-      { label: "Drivers", value: "32" },
-      { label: "Pending Tasks", value: "7" },
-    ],
-  },
-  "road-captain": {
-    title: "Road Captain Dashboard",
-    description: "Trip management, route planning, fuel logs, and delivery tracking.",
-    icon: Navigation,
-    color: "bg-success/10 text-success",
-    stats: [
-      { label: "Today's Trips", value: "12" },
-      { label: "Completed", value: "8" },
-      { label: "In Transit", value: "4" },
-      { label: "Fuel Logs", value: "15" },
-    ],
-  },
-  safety: {
-    title: "Safety Officer Dashboard",
-    description: "Driver compliance, incident reports, vehicle inspections, and license management.",
-    icon: ShieldCheck,
-    color: "bg-warning/10 text-warning",
-    stats: [
-      { label: "Compliance", value: "94%" },
-      { label: "Incidents", value: "2" },
-      { label: "Inspections", value: "6" },
-      { label: "Expiring Licenses", value: "3" },
-    ],
-  },
-  finance: {
-    title: "Finance Hub Dashboard",
-    description: "Expense tracking, fuel costs, profitability analysis, and invoice management.",
-    icon: BarChart3,
-    color: "bg-purple-500/10 text-purple-600",
-    stats: [
-      { label: "Monthly Spend", value: "$48K" },
-      { label: "Fuel Costs", value: "$12K" },
-      { label: "Revenue", value: "$72K" },
-      { label: "Pending Invoices", value: "5" },
-    ],
-  },
-  destination: {
-    title: "Destination Control Dashboard",
-    description: "Incoming deliveries, warehouse operations, proof of delivery, and inventory tracking.",
-    icon: MapPin,
-    color: "bg-rose-500/10 text-rose-600",
-    stats: [
-      { label: "Incoming", value: "9" },
-      { label: "Delivered", value: "14" },
-      { label: "Warehouse", value: "82%" },
-      { label: "POD Pending", value: "4" },
-    ],
-  },
-};
+const dashboards = {};
 
 export default function DashboardPlaceholder() {
   const { role } = useParams();

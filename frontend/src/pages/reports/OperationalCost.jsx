@@ -13,15 +13,15 @@ export default function OperationalCost() {
   const totalCost = operationalCostBreakdown.reduce((s, d) => s + d.value, 0);
 
   const costCategories = [
-    { label: "Fuel Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Fuel').value / 100000).toFixed(1)}L`, icon: Fuel, change: "+5.8%", changeType: "up", color: "bg-rose-50 text-rose-600", delay: 0 },
-    { label: "Maintenance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Maintenance').value / 100000).toFixed(1)}L`, icon: Wrench, change: "+4.2%", changeType: "up", color: "bg-amber-50 text-amber-600", delay: 0.02 },
-    { label: "Insurance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Insurance').value / 100000).toFixed(1)}L`, icon: Shield, change: "+2.1%", changeType: "up", color: "bg-indigo-50 text-indigo-600", delay: 0.04 },
-    { label: "Driver Salary", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Driver Salary').value / 100000).toFixed(1)}L`, icon: Users, change: "+6.5%", changeType: "up", color: "bg-emerald-50 text-emerald-600", delay: 0.06 },
-    { label: "Parking", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Parking').value / 100000).toFixed(1)}L`, icon: Car, change: "+1.2%", changeType: "up", color: "bg-cyan-50 text-cyan-600", delay: 0.08 },
-    { label: "Toll Charges", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Toll Charges').value / 100000).toFixed(1)}L`, icon: CircleDollarSign, change: "+3.5%", changeType: "up", color: "bg-purple-50 text-purple-600", delay: 0.1 },
-    { label: "Repair Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Repairs').value / 100000).toFixed(1)}L`, icon: Repair, change: "+2.8%", changeType: "up", color: "bg-pink-50 text-pink-600", delay: 0.12 },
-    { label: "Taxes", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Taxes').value / 100000).toFixed(1)}L`, icon: Receipt, change: "+1.5%", changeType: "up", color: "bg-teal-50 text-teal-600", delay: 0.14 },
-    { label: "Miscellaneous", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Miscellaneous').value / 100000).toFixed(1)}L`, icon: PiggyBank, change: "-0.5%", changeType: "down", color: "bg-slate-50 text-slate-600", delay: 0.16 },
+    { label: "Fuel Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Fuel').value / 100000).toFixed(1)}L`, icon: Fuel, change: "", changeType: "up", color: "bg-rose-50 text-rose-600", delay: 0 },
+    { label: "Maintenance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Maintenance').value / 100000).toFixed(1)}L`, icon: Wrench, change: "", changeType: "up", color: "bg-amber-50 text-amber-600", delay: 0.02 },
+    { label: "Insurance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Insurance').value / 100000).toFixed(1)}L`, icon: Shield, change: "", changeType: "up", color: "bg-indigo-50 text-indigo-600", delay: 0.04 },
+    { label: "Driver Salary", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Driver Salary').value / 100000).toFixed(1)}L`, icon: Users, change: "", changeType: "up", color: "bg-emerald-50 text-emerald-600", delay: 0.06 },
+    { label: "Parking", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Parking').value / 100000).toFixed(1)}L`, icon: Car, change: "", changeType: "up", color: "bg-cyan-50 text-cyan-600", delay: 0.08 },
+    { label: "Toll Charges", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Toll Charges').value / 100000).toFixed(1)}L`, icon: CircleDollarSign, change: "", changeType: "up", color: "bg-purple-50 text-purple-600", delay: 0.1 },
+    { label: "Repair Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Repairs').value / 100000).toFixed(1)}L`, icon: Repair, change: "", changeType: "up", color: "bg-pink-50 text-pink-600", delay: 0.12 },
+    { label: "Taxes", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Taxes').value / 100000).toFixed(1)}L`, icon: Receipt, change: "", changeType: "up", color: "bg-teal-50 text-teal-600", delay: 0.14 },
+    { label: "Miscellaneous", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Miscellaneous').value / 100000).toFixed(1)}L`, icon: PiggyBank, change: "", changeType: "down", color: "bg-slate-50 text-slate-600", delay: 0.16 },
   ];
 
   return (
@@ -45,13 +45,13 @@ export default function OperationalCost() {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         <ChartCard title="Expense Breakdown" subtitle="Total: ₹{(totalCost / 100000).toFixed(1)}L" delay={0.2}
-          actions={<TrendIndicator value="+4.2% vs LY" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <DonutChart data={operationalCostBreakdown} size={140} thickness={16} showTotal={false} />
         </ChartCard>
 
         <ChartCard title="Monthly Cost Trend" subtitle="Last 12 months" delay={0.25}
-          actions={<TrendIndicator value="+3.2%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <AreaChart data={monthlyExpenses.map(d => ({ label: d.label, value: Math.round(d.value / 1000) }))} color="#DC2626" height={180} />
         </ChartCard>
@@ -95,7 +95,7 @@ export default function OperationalCost() {
         </ChartCard>
 
         <ChartCard title="Department Spending" subtitle="Cost by department" delay={0.35}
-          actions={<TrendIndicator value="Transport: 32%" type="up" />}
+          actions={<TrendIndicator value="" type="up" />}
         >
           <SimpleBarChart data={departmentSpending.map(d => ({ label: d.department || d.province, value: Math.round(d.value / 1000) }))} color="#1E3A5F" height={180} />
         </ChartCard>
@@ -104,11 +104,7 @@ export default function OperationalCost() {
       {/* Savings Opportunities */}
       <ChartCard title="Cost Saving Opportunities" subtitle="Identified areas for optimization" delay={0.4}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            { title: "Fuel Optimization", saving: "₹85,000/yr", desc: "Route optimization could reduce fuel consumption by 8%", icon: Fuel, color: "bg-rose-50 text-rose-600" },
-            { title: "Maintenance Schedule", saving: "₹52,000/yr", desc: "Preventive maintenance reduces emergency repairs by 15%", icon: Wrench, color: "bg-amber-50 text-amber-600" },
-            { title: "Insurance Review", saving: "₹28,000/yr", desc: "Fleet-wide policy negotiation could lower premiums", icon: Shield, color: "bg-indigo-50 text-indigo-600" },
-          ].map((item, i) => (
+          {[].map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 10 }}
