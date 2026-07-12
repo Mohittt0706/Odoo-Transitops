@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import PageHeader from "../../../components/ui/PageHeader";
-import KPICard from "../../../components/ui/KPICard";
-import ChartCard from "../../../components/ui/ChartCard";
-import DonutChart from "../../../components/ui/DonutChart";
-import SimpleBarChart from "../../../components/ui/SimpleBarChart";
+import PageHeader from "../../../components/layout/PageHeader";
+import KPICard from "../../../components/dashboard/KPICard";
+import ChartCard from "../../../components/charts/ChartCard";
+import DonutChart from "../../../components/charts/PieChart";
+import SimpleBarChart from "../../../components/charts/BarChart";
 import ActivityFeed from "../../../components/fleet/ActivityFeed";
 import VehicleCard from "../../../components/fleet/VehicleCard";
 import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";

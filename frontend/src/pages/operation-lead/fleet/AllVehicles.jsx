@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import PageHeader from "../../../components/ui/PageHeader";
-import DataTable from "../../../components/ui/DataTable";
+import PageHeader from "../../../components/layout/PageHeader";
+import DataTable from "../../../components/common/DataTable";
 import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
 import { vehicles } from "../../../data/vehicleData";
 import { cn } from "../../../utils/utils";

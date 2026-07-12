@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
+import PageHeader from "../../components/layout/PageHeader";
 import {
   Settings,
   Bell,

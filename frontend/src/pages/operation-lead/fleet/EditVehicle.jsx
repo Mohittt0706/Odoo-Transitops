@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
-import PageHeader from "../../../components/ui/PageHeader";
+import PageHeader from "../../../components/layout/PageHeader";
 import { vehicles, vehicleTypes, manufacturers, fuelTypes } from "../../../data/vehicleData";
 import { cn } from "../../../utils/utils";
 import { Save, X, ArrowLeft, Truck } from "lucide-react";

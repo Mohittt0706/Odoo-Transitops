@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import KPICard from "../../components/ui/KPICard";
-import DataTable from "../../components/ui/DataTable";
-import StatusBadge from "../../components/ui/StatusBadge";
+import PageHeader from "../../components/layout/PageHeader";
+import KPICard from "../../components/dashboard/KPICard";
+import DataTable from "../../components/common/DataTable";
+import StatusBadge from "../../components/common/Badge";
 import { deliveries } from "../../data/mockData";
 import { Truck, ArrowRight, AlertTriangle, Clock } from "lucide-react";
 

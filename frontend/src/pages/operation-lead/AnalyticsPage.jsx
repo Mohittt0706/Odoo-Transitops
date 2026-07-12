@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import ChartCard from "../../components/ui/ChartCard";
-import SimpleBarChart from "../../components/ui/SimpleBarChart";
+import PageHeader from "../../components/layout/PageHeader";
+import ChartCard from "../../components/charts/ChartCard";
+import SimpleBarChart from "../../components/charts/BarChart";
 import { TrendingUp, Route, IndianRupee, Users } from "lucide-react";
 
 const fleetUtilizationTrend = [

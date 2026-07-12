@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import KPICard from "../../components/ui/KPICard";
-import ChartCard from "../../components/ui/ChartCard";
-import DonutChart from "../../components/ui/DonutChart";
-import SimpleBarChart from "../../components/ui/SimpleBarChart";
+import PageHeader from "../../components/layout/PageHeader";
+import KPICard from "../../components/dashboard/KPICard";
+import ChartCard from "../../components/charts/ChartCard";
+import DonutChart from "../../components/charts/PieChart";
+import SimpleBarChart from "../../components/charts/BarChart";
 import {
   Truck,
   CheckCircle,

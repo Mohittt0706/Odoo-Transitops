@@ -1,6 +1,6 @@
-import PageHeader from "../../components/ui/PageHeader";
-import ChartCard from "../../components/ui/ChartCard";
-import SimpleBarChart from "../../components/ui/SimpleBarChart";
+import PageHeader from "../../components/layout/PageHeader";
+import ChartCard from "../../components/charts/ChartCard";
+import SimpleBarChart from "../../components/charts/BarChart";
 import { motion } from "framer-motion";
 
 const revenueVsExpenses = [

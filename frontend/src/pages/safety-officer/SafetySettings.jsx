@@ -1,6 +1,6 @@
-import PageHeader from "../../components/ui/PageHeader"
+import PageHeader from "../../components/layout/PageHeader"
 import { motion } from "framer-motion"
-import ChartCard from "../../components/ui/ChartCard"
+import ChartCard from "../../components/charts/ChartCard"
 import { Bell, Shield, FileText, Save, AlertTriangle } from "lucide-react"
 import { useState } from "react"
 
