@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import DashboardHeader from "./DashboardHeader";
+import Sidebar from "../components/layout/Sidebar";
+import DashboardHeader from "../components/layout/Topbar";
 
 export default function DashboardLayout({ role }) {
   const [collapsed, setCollapsed] = useState(false);

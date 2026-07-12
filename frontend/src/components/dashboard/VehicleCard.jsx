@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Truck, Fuel, Gauge, ArrowRight } from "lucide-react";
-import VehicleStatusBadge from "./VehicleStatusBadge";
+import VehicleStatusBadge from "../common/VehicleStatusBadge";
 
 export default function VehicleCard({ vehicle, index = 0 }) {
   const navigate = useNavigate();

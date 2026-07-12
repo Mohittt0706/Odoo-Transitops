@@ -5,7 +5,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import LoginForm from "./components/forms/LoginForm";
 import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
 import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
-import DashboardLayout from "./components/dashboard/DashboardLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 import DriverOverview from "./pages/operation-lead/DriverOverview";
 import AllDrivers from "./pages/operation-lead/AllDrivers";
