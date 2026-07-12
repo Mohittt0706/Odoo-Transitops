@@ -4,22 +4,22 @@ import { Star } from 'lucide-react';
 export default function Testimonials() {
   const reviews = [
     {
-      name: 'Sarah Jenkins',
-      company: 'Apex Industries',
-      text: 'TransitOps transformed our warehouse bottleneck. Pre-allocating docks and syncing POD sheets directly to Odoo saves us hours every single day.',
-      avatar: 'SJ'
+      name: 'Rahul Sharma',
+      company: 'Blue Dart Express',
+      text: 'TransitOps has streamlined our fleet operations. Real-time tracking and warehouse management have significantly improved delivery efficiency.',
+      avatar: 'RS'
     },
     {
-      name: 'Marcus Vance',
-      company: 'Midwest Cargo',
-      text: 'The safety warnings and live telematics logs keep us compliant. Our safety audit score jumped from 82 to 98% within a month.',
-      avatar: 'MV'
+      name: 'Priya Patel',
+      company: 'Delhivery',
+      text: 'The maintenance alerts and driver management features have reduced downtime and improved our daily operations.',
+      avatar: 'PP'
     },
     {
-      name: 'David Chen',
-      company: 'Rapid Freight',
-      text: 'We tried several tracking platforms, but none integrated with our Odoo inventory and stock pickings like TransitOps. Clean interface and highly usable.',
-      avatar: 'DC'
+      name: 'Arjun Mehta',
+      company: 'Mahindra Logistics',
+      text: 'A clean, professional platform that brings fleet, trips, fuel, and warehouse management together in one dashboard.',
+      avatar: 'AM'
     }
   ];
 
