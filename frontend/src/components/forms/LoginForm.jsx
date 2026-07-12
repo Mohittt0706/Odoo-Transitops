@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowRight, CheckCircle2 } from "lucide-react";
-import InputField from "../common/InputField";
+import InputField from "../common/Input";
 import PasswordInput from "../common/PasswordInput";
 import Button from "../common/Button";
 import Checkbox from "../common/Checkbox";
 import Logo from "../common/Logo";
-import FormCard from "../common/FormCard";
+import FormCard from "../common/Card";
 
 export default function LoginForm() {
   const navigate = useNavigate();

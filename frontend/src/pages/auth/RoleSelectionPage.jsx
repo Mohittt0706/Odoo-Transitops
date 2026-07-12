@@ -9,7 +9,7 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
-import Logo from "../components/common/Logo";
+import Logo from "../../components/common/Logo";
 
 const roles = [
   {

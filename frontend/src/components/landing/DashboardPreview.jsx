@@ -1,6 +1,6 @@
 import React from 'react';
 import { Truck, MapPin, Battery, ShieldAlert, ArrowRight } from 'lucide-react';
-import TelemetryChart from '../common/TelemetryChart';
+import TelemetryChart from '../charts/TelemetryChart';
 
 export default function DashboardPreview() {
   const kpis = [

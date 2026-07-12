@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowLeft, CheckCircle2, Send } from "lucide-react";
-import InputField from "../common/InputField";
+import InputField from "../common/Input";
 import Button from "../common/Button";
 import Logo from "../common/Logo";
-import FormCard from "../common/FormCard";
+import FormCard from "../common/Card";
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
