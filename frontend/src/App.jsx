@@ -83,6 +83,12 @@ import ExportReports from "./pages/reports/ExportReports";
 import AnalyticsPage from "./pages/operation-lead/AnalyticsPage";
 import OperationsNotifications from "./pages/operation-lead/OperationsNotifications";
 import OperationsSettings from "./pages/operation-lead/OperationsSettings";
+import FuelLayout from "./layouts/FuelLayout";
+import FuelLogs from "./pages/operation-lead/fuel-expense/FuelLogs";
+import AddFuelLog from "./pages/operation-lead/fuel-expense/AddFuelLog";
+import ExpensesPageOp from "./pages/operation-lead/fuel-expense/Expenses";
+import ExpenseDetails from "./pages/operation-lead/fuel-expense/ExpenseDetails";
+import VehicleExpenses from "./pages/operation-lead/fuel-expense/VehicleExpenses";
 
 import RoadCaptainDashboard from "./pages/road-captain/RoadCaptainDashboard";
 import MyTripsPage from "./pages/road-captain/MyTripsPage";
@@ -94,6 +100,7 @@ import DocumentsPage from "./pages/road-captain/DocumentsPage";
 import EmergencyPage from "./pages/road-captain/EmergencyPage";
 import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
 import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
+import TodaysRoute from "./pages/road-captain/TodaysRoute";
 
 import SafetyDashboard from "./pages/safety-officer/SafetyDashboard";
 import SafetyDriversPage from "./pages/safety-officer/SafetyDriversPage";
@@ -254,6 +261,17 @@ export default function App() {
             <Route path="history" element={<MaintenanceHistory />} />
             <Route path="service-log" element={<VehicleServiceLog />} />
           </Route>
+          <Route path="fuel" element={<FuelLayout />}>
+            <Route index element={<FuelLogs />} />
+            <Route path="add" element={<AddFuelLog />} />
+          </Route>
+          <Route path="expenses" element={<FuelLayout />}>
+            <Route index element={<ExpensesPageOp />} />
+            <Route path=":id" element={<ExpenseDetails />} />
+          </Route>
+          <Route path="vehicle-expenses" element={<FuelLayout />}>
+            <Route index element={<VehicleExpenses />} />
+          </Route>
           <Route path="reports" element={<ReportsDashboard />} />
           <Route path="reports/fleet" element={<FleetAnalytics />} />
           <Route path="reports/fuel" element={<FuelAnalytics />} />
@@ -275,10 +293,14 @@ export default function App() {
           }>
           <Route index element={<RoadCaptainDashboard />} />
           <Route path="my-trips" element={<MyTripsPage />} />
+          <Route path="todays-route" element={<TodaysRoute />} />
           <Route path="trip-history" element={<TripHistoryPage />} />
+          <Route path="history" element={<TripHistoryPage />} />
           <Route path="assigned-vehicle" element={<AssignedVehiclePage />} />
+          <Route path="vehicle" element={<AssignedVehiclePage />} />
           <Route path="navigation" element={<NavigationPage />} />
           <Route path="fuel-logs" element={<FuelLogsPage />} />
+          <Route path="fuel" element={<FuelLogsPage />} />
           <Route path="documents" element={<DocumentsPage />} />
           <Route path="emergency" element={<EmergencyPage />} />
           <Route path="profile" element={<RoadCaptainProfile />} />
