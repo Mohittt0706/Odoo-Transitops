@@ -8,3 +8,4 @@ export { fuelService } from './fuel.service';
 export { expenseService } from './expense.service';
 export { receiverService } from './receiver.service';
 export { notificationService } from './notification.service';
+export { reportService } from './report.service';

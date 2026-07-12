@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatusBadge from "../../components/common/Badge";
@@ -21,7 +21,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Filter,
   RotateCcw,
   Loader,
   TriangleAlert,
@@ -41,17 +40,22 @@ export default function ExportReports() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const pageSize = 10;
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => { isMounted.current = false; };
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await reportService.overview();
-      setData(res.data);
+      if (isMounted.current) setData(res.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load reports");
+      if (isMounted.current) setError(err.response?.data?.message || "Failed to load reports");
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 

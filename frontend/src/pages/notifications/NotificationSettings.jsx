@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import { SettingsCard, ToggleSwitch } from "../../components/notifications/NotificationComponents";
-import { Bell, BellRing, MessageSquare, Monitor, AlertTriangle, Route, Wrench, DollarSign, FileText, Volume2, Save, RotateCcw, Undo, CheckCircle } from "lucide-react";
+import { Bell, BellRing, MessageSquare, AlertTriangle, Route, Wrench, DollarSign, FileText, Volume2, Save, RotateCcw, Undo, CheckCircle } from "lucide-react";
 
 const defaultSettings = {
   email: true, push: true, sms: false, desktop: true,

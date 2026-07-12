@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import { NotificationCard, FilterPanel, EmptyState, LoadingSkeleton } from "../../components/notifications/NotificationComponents";
@@ -36,18 +36,24 @@ export default function AllNotifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const pageSize = 10;
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => { isMounted.current = false; };
+  }, []);
 
   const fetchNotifications = async () => {
     try {
       setLoading(true);
       setError(null);
       const res = await notificationService.getAll();
+      if (!isMounted.current) return;
       const { notifications: data } = res.data;
       setNotifications((data || []).map(n => ({ ...n, id: n._id, description: n.message || n.title, read: n.isRead, date: n.createdAt })));
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to fetch notifications');
+      if (isMounted.current) setError(err.response?.data?.message || err.message || 'Failed to fetch notifications');
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 
