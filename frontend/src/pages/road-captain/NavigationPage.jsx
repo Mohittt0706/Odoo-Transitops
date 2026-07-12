@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import PageHeader from "../../components/ui/PageHeader";
-import ChartCard from "../../components/ui/ChartCard";
-import StatusBadge from "../../components/ui/StatusBadge";
+import PageHeader from "../../components/layout/PageHeader";
+import ChartCard from "../../components/charts/ChartCard";
+import StatusBadge from "../../components/common/Badge";
 import {
   Navigation,
   Clock,

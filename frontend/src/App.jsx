@@ -1,11 +1,27 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-import AuthLayout from "./components/auth/AuthLayout";
-import LoginForm from "./components/auth/LoginForm";
-import ForgotPasswordForm from "./components/auth/ForgotPasswordForm";
-import RoleSelectionPage from "./pages/RoleSelectionPage";
-import DashboardLayout from "./components/dashboard/DashboardLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import LoginForm from "./components/forms/LoginForm";
+import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
+import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
+import DashboardLayout from "./layouts/DashboardLayout";
+
+import DriverOverview from "./pages/operation-lead/DriverOverview";
+import AllDrivers from "./pages/operation-lead/AllDrivers";
+import RegisterDriver from "./pages/operation-lead/RegisterDriver";
+import DriverProfile from "./pages/operation-lead/DriverProfile";
+import EditDriverPage from "./pages/operation-lead/EditDriver";
+import DriverDocumentsPage from "./pages/operation-lead/DriverDocuments";
+import DriverPerformancePage from "./pages/operation-lead/DriverPerformance";
+import LicenseManagementPage from "./pages/operation-lead/LicenseManagement";
+import DriverHistoryPage from "./pages/operation-lead/DriverHistory";
+import DriverSettingsPage from "./pages/operation-lead/DriverSettings";
+import DriverDocuments from "./pages/operation-lead/DriverDocuments";
+import DriverPerformance from "./pages/operation-lead/DriverPerformance";
+import LicenseManagement from "./pages/operation-lead/LicenseManagement";
+import DriverHistory from "./pages/operation-lead/DriverHistory";
+import DriverSettings from "./pages/operation-lead/DriverSettings";
 
 import Navbar from "./components/landing/Navbar";
 import HeroSection from "./components/landing/HeroSection";
@@ -21,38 +37,38 @@ import FAQ from "./components/landing/FAQ";
 import Footer from "./components/landing/Footer";
 import { ArrowRight } from "lucide-react";
 
-import OperationsDashboard from "./pages/operations/OperationsDashboard";
-import FleetLayout from "./components/fleet/FleetLayout";
-import VehicleOverview from "./pages/operations/fleet/VehicleOverview";
-import AllVehicles from "./pages/operations/fleet/AllVehicles";
-import RegisterVehicle from "./pages/operations/fleet/RegisterVehicle";
-import VehicleDetails from "./pages/operations/fleet/VehicleDetails";
-import EditVehicle from "./pages/operations/fleet/EditVehicle";
-import VehicleDocuments from "./pages/operations/fleet/VehicleDocuments";
-import VehicleAnalytics from "./pages/operations/fleet/VehicleAnalytics";
-import VehicleHistory from "./pages/operations/fleet/VehicleHistory";
-import FleetStatus from "./pages/operations/fleet/FleetStatus";
-import VehicleSettings from "./pages/operations/fleet/VehicleSettings";
-import VehiclesPage from "./pages/operations/VehiclesPage";
-import DriversPage from "./pages/operations/DriversPage";
+import OperationsDashboard from "./pages/operation-lead/OperationsDashboard";
+import FleetLayout from "./layouts/FleetLayout";
+import VehicleOverview from "./pages/operation-lead/fleet/VehicleOverview";
+import AllVehicles from "./pages/operation-lead/fleet/AllVehicles";
+import RegisterVehicle from "./pages/operation-lead/fleet/RegisterVehicle";
+import VehicleDetails from "./pages/operation-lead/fleet/VehicleDetails";
+import EditVehicle from "./pages/operation-lead/fleet/EditVehicle";
+import VehicleDocuments from "./pages/operation-lead/fleet/VehicleDocuments";
+import VehicleAnalytics from "./pages/operation-lead/fleet/VehicleAnalytics";
+import VehicleHistory from "./pages/operation-lead/fleet/VehicleHistory";
+import FleetStatus from "./pages/operation-lead/fleet/FleetStatus";
+import VehicleSettings from "./pages/operation-lead/fleet/VehicleSettings";
+import VehiclesPage from "./pages/operation-lead/VehiclesPage";
+import DriversPage from "./pages/operation-lead/DriversPage";
 import DriverLayout from "./components/drivers/DriverLayout";
-import DriverProfile from "./pages/operations/drivers/DriverProfile";
+import DriverProfilePage from "./pages/operations/drivers/DriverProfile";
 import DriverForm from "./pages/operations/drivers/DriverForm";
 import DriverAnalytics from "./pages/operations/drivers/DriverAnalytics";
 import LicenseDetailsPage from "./pages/operations/drivers/LicenseDetailsPage";
-import TripsPage from "./pages/operations/TripsPage";
+import TripsPage from "./pages/operation-lead/TripsPage";
 import TripLayout from "./components/trips/TripLayout";
 import CreateTrip from "./pages/operations/trips/CreateTrip";
 import TripDetails from "./pages/operations/trips/TripDetails";
 import TripTimelinePage from "./pages/operations/trips/TripTimeline";
 import CompletedTrips from "./pages/operations/trips/CompletedTrips";
 import CancelledTrips from "./pages/operations/trips/CancelledTrips";
-import AssignmentsPage from "./pages/operations/AssignmentsPage";
-import MaintenancePage from "./pages/operations/MaintenancePage";
-import ReportsPage from "./pages/operations/ReportsPage";
-import AnalyticsPage from "./pages/operations/AnalyticsPage";
-import OperationsNotifications from "./pages/operations/OperationsNotifications";
-import OperationsSettings from "./pages/operations/OperationsSettings";
+import AssignmentsPage from "./pages/operation-lead/AssignmentsPage";
+import MaintenancePage from "./pages/operation-lead/MaintenancePage";
+import ReportsPage from "./pages/operation-lead/ReportsPage";
+import AnalyticsPage from "./pages/operation-lead/AnalyticsPage";
+import OperationsNotifications from "./pages/operation-lead/OperationsNotifications";
+import OperationsSettings from "./pages/operation-lead/OperationsSettings";
 
 import RoadCaptainDashboard from "./pages/road-captain/RoadCaptainDashboard";
 import MyTripsPage from "./pages/road-captain/MyTripsPage";
@@ -65,36 +81,36 @@ import EmergencyPage from "./pages/road-captain/EmergencyPage";
 import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
 import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
 
-import SafetyDashboard from "./pages/safety/SafetyDashboard";
-import SafetyDriversPage from "./pages/safety/SafetyDriversPage";
-import CompliancePage from "./pages/safety/CompliancePage";
-import LicensesPage from "./pages/safety/LicensesPage";
-import IncidentsPage from "./pages/safety/IncidentsPage";
-import TrainingPage from "./pages/safety/TrainingPage";
-import InspectionsPage from "./pages/safety/InspectionsPage";
-import SafetyReportsPage from "./pages/safety/SafetyReportsPage";
-import SafetySettings from "./pages/safety/SafetySettings";
+import SafetyDashboard from "./pages/safety-officer/SafetyDashboard";
+import SafetyDriversPage from "./pages/safety-officer/SafetyDriversPage";
+import CompliancePage from "./pages/safety-officer/CompliancePage";
+import LicensesPage from "./pages/safety-officer/LicensesPage";
+import IncidentsPage from "./pages/safety-officer/IncidentsPage";
+import TrainingPage from "./pages/safety-officer/TrainingPage";
+import InspectionsPage from "./pages/safety-officer/InspectionsPage";
+import SafetyReportsPage from "./pages/safety-officer/SafetyReportsPage";
+import SafetySettings from "./pages/safety-officer/SafetySettings";
 
-import FinanceDashboard from "./pages/finance/FinanceDashboard";
-import ExpensesPage from "./pages/finance/ExpensesPage";
-import FuelCostPage from "./pages/finance/FuelCostPage";
-import MaintenanceCostPage from "./pages/finance/MaintenanceCostPage";
-import RevenuePage from "./pages/finance/RevenuePage";
-import ROIPage from "./pages/finance/ROIPage";
-import InvoicesPage from "./pages/finance/InvoicesPage";
-import FinanceReportsPage from "./pages/finance/FinanceReportsPage";
-import FinanceAnalytics from "./pages/finance/FinanceAnalytics";
-import FinanceSettings from "./pages/finance/FinanceSettings";
+import FinanceDashboard from "./pages/finance-hub/FinanceDashboard";
+import ExpensesPage from "./pages/finance-hub/ExpensesPage";
+import FuelCostPage from "./pages/finance-hub/FuelCostPage";
+import MaintenanceCostPage from "./pages/finance-hub/MaintenanceCostPage";
+import RevenuePage from "./pages/finance-hub/RevenuePage";
+import ROIPage from "./pages/finance-hub/ROIPage";
+import InvoicesPage from "./pages/finance-hub/InvoicesPage";
+import FinanceReportsPage from "./pages/finance-hub/FinanceReportsPage";
+import FinanceAnalytics from "./pages/finance-hub/FinanceAnalytics";
+import FinanceSettings from "./pages/finance-hub/FinanceSettings";
 
-import DestinationDashboard from "./pages/destination/DestinationDashboard";
-import IncomingDeliveriesPage from "./pages/destination/IncomingDeliveriesPage";
-import CompletedDeliveriesPage from "./pages/destination/CompletedDeliveriesPage";
-import WarehousePage from "./pages/destination/WarehousePage";
-import InventoryPage from "./pages/destination/InventoryPage";
-import ReceiversPage from "./pages/destination/ReceiversPage";
-import ProofOfDeliveryPage from "./pages/destination/ProofOfDeliveryPage";
-import DestinationReportsPage from "./pages/destination/DestinationReportsPage";
-import DestinationSettings from "./pages/destination/DestinationSettings";
+import DestinationDashboard from "./pages/destination-control/DestinationDashboard";
+import IncomingDeliveriesPage from "./pages/destination-control/IncomingDeliveriesPage";
+import CompletedDeliveriesPage from "./pages/destination-control/CompletedDeliveriesPage";
+import WarehousePage from "./pages/destination-control/WarehousePage";
+import InventoryPage from "./pages/destination-control/InventoryPage";
+import ReceiversPage from "./pages/destination-control/ReceiversPage";
+import ProofOfDeliveryPage from "./pages/destination-control/ProofOfDeliveryPage";
+import DestinationReportsPage from "./pages/destination-control/DestinationReportsPage";
+import DestinationSettings from "./pages/destination-control/DestinationSettings";
 
 function LandingPage() {
   return (
@@ -195,7 +211,7 @@ export default function App() {
           <Route path="vehicles" element={<VehiclesPage />} />
           <Route path="drivers" element={<DriverLayout />}>
             <Route index element={<DriversPage />} />
-            <Route path="profile/:id" element={<DriverProfile />} />
+            <Route path="profile/:id" element={<DriverProfilePage />} />
             <Route path="add" element={<DriverForm />} />
             <Route path="edit/:id" element={<DriverForm />} />
             <Route path="analytics" element={<DriverAnalytics />} />

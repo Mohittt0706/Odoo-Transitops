@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
+import PageHeader from "../../../components/layout/PageHeader";
 import { Toast, ConfirmationModal } from "../../../components/trips/TripComponents";
 import { ArrowLeft } from "lucide-react";
 

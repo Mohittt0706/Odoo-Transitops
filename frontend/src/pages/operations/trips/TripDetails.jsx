@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import PageHeader from "../../../components/ui/PageHeader";
-import StatusBadge from "../../../components/ui/StatusBadge";
+import PageHeader from "../../../components/layout/PageHeader";
+import StatusBadge from "../../../components/common/Badge";
 import { TripStatusBadge, ProgressBar, Timeline, RouteCard } from "../../../components/trips/TripComponents";
 import { trips, timelineEvents } from "../../../data/tripData";
 import { ArrowLeft, Truck, User, Package, Fuel, Receipt, FileText, Weight, Map } from "lucide-react";
