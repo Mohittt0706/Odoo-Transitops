@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -11,19 +11,15 @@ import {
   Truck,
   IndianRupee,
   TrendingUp,
-  TrendingDown,
   Wallet,
   Route,
   CheckCircle2,
   ShieldCheck,
   BarChart3,
   Fuel,
-  Wrench,
-  Users,
   Download,
   ArrowRight,
   Building2,
-  PieChart,
   Loader,
   TriangleAlert,
   Inbox,
@@ -37,16 +33,22 @@ export default function ReportsDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => { isMounted.current = false; };
+  }, []);
+
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await reportService.overview();
-      setData(res.data);
+      if (isMounted.current) setData(res.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load report data");
+      if (isMounted.current) setError(err.response?.data?.message || "Failed to load report data");
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 

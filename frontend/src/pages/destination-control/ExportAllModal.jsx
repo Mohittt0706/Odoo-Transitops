@@ -294,7 +294,7 @@ export default function ExportAllModal({ open, onClose }) {
                   setter(v => !v);
                 }}
                   className="flex items-center gap-1.5 text-[11px] font-medium text-neutral-textMain hover:text-primary transition-colors">
-                  {eval(opt.key) ? <CheckSquare className="w-3 h-3 text-primary" /> : <Square className="w-3 h-3 text-neutral-textMuted" />}
+                  {{ includeCharts, includeTables, includeSummary }[opt.key] ? <CheckSquare className="w-3 h-3 text-primary" /> : <Square className="w-3 h-3 text-neutral-textMuted" />}
                   {opt.label}
                 </button>
               ))}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -6,24 +6,29 @@ import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { Fuel, DollarSign, Gauge, TrendingUp, TrendingDown, Zap, Route, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { Fuel, DollarSign, Gauge, TrendingUp, Zap, Route, Loader, TriangleAlert, Inbox } from "lucide-react";
 import { reportService } from "../../services/report.service";
 
 export default function FuelAnalytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => { isMounted.current = false; };
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await reportService.fleet();
-      setData(res.data);
+      if (isMounted.current) setData(res.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to load fuel data");
+      if (isMounted.current) setError(err.response?.data?.message || "Failed to load fuel data");
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 
