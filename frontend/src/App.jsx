@@ -33,7 +33,7 @@ import Footer from "./components/landing/Footer";
 import { ArrowRight } from "lucide-react";
 
 import OperationsDashboard from "./pages/operations/OperationsDashboard";
-import FleetLayout from "./components/fleet/FleetLayout";
+import FleetLayout from "./layouts/FleetLayout";
 import VehicleOverview from "./pages/operations/fleet/VehicleOverview";
 import AllVehicles from "./pages/operations/fleet/AllVehicles";
 import RegisterVehicle from "./pages/operations/fleet/RegisterVehicle";

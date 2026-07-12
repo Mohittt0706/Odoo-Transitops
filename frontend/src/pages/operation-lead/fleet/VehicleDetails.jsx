@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import PageHeader from "../../../components/layout/PageHeader";
 import DataTable from "../../../components/common/DataTable";
-import VehicleStatusBadge from "../../../components/fleet/VehicleStatusBadge";
-import DocumentCard from "../../../components/fleet/DocumentCard";
-import TimelineItem from "../../../components/fleet/TimelineItem";
+import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
+import DocumentCard from "../../../components/dashboard/DocumentCard";
+import TimelineItem from "../../../components/timeline/TimelineItem";
 import { vehicles } from "../../../data/vehicleData";
 import { cn } from "../../../utils/utils";
 import {

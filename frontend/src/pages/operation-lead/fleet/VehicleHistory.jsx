@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../../utils/utils";
 import PageHeader from "../../../components/layout/PageHeader";
-import TimelineItem from "../../../components/fleet/TimelineItem";
+import TimelineItem from "../../../components/timeline/TimelineItem";
 import { vehicles } from "../../../data/vehicleData";
 import { ChevronDown, Calendar } from "lucide-react";
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../../utils/utils";
 import PageHeader from "../../../components/layout/PageHeader";
-import DocumentCard from "../../../components/fleet/DocumentCard";
+import DocumentCard from "../../../components/dashboard/DocumentCard";
 import { vehicles } from "../../../data/vehicleData";
 import { Upload, ChevronDown, FileText, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 
