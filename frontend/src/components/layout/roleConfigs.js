@@ -26,6 +26,10 @@ import {
   FileCheck,
   UserCheck,
   Clipboard,
+  Download,
+  Wallet,
+  TrendingDown,
+  IndianRupee,
 } from "lucide-react";
 
 export const roleConfigs = {
@@ -42,6 +46,12 @@ export const roleConfigs = {
       { label: "Assignments", path: "/dashboard/operations/assignments", icon: ClipboardList },
       { label: "Maintenance", path: "/dashboard/operations/maintenance", icon: Wrench },
       { label: "Reports", path: "/dashboard/operations/reports", icon: FileText },
+      { label: "Fleet Analytics", path: "/dashboard/operations/reports/fleet", icon: Truck },
+      { label: "Fuel Analytics", path: "/dashboard/operations/reports/fuel", icon: Fuel },
+      { label: "Revenue", path: "/dashboard/operations/reports/revenue", icon: IndianRupee },
+      { label: "Vehicle ROI", path: "/dashboard/operations/reports/roi", icon: TrendingUp },
+      { label: "Cost", path: "/dashboard/operations/reports/operational-cost", icon: Wallet },
+      { label: "Export", path: "/dashboard/operations/reports/export", icon: Download },
       { label: "Analytics", path: "/dashboard/operations/analytics", icon: BarChart3 },
       { label: "Notifications", path: "/dashboard/operations/notifications", icon: Bell },
       { label: "Settings", path: "/dashboard/operations/settings", icon: Settings },
