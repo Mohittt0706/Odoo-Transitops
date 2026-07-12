@@ -65,6 +65,11 @@ import CompletedTrips from "./pages/operations/trips/CompletedTrips";
 import CancelledTrips from "./pages/operations/trips/CancelledTrips";
 import AssignmentsPage from "./pages/operation-lead/AssignmentsPage";
 import MaintenancePage from "./pages/operation-lead/MaintenancePage";
+import MaintenanceLayout from "./components/maintenance/MaintenanceLayout";
+import CreateMaintenance from "./pages/operation-lead/maintenance/CreateMaintenance";
+import MaintenanceDetails from "./pages/operation-lead/maintenance/MaintenanceDetails";
+import MaintenanceHistory from "./pages/operation-lead/maintenance/MaintenanceHistory";
+import VehicleServiceLog from "./pages/operation-lead/maintenance/VehicleServiceLog";
 import ReportsPage from "./pages/operation-lead/ReportsPage";
 import AnalyticsPage from "./pages/operation-lead/AnalyticsPage";
 import OperationsNotifications from "./pages/operation-lead/OperationsNotifications";
@@ -226,7 +231,13 @@ export default function App() {
             <Route path="cancelled" element={<CancelledTrips />} />
           </Route>
           <Route path="assignments" element={<AssignmentsPage />} />
-          <Route path="maintenance" element={<MaintenancePage />} />
+          <Route path="maintenance" element={<MaintenanceLayout />}>
+            <Route index element={<MaintenancePage />} />
+            <Route path="create" element={<CreateMaintenance />} />
+            <Route path=":id" element={<MaintenanceDetails />} />
+            <Route path="history" element={<MaintenanceHistory />} />
+            <Route path="service-log" element={<VehicleServiceLog />} />
+          </Route>
           <Route path="reports" element={<ReportsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="notifications" element={<OperationsNotifications />} />
