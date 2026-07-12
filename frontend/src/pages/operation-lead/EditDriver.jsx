@@ -42,7 +42,7 @@ export default function EditDriver() {
     (async () => {
       try {
         const res = await driverService.getById(driverId);
-        const d = res.data;
+        const d = res.data.driver;
         setForm({
           fullName: d.fullName || '',
           licenseNumber: d.licenseNumber || '',

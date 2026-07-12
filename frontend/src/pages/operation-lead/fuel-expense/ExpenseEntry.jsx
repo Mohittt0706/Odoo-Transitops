@@ -9,6 +9,7 @@ import { useToast } from "../../../components/common/Toast";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { expenseSchema } from "../../../lib/validations";
 import { ArrowLeft, DollarSign, CreditCard, Building, FileText, Receipt } from "lucide-react";
+import { expenseService } from "../../../services/expense.service";
 
 const expenseCategories = [
   { value: "Fuel", label: "Fuel" },
@@ -62,11 +63,24 @@ export default function ExpenseEntry() {
 
   const onSubmit = () => setShowConfirm(true);
 
-  const confirmSubmit = () => {
+  const confirmSubmit = async () => {
     setShowConfirm(false);
     setSaved(true);
-    toast("Expense recorded successfully!", "success");
-    setTimeout(() => navigate("/dashboard/operations/expenses"), 1200);
+    try {
+      const values = methods.getValues();
+      await expenseService.create({
+        vehicleId: values.vehicle,
+        type: values.category,
+        amount: parseFloat(values.amount),
+        description: values.description,
+        date: values.date,
+      });
+      toast("Expense recorded successfully!", "success");
+      setTimeout(() => navigate("/dashboard/operations/expenses"), 1200);
+    } catch (err) {
+      toast(err?.response?.data?.message || "Failed to record expense", "error");
+      setSaved(false);
+    }
   };
 
   useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);

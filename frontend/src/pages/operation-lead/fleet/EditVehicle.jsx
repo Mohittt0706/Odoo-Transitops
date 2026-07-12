@@ -31,7 +31,7 @@ export default function EditVehicle() {
     (async () => {
       try {
         const res = await vehicleService.getById(id);
-        const v = res.data;
+        const v = res.data.vehicle;
         reset({
           registrationNumber: v.registrationNumber || "",
           vehicleName: v.vehicleName || "",

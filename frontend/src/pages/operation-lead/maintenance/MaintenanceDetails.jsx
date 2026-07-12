@@ -1,18 +1,74 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PageHeader from "../../../components/layout/PageHeader";
 import { MaintStatusBadge, PriorityBadge, ProgressBar, Timeline } from "../../../components/maintenance/MaintenanceComponents";
-import { maintenance } from "../../../data/maintenanceData";
-import { ArrowLeft, Wrench, User, Truck, FileText, DollarSign, Star, Phone, Mail } from "lucide-react";
+import { maintenanceService } from "../../../services/maintenance.service";
+import { ArrowLeft, Wrench, User, Truck, FileText, DollarSign, Star, Phone, Mail, Loader2 } from "lucide-react";
 import { cn } from "../../../utils/utils";
 
 export default function MaintenanceDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const job = maintenance.find(j => j.id === id);
-  if (!job) return <div className="p-8 text-center text-neutral-textMuted">Maintenance job not found</div>;
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const progressMap = { Completed: 100, "In Progress": 55, "Waiting Parts": 35, Scheduled: 10 };
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    maintenanceService.getById(id)
+      .then((res) => {
+        const r = res.data.record;
+        setJob({
+          ...r,
+          id: r._id,
+          vehicle: r.vehicleId?.vehicleName || 'Unknown',
+          plate: r.vehicleId?.registrationNumber || '—',
+          vehicleId: r.vehicleId?._id || '—',
+          issue: r.issue,
+          description: r.description,
+          status: r.status,
+          cost: r.cost,
+          date: r.maintenanceDate ? new Date(r.maintenanceDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—',
+          completedDate: r.completedDate ? new Date(r.completedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—',
+          priority: r.priority || 'Medium',
+          category: r.category || r.issue,
+          reportedBy: r.reportedBy || '—',
+          approvalStatus: r.approvalStatus || 'Approved',
+          warranty: r.warranty || 'N/A',
+          mechanic: r.technicianName || 'Unassigned',
+          mechanicExp: r.mechanicExp || '—',
+          garage: r.garage || '—',
+          mechanicPhone: r.mechanicPhone || '—',
+          mechanicEmail: r.mechanicEmail || '—',
+          mechanicRating: r.mechanicRating ?? '—',
+          mechanicAvail: r.mechanicAvail || '—',
+          timeline: r.timeline || [],
+          labourCost: r.labourCost || '—',
+          partsCost: r.partsCost || '—',
+          tax: r.tax || '—',
+          discount: r.discount || null,
+          totalCost: r.cost ? `₹${r.cost.toLocaleString()}` : '—',
+          estimatedCost: r.estimatedCost || '—',
+          documents: r.documents || [],
+          invoice: r.invoice || null,
+          duration: r.duration || '—',
+          notes: r.remarks || r.notes || '',
+        });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || err.message || "Failed to load maintenance record");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>;
+  if (error) return <div className="flex items-center justify-center min-h-[400px] text-danger">{error}</div>;
+  if (!job) return <div className="flex items-center justify-center min-h-[400px] text-neutral-textMuted">Not found</div>;
+
+  const progressMap = { COMPLETED: 100, IN_PROGRESS: 55, WAITING_PARTS: 35, OPEN: 10, SCHEDULED: 10 };
   const progress = progressMap[job.status] || 0;
 
   return (
