@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -6,20 +7,86 @@ import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import DonutChart from "../../components/charts/PieChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { Truck, TrendingUp, TrendingDown, Route, Wrench, Clock, DollarSign, Gauge, ArrowUp, ArrowDown } from "lucide-react";
-import { vehiclePerformance, fleetGrowthData, vehicleStatusData, vehicleHealthData, fleetUtilization, monthlyExpenses } from "../../data/reportData";
+import { Truck, TrendingUp, TrendingDown, Route, Wrench, Clock, DollarSign, Gauge, ArrowUp, ArrowDown, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { reportService } from "../../services/report.service";
 
 export default function FleetAnalytics() {
-  const totalDistance = vehiclePerformance.reduce((s, v) => s + v.distance, 0);
-  const avgUtilization = Math.round(vehiclePerformance.reduce((s, v) => s + v.usage, 0) / vehiclePerformance.length);
-  const avgMaintScore = Math.round(vehiclePerformance.reduce((s, v) => s + v.maintenanceScore, 0) / vehiclePerformance.length);
-  const totalMaintCost = monthlyExpenses.reduce((s, d) => s + d.maintenance, 0);
-  const totalServiceCost = monthlyExpenses.reduce((s, d) => s + d.maintenance + d.other, 0);
-  const avgDowntime = 8.5;
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const sortedByUsage = [...vehiclePerformance].sort((a, b) => b.usage - a.usage);
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.fleet();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load fleet data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const vehiclePerformance = data?.vehiclePerformance || [];
+  const fleetGrowthData = data?.fleetGrowthData || [];
+  const vehicleStatusData = data?.vehicleStatusData || [];
+  const vehicleHealthData = data?.vehicleHealthData || [];
+  const fleetUtilization = data?.fleetUtilization || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+
+  const totalDistance = vehiclePerformance.reduce((s, v) => s + (v.distance || 0), 0);
+  const avgUtilization = vehiclePerformance.length
+    ? Math.round(vehiclePerformance.reduce((s, v) => s + (v.usage || 0), 0) / vehiclePerformance.length)
+    : 0;
+  const avgMaintScore = vehiclePerformance.length
+    ? Math.round(vehiclePerformance.reduce((s, v) => s + (v.maintenanceScore || 0), 0) / vehiclePerformance.length)
+    : 0;
+  const totalMaintCost = monthlyExpenses.reduce((s, d) => s + (d.maintenance || 0), 0);
+  const totalServiceCost = monthlyExpenses.reduce((s, d) => s + (d.maintenance || 0) + (d.other || 0), 0);
+  const avgDowntime = data?.avgDowntime || 8.5;
+
+  const sortedByUsage = [...vehiclePerformance].sort((a, b) => (b.usage || 0) - (a.usage || 0));
   const topVehicles = sortedByUsage.slice(0, 5);
   const bottomVehicles = sortedByUsage.slice(-5).reverse();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No fleet data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -6,23 +7,87 @@ import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import DonutChart from "../../components/charts/PieChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { Wallet, Fuel, Wrench, Shield, Users, Car, CircleDollarSign, Wrench as Repair, Receipt, PiggyBank } from "lucide-react";
-import { operationalCostBreakdown, monthlyExpenses, departmentSpending } from "../../data/reportData";
+import { Wallet, Fuel, Wrench, Shield, Users, Car, CircleDollarSign, Wrench as Repair, Receipt, PiggyBank, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { reportService } from "../../services/report.service";
 
 export default function OperationalCost() {
-  const totalCost = operationalCostBreakdown.reduce((s, d) => s + d.value, 0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.finance();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load operational cost data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const operationalCostBreakdown = data?.operationalCostBreakdown || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+  const departmentSpending = data?.departmentSpending || [];
+
+  const totalCost = operationalCostBreakdown.reduce((s, d) => s + (d.value || 0), 0);
+
+  const getCategoryValue = (category) => {
+    const found = operationalCostBreakdown.find(d => d.category === category);
+    return found ? found.value : 0;
+  };
 
   const costCategories = [
-    { label: "Fuel Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Fuel').value / 100000).toFixed(1)}L`, icon: Fuel, change: "+5.8%", changeType: "up", color: "bg-rose-50 text-rose-600", delay: 0 },
-    { label: "Maintenance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Maintenance').value / 100000).toFixed(1)}L`, icon: Wrench, change: "+4.2%", changeType: "up", color: "bg-amber-50 text-amber-600", delay: 0.02 },
-    { label: "Insurance", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Insurance').value / 100000).toFixed(1)}L`, icon: Shield, change: "+2.1%", changeType: "up", color: "bg-indigo-50 text-indigo-600", delay: 0.04 },
-    { label: "Driver Salary", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Driver Salary').value / 100000).toFixed(1)}L`, icon: Users, change: "+6.5%", changeType: "up", color: "bg-emerald-50 text-emerald-600", delay: 0.06 },
-    { label: "Parking", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Parking').value / 100000).toFixed(1)}L`, icon: Car, change: "+1.2%", changeType: "up", color: "bg-cyan-50 text-cyan-600", delay: 0.08 },
-    { label: "Toll Charges", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Toll Charges').value / 100000).toFixed(1)}L`, icon: CircleDollarSign, change: "+3.5%", changeType: "up", color: "bg-purple-50 text-purple-600", delay: 0.1 },
-    { label: "Repair Cost", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Repairs').value / 100000).toFixed(1)}L`, icon: Repair, change: "+2.8%", changeType: "up", color: "bg-pink-50 text-pink-600", delay: 0.12 },
-    { label: "Taxes", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Taxes').value / 100000).toFixed(1)}L`, icon: Receipt, change: "+1.5%", changeType: "up", color: "bg-teal-50 text-teal-600", delay: 0.14 },
-    { label: "Miscellaneous", value: `₹${(operationalCostBreakdown.find(d => d.category === 'Miscellaneous').value / 100000).toFixed(1)}L`, icon: PiggyBank, change: "-0.5%", changeType: "down", color: "bg-slate-50 text-slate-600", delay: 0.16 },
+    { label: "Fuel Cost", value: `₹${(getCategoryValue('Fuel') / 100000).toFixed(1)}L`, icon: Fuel, change: "+5.8%", changeType: "up", color: "bg-rose-50 text-rose-600", delay: 0 },
+    { label: "Maintenance", value: `₹${(getCategoryValue('Maintenance') / 100000).toFixed(1)}L`, icon: Wrench, change: "+4.2%", changeType: "up", color: "bg-amber-50 text-amber-600", delay: 0.02 },
+    { label: "Insurance", value: `₹${(getCategoryValue('Insurance') / 100000).toFixed(1)}L`, icon: Shield, change: "+2.1%", changeType: "up", color: "bg-indigo-50 text-indigo-600", delay: 0.04 },
+    { label: "Driver Salary", value: `₹${(getCategoryValue('Driver Salary') / 100000).toFixed(1)}L`, icon: Users, change: "+6.5%", changeType: "up", color: "bg-emerald-50 text-emerald-600", delay: 0.06 },
+    { label: "Parking", value: `₹${(getCategoryValue('Parking') / 100000).toFixed(1)}L`, icon: Car, change: "+1.2%", changeType: "up", color: "bg-cyan-50 text-cyan-600", delay: 0.08 },
+    { label: "Toll Charges", value: `₹${(getCategoryValue('Toll Charges') / 100000).toFixed(1)}L`, icon: CircleDollarSign, change: "+3.5%", changeType: "up", color: "bg-purple-50 text-purple-600", delay: 0.1 },
+    { label: "Repair Cost", value: `₹${(getCategoryValue('Repairs') / 100000).toFixed(1)}L`, icon: Repair, change: "+2.8%", changeType: "up", color: "bg-pink-50 text-pink-600", delay: 0.12 },
+    { label: "Taxes", value: `₹${(getCategoryValue('Taxes') / 100000).toFixed(1)}L`, icon: Receipt, change: "+1.5%", changeType: "up", color: "bg-teal-50 text-teal-600", delay: 0.14 },
+    { label: "Miscellaneous", value: `₹${(getCategoryValue('Miscellaneous') / 100000).toFixed(1)}L`, icon: PiggyBank, change: "-0.5%", changeType: "down", color: "bg-slate-50 text-slate-600", delay: 0.16 },
   ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No operational cost data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

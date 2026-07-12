@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/utils";
 import { useAuth } from "../../context/AuthContext";
+import { notificationService } from "../../services";
 import {
   Search,
   Bell,
@@ -44,10 +45,28 @@ export default function DashboardHeader({ sidebarCollapsed, onToggleSidebar, onM
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   const crumbs = getBreadcrumbs(location.pathname);
 
-  const notifications = [];
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await notificationService.getAll({ limit: 5 });
+        const data = res.data.notifications || [];
+        setNotifications(data.map(n => ({
+          ...n,
+          id: n._id,
+          title: n.title,
+          time: n.createdAt ? new Date(n.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : '',
+          unread: !n.isRead,
+        })));
+      } catch (err) {
+        console.error('Failed to fetch notifications for topbar', err);
+      }
+    };
+    fetchNotifications();
+  }, []);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 

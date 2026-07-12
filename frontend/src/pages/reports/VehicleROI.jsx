@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -5,25 +6,84 @@ import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { IndianRupee, TrendingUp, TrendingDown, DollarSign, PieChart, Target, Wallet, ArrowUp, ArrowDown } from "lucide-react";
-import { roiData, monthlyRevenue, monthlyExpenses } from "../../data/reportData";
+import { IndianRupee, TrendingUp, TrendingDown, DollarSign, PieChart, Target, Wallet, ArrowUp, ArrowDown, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { reportService } from "../../services/report.service";
 
 export default function VehicleROI() {
-  const totalPurchaseCost = roiData.reduce((s, v) => s + v.purchaseCost, 0);
-  const totalOperationalCost = roiData.reduce((s, v) => s + v.totalOperationalCost, 0);
-  const totalRevenue = roiData.reduce((s, v) => s + v.revenue, 0);
-  const totalNetProfit = roiData.reduce((s, v) => s + v.netProfit, 0);
-  const avgROI = Math.round(roiData.reduce((s, v) => s + v.roi, 0) / roiData.length);
-  const totalLifetimeValue = roiData.reduce((s, v) => s + v.lifetimeValue, 0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const sortedByROI = [...roiData].sort((a, b) => b.roi - a.roi);
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.finance();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load ROI data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const roiData = data?.roiData || [];
+  const monthlyRevenue = data?.monthlyRevenue || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+
+  const totalPurchaseCost = roiData.reduce((s, v) => s + (v.purchaseCost || 0), 0);
+  const totalOperationalCost = roiData.reduce((s, v) => s + (v.totalOperationalCost || 0), 0);
+  const totalRevenue = roiData.reduce((s, v) => s + (v.revenue || 0), 0);
+  const totalNetProfit = roiData.reduce((s, v) => s + (v.netProfit || 0), 0);
+  const avgROI = roiData.length ? Math.round(roiData.reduce((s, v) => s + (v.roi || 0), 0) / roiData.length) : 0;
+  const totalLifetimeValue = roiData.reduce((s, v) => s + (v.lifetimeValue || 0), 0);
+
+  const sortedByROI = [...roiData].sort((a, b) => (b.roi || 0) - (a.roi || 0));
   const topROI = sortedByROI.slice(0, 5);
   const lowestROI = sortedByROI.slice(-5).reverse();
 
   const netProfitMonthly = monthlyRevenue.map((d, i) => ({
     label: d.label,
-    value: d.value - (monthlyExpenses[i]?.value || 0),
+    value: (d.value || 0) - (monthlyExpenses[i]?.value || 0),
   }));
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No ROI data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

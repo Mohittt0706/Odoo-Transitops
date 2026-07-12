@@ -1,35 +1,78 @@
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import ChartCard from "../../components/charts/ChartCard";
 import DonutChart from "../../components/charts/PieChart";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
-import { StatCard } from "../../components/notifications/NotificationComponents";
-import { allNotifications, notificationStats, monthlyTrend } from "../../data/notificationData";
-import { Bell, BellRing, AlertTriangle, Wrench, Route, DollarSign, FileText, Archive, TrendingUp, TrendingDown, BarChart3, Download, CheckCheck } from "lucide-react";
-
-const catDist = [
-  { label: "Maintenance", value: allNotifications.filter((n) => n.category === "maintenance").length, color: "#F59E0B" },
-  { label: "Trip", value: allNotifications.filter((n) => n.category === "trip").length, color: "#2563EB" },
-  { label: "License", value: allNotifications.filter((n) => n.category === "license").length, color: "#8B5CF6" },
-  { label: "Financial", value: allNotifications.filter((n) => n.category === "financial").length, color: "#22C55E" },
-  { label: "General", value: allNotifications.filter((n) => n.category === "general").length, color: "#A1A1AA" },
-];
-
-const readVsUnread = [
-  { label: "Read", value: allNotifications.filter((n) => n.read).length, color: "#22C55E" },
-  { label: "Unread", value: allNotifications.filter((n) => !n.read).length, color: "#3B82F6" },
-];
-
-const priorityDist = [
-  { label: "Critical", value: allNotifications.filter((n) => n.priority === "critical").length, color: "#EF4444" },
-  { label: "High", value: allNotifications.filter((n) => n.priority === "high").length, color: "#F97316" },
-  { label: "Medium", value: allNotifications.filter((n) => n.priority === "medium").length, color: "#F59E0B" },
-  { label: "Low", value: allNotifications.filter((n) => n.priority === "low").length, color: "#A1A1AA" },
-];
+import { StatCard, LoadingSkeleton } from "../../components/notifications/NotificationComponents";
+import { notificationService } from "../../services";
+import { Bell, BellRing, AlertTriangle, Wrench, Route, DollarSign, FileText, Archive, Download, AlertCircle } from "lucide-react";
 
 export default function AlertDashboard() {
-  const stats = [
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await notificationService.getAll();
+      const { notifications: data } = res.data;
+      setNotifications((data || []).map(n => ({ ...n, id: n._id, description: n.message || n.title, read: n.isRead, date: n.createdAt })));
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to fetch notification data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchNotifications(); }, []);
+
+  const notificationStats = useMemo(() => ({
+    total: notifications.length,
+    unread: notifications.filter(n => !n.read).length,
+    critical: notifications.filter(n => n.priority === 'critical').length,
+    trip: notifications.filter(n => n.category === 'trip').length,
+    maintenance: notifications.filter(n => n.category === 'maintenance').length,
+    financial: notifications.filter(n => n.category === 'financial').length,
+    license: notifications.filter(n => n.category === 'license').length,
+    archived: notifications.filter(n => n.archived).length,
+  }), [notifications]);
+
+  const catDist = useMemo(() => [
+    { label: "Maintenance", value: notifications.filter((n) => n.category === "maintenance").length, color: "#F59E0B" },
+    { label: "Trip", value: notifications.filter((n) => n.category === "trip").length, color: "#2563EB" },
+    { label: "License", value: notifications.filter((n) => n.category === "license").length, color: "#8B5CF6" },
+    { label: "Financial", value: notifications.filter((n) => n.category === "financial").length, color: "#22C55E" },
+    { label: "General", value: notifications.filter((n) => n.category === "general").length, color: "#A1A1AA" },
+  ], [notifications]);
+
+  const readVsUnread = useMemo(() => [
+    { label: "Read", value: notifications.filter((n) => n.read).length, color: "#22C55E" },
+    { label: "Unread", value: notifications.filter((n) => !n.read).length, color: "#3B82F6" },
+  ], [notifications]);
+
+  const priorityDist = useMemo(() => [
+    { label: "Critical", value: notifications.filter((n) => n.priority === "critical").length, color: "#EF4444" },
+    { label: "High", value: notifications.filter((n) => n.priority === "high").length, color: "#F97316" },
+    { label: "Medium", value: notifications.filter((n) => n.priority === "medium").length, color: "#F59E0B" },
+    { label: "Low", value: notifications.filter((n) => n.priority === "low").length, color: "#A1A1AA" },
+  ], [notifications]);
+
+  const monthlyTrend = useMemo(() => {
+    const months = {};
+    notifications.forEach(n => {
+      if (!n.date) return;
+      const d = new Date(n.date);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      months[key] = (months[key] || 0) + 1;
+    });
+    return Object.entries(months).sort(([a], [b]) => a.localeCompare(b)).map(([month, count]) => ({ month, count }));
+  }, [notifications]);
+
+  const stats = useMemo(() => [
     { label: "Total Notifications", value: notificationStats.total, icon: Bell, color: "primary", trend: 12 },
     { label: "Unread", value: notificationStats.unread, icon: BellRing, color: "purple", trend: 8 },
     { label: "Critical Alerts", value: notificationStats.critical, icon: AlertTriangle, color: "danger", trend: 15 },
@@ -38,7 +81,31 @@ export default function AlertDashboard() {
     { label: "Financial", value: notificationStats.financial, icon: DollarSign, color: "success", trend: -2 },
     { label: "License", value: notificationStats.license, icon: FileText, color: "purple", trend: 10 },
     { label: "Archived", value: notificationStats.archived, icon: Archive, color: "slate", trend: 0 },
-  ];
+  ], [notificationStats]);
+
+  if (loading) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        <LoadingSkeleton />
+      </motion.div>
+    );
+  }
+
+  if (error) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        <PageHeader title="Alerts Overview" subtitle="Notification analytics and KPI dashboard" />
+        <div className="flex flex-col items-center justify-center py-16 px-4">
+          <div className="w-16 h-16 bg-danger/10 rounded-2xl flex items-center justify-center mb-4">
+            <AlertCircle className="w-7 h-7 text-danger" strokeWidth={1.5} />
+          </div>
+          <h3 className="text-base font-bold text-neutral-textMain mb-1">Failed to load notification data</h3>
+          <p className="text-sm text-neutral-textMuted max-w-xs text-center mb-4">{error}</p>
+          <button onClick={fetchNotifications} className="px-4 py-2 text-xs font-semibold text-white bg-primary rounded-lg hover:bg-primary/80 transition-all">Retry</button>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
