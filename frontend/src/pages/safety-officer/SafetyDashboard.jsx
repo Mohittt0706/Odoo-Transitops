@@ -1,21 +1,17 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import KPICard from "../../components/dashboard/KPICard";
 import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
-import { drivers, incidents, licenses } from "../../data/mockData";
+import { dashboardService } from "../../services/dashboard.service";
 import { cn } from "../../utils/utils";
-import { AlertTriangle, Shield, FileText, Calendar, UserX, TrendingUp, CheckCircle, Clock } from "lucide-react";
+import { AlertTriangle, Shield, FileText, Calendar, UserX, TrendingUp, CheckCircle, Clock, Loader2, Inbox } from "lucide-react";
 
 const complianceTrend = [];
 
 const incidentTrend = [];
-
-const driverSafetyScores = drivers.map((d) => ({
-  label: d.name.split(" ")[0],
-  value: d.compliance,
-}));
 
 const recentAlerts = [];
 
@@ -26,8 +22,70 @@ const severityConfig = {
 };
 
 export default function SafetyDashboard() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
+    dashboardService.getDashboard()
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load safety data");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">{error}</p>
+          <button onClick={fetchData} className="btn btn-primary mt-4">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Inbox className="w-12 h-12 text-neutral-textMuted mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">No data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const drivers = data.drivers || [];
+  const incidents = data.incidents || [];
+  const licenses = data.licenses || [];
+
   const driversAtRisk   = drivers.filter((d) => d.status === "At Risk").length;
   const licenseExpiring = licenses.filter((l) => l.status === "Expiring Soon").length;
+
+  const driverSafetyScores = drivers.map((d) => ({
+    label: d.name.split(" ")[0],
+    value: d.compliance,
+  }));
 
   return (
     <motion.div

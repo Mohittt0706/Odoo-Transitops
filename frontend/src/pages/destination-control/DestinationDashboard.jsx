@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import ChartCard from "../../components/charts/ChartCard";
@@ -8,17 +9,78 @@ import TrendIndicator from "../../components/reports/TrendIndicator";
 import StatCard from "../../components/reports/StatCard";
 import {
   Truck, CheckCircle, Clock, AlertTriangle, Warehouse, PackageCheck,
-  XCircle, Upload, Download, Users, Gauge, Hourglass,
+  XCircle, Upload, Download, Users, Gauge, Hourglass, Loader2, Inbox,
 } from "lucide-react";
-import {
-  dailyDeliveries, dockUtilizationHistory, warehouseCapacityHistory,
-  delayAnalysis, storageDistribution, dockData, incomingDeliveries,
-  completedDeliveries, warehouseSections, podRecords,
-} from "../../data/destinationData";
+import { dashboardService } from "../../services/dashboard.service";
 import { useNavigate } from "react-router-dom";
 
 export default function DestinationDashboard() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
   const navigate = useNavigate();
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
+    dashboardService.getDashboard()
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load destination data");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">{error}</p>
+          <button onClick={fetchData} className="btn btn-primary mt-4">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Inbox className="w-12 h-12 text-neutral-textMuted mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">No data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const dailyDeliveries = data.dailyDeliveries || [];
+  const dockUtilizationHistory = data.dockUtilizationHistory || [];
+  const warehouseCapacityHistory = data.warehouseCapacityHistory || [];
+  const delayAnalysis = data.delayAnalysis || [];
+  const storageDistribution = data.storageDistribution || [];
+  const dockData = data.dockData || [];
+  const incomingDeliveries = data.incomingDeliveries || [];
+  const completedDeliveries = data.completedDeliveries || [];
+  const warehouseSections = data.warehouseSections || [];
+  const podRecords = data.podRecords || [];
+
   const activeDocks = dockData.filter(d => d.status === 'Occupied').length;
   const totalCapacity = warehouseSections.reduce((s, sec) => s + sec.capacity, 0);
   const totalUsed = warehouseSections.reduce((s, sec) => s + sec.used, 0);

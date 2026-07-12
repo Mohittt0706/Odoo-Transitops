@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import ChartCard from "../../components/charts/ChartCard";
@@ -5,14 +6,71 @@ import DonutChart from "../../components/charts/PieChart";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import { StatCard } from "../../components/finance-hub/FinanceHubComponents";
-import { monthlyRevenue, monthlyExpenses, expenseDist } from "../../data/financeData";
-import { TrendingUp, IndianRupee, Fuel, Truck, BarChart3, Download, CheckCircle, TrendingDown, DollarSign, Receipt, Wallet, Shield } from "lucide-react";
+import { dashboardService } from "../../services/dashboard.service";
+import { TrendingUp, IndianRupee, Fuel, Truck, BarChart3, Download, CheckCircle, TrendingDown, DollarSign, Receipt, Wallet, Shield, Loader2, Inbox, AlertTriangle } from "lucide-react";
 
 const roiData = [];
 
 const recentTxns = [];
 
 export default function FinanceDashboard() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
+    dashboardService.getDashboard()
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load finance data");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">{error}</p>
+          <button onClick={fetchData} className="btn btn-primary mt-4">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Inbox className="w-12 h-12 text-neutral-textMuted mx-auto mb-3" />
+          <p className="text-sm text-neutral-textMuted">No data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const monthlyRevenue = data.monthlyRevenue || [];
+  const monthlyExpenses = data.monthlyExpenses || [];
+  const expenseDist = data.expenseDist || [];
+
   const stats = [];
 
   return (
