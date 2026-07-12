@@ -8,12 +8,8 @@ import { Form, FormSection, FormRow, FormInput, FormSelect, FormDatePicker, Form
 import { useToast } from "../../../components/common/Toast";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { tripSchema } from "../../../lib/validations";
-import { ArrowLeft, Route, Package, AlertTriangle, FileText, AlertCircle } from "lucide-react";
-
-const allTrips = [
-  { id: "TR-0001", title: "Delhi to Mumbai Freight", vehicle: "KL-07-AU-4521", driver: "Rajesh Kumar", origin: "Mumbai, Maharashtra", destination: "Delhi, NCR", scheduledStart: "2026-07-01", scheduledEnd: "2026-07-05", cargoType: "Electronics", cargoWeight: "2.5 tons", cargoValue: "₹5,00,000", tripType: "Freight", priority: "High", notes: "Handle with care" },
-  { id: "TR-0002", title: "Bangalore to Chennai Express", vehicle: "KA-01-MN-3312", driver: "Amit Singh", origin: "Bangalore, Karnataka", destination: "Chennai, Tamil Nadu", scheduledStart: "2026-07-03", scheduledEnd: "2026-07-04", cargoType: "Garments", cargoWeight: "1.8 tons", cargoValue: "₹3,20,000", tripType: "Express", priority: "Normal", notes: "" },
-];
+import { tripService } from "../../../services/trip.service";
+import { ArrowLeft, Route, Package, AlertTriangle, FileText, AlertCircle, Loader2 } from "lucide-react";
 
 export default function EditTrip() {
   const { id } = useParams();
@@ -21,40 +17,109 @@ export default function EditTrip() {
   const toast = useToast();
   const [showConfirm, setShowConfirm] = useState(false);
   const [saved, setSaved] = useState(false);
-
-  const trip = allTrips.find((t) => t.id === id);
+  const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+  const [tripData, setTripData] = useState(null);
 
   const methods = useForm({
     resolver: zodResolver(tripSchema),
-    defaultValues: trip ? {
-      title: trip.title, vehicle: trip.vehicle, driver: trip.driver,
-      origin: trip.origin, destination: trip.destination,
-      scheduledStart: trip.scheduledStart, scheduledEnd: trip.scheduledEnd,
-      cargoType: trip.cargoType, cargoWeight: trip.cargoWeight || "",
-      cargoValue: trip.cargoValue || "", tripType: trip.tripType || "Freight",
-      priority: trip.priority || "Normal", notes: trip.notes || "",
-    } : {},
+    defaultValues: {
+      title: "", vehicle: "", driver: "", origin: "", destination: "",
+      scheduledStart: "", scheduledEnd: "", cargoType: "", cargoWeight: "",
+      cargoValue: "", tripType: "Freight", priority: "Normal", notes: "",
+    },
   });
 
-  const { handleSubmit, formState: { isSubmitting } } = methods;
+  const { handleSubmit, formState: { isSubmitting }, reset } = methods;
+
+  useEffect(() => {
+    const fetchTrip = async () => {
+      setLoading(true);
+      setFetchError(null);
+      try {
+        const res = await tripService.getById(id);
+        const d = res.data.trip || res.data;
+        setTripData(d);
+        const vehicleVal = d.vehicleId?.registrationNumber || (typeof d.vehicleId === "string" ? d.vehicleId : "") || "";
+        const driverVal = d.driverId?.fullName || (typeof d.driverId === "string" ? d.driverId : "") || "";
+        const titleVal = d.title || `${d.source || ""} → ${d.destination || ""}`;
+        reset({
+          title: titleVal,
+          vehicle: vehicleVal,
+          driver: driverVal,
+          origin: d.source || "",
+          destination: d.destination || "",
+          scheduledStart: d.scheduledStart || "",
+          scheduledEnd: d.scheduledEnd || "",
+          cargoType: d.cargoType || "",
+          cargoWeight: d.cargoWeight ? String(d.cargoWeight) : "",
+          cargoValue: d.cargoValue || "",
+          tripType: d.tripType || "Freight",
+          priority: d.priority || "Normal",
+          notes: d.notes || "",
+        });
+      } catch (err) {
+        const msg = err?.response?.data?.message || err.message || "Failed to load trip";
+        setFetchError(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrip();
+  }, [id, reset]);
 
   const onSubmit = () => setShowConfirm(true);
 
-  const confirmSubmit = () => {
+  const confirmSubmit = async () => {
     setShowConfirm(false);
-    setSaved(true);
-    toast("Trip updated successfully!", "success");
-    setTimeout(() => navigate("/dashboard/operations/trips"), 1200);
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      const fd = methods.getValues();
+      await tripService.update(id, {
+        source: fd.origin,
+        destination: fd.destination,
+        cargoWeight: Number(fd.cargoWeight) || 0,
+        plannedDistance: Number(fd.plannedDistance) || 0,
+        vehicleId: fd.vehicle,
+        driverId: fd.driver,
+        notes: fd.notes,
+        scheduledStart: fd.scheduledStart || undefined,
+        scheduledEnd: fd.scheduledEnd || undefined,
+        cargoType: fd.cargoType || undefined,
+        priority: fd.priority || undefined,
+      });
+      setSaved(true);
+      toast("Trip updated successfully!", "success");
+      setTimeout(() => navigate("/dashboard/operations/trips"), 1200);
+    } catch (err) {
+      const msg = err?.response?.data?.message || err.message || "Failed to update trip";
+      setApiError(msg);
+      toast(msg, "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
 
-  if (!trip) {
+  if (loading) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 text-primary animate-spin mb-3" />
+        <p className="text-sm text-neutral-textMuted">Loading trip details...</p>
+      </motion.div>
+    );
+  }
+
+  if (fetchError) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-        <AlertCircle className="w-16 h-16 text-neutral-textMuted mx-auto mb-4" strokeWidth={1} />
-        <h2 className="text-lg font-bold text-neutral-textMain">Trip not found</h2>
-        <p className="text-sm text-neutral-textMuted mt-1">The trip with ID "{id}" does not exist.</p>
+        <AlertCircle className="w-16 h-16 text-danger mx-auto mb-4" strokeWidth={1} />
+        <h2 className="text-lg font-bold text-neutral-textMain">Failed to load trip</h2>
+        <p className="text-sm text-neutral-textMuted mt-1">{fetchError}</p>
         <button onClick={() => navigate(-1)} className="mt-4 btn btn-primary text-sm">Go Back</button>
       </motion.div>
     );
@@ -62,9 +127,12 @@ export default function EditTrip() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <PageHeader title="Edit Trip" subtitle={`${trip.title} — ${id}`}
+      <PageHeader title="Edit Trip" subtitle={`${(tripData?.title || tripData?.source || "")} — ${id}`}
         actions={<button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>}
       />
+      {apiError && (
+        <div className="mb-4 p-3 text-sm text-danger bg-danger-light border border-danger/20 rounded-lg">{apiError}</div>
+      )}
       <Form methods={methods} onSubmit={onSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <FormSection title="Trip Details" description="Basic trip information" icon={Route} delay={0.05}>
@@ -114,7 +182,7 @@ export default function EditTrip() {
           <FormTextarea name="notes" label="Notes" rows={3} />
         </FormSection>
 
-        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Update Trip" loading={isSubmitting} success={saved} />
+        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Update Trip" loading={isSubmitting || submitting} success={saved} />
       </Form>
 
       <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}

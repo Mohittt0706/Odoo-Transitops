@@ -14,11 +14,9 @@ import { Wrench, Clock, CheckCircle, AlertCircle, DollarSign, Truck, Timer, Cale
 import { cn } from "../../utils/utils";
 
 const STATUS_COLORS = {
-  SCHEDULED: "#8B5CF6",
+  OPEN: "#8B5CF6",
   IN_PROGRESS: "#3B82F6",
   COMPLETED: "#22C55E",
-  CANCELLED: "#EF4444",
-  PENDING: "#F59E0B",
 };
 
 const columns = [
@@ -56,7 +54,7 @@ export default function MaintenancePage() {
   useEffect(() => { fetchRecords(); }, [fetchRecords]);
 
   const stats = useMemo(() => {
-    const pending = records.filter(r => r.status === "PENDING" || r.status === "SCHEDULED").length;
+    const pending = records.filter(r => r.status === "OPEN").length;
     const inProgress = records.filter(r => r.status === "IN_PROGRESS").length;
     const completed = records.filter(r => r.status === "COMPLETED").length;
     const totalCost = records.reduce((s, r) => s + (r.cost || 0), 0);
@@ -69,10 +67,9 @@ export default function MaintenancePage() {
   const completionRate = useMemo(() => months.map(m => ({ label: m, value: 60 + Math.floor(Math.random() * 35) })), []);
 
   const categoryDist = useMemo(() => [
-    { label: "Scheduled", value: records.filter(r => r.status === "SCHEDULED").length, color: "#8B5CF6" },
+    { label: "Open", value: records.filter(r => r.status === "OPEN").length, color: "#8B5CF6" },
     { label: "In Progress", value: records.filter(r => r.status === "IN_PROGRESS").length, color: "#3B82F6" },
     { label: "Completed", value: records.filter(r => r.status === "COMPLETED").length, color: "#22C55E" },
-    { label: "Pending", value: records.filter(r => r.status === "PENDING").length, color: "#F59E0B" },
   ], [records]);
 
   if (error) {
@@ -103,7 +100,7 @@ export default function MaintenancePage() {
           { label: "Total Cost", value: `₹${(stats.totalCost/1000).toFixed(0)}k`, icon: DollarSign },
           { label: "Under Service", value: stats.inProgress, icon: Truck },
           { label: "Avg Time", value: `${Math.floor(Math.random() * 3 + 2)}d`, icon: Timer },
-          { label: "Upcoming", value: records.filter(r => r.status === "SCHEDULED").length, icon: CalendarPlus },
+          { label: "Upcoming", value: records.filter(r => r.status === "OPEN").length, icon: CalendarPlus },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} className="bg-white border border-neutral-border rounded-xl p-3 shadow-soft-sm">
             <s.icon className="w-3.5 h-3.5 text-primary mb-1" />
@@ -122,7 +119,7 @@ export default function MaintenancePage() {
       </div>
       <div className="flex items-center gap-2 mb-4 flex-wrap">
         <div className="flex items-center gap-1 p-1 bg-white border border-neutral-border rounded-lg">
-          {["all", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"].map(s => (
+          {["all", "OPEN", "IN_PROGRESS", "COMPLETED"].map(s => (
             <button key={s} onClick={() => setFilter(s)} className={cn("px-3 py-1.5 text-xs font-semibold rounded-md transition-all", filter === s ? "bg-primary text-white" : "text-neutral-textMuted hover:text-accent")}>
               {s === "all" ? "All" : s.replace(/_/g, " ")}
             </button>

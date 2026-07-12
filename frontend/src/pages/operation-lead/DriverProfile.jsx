@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -6,7 +6,7 @@ import {
   Calendar, Clock, AlertTriangle, CheckCircle, XCircle, ChevronRight,
   User, Shield, BookOpen, Star, Fuel, Gauge, Award, Upload, Download,
   RefreshCw, Trash2, Ban, Route, Car, Eye, Heart, HeartPulse,
-  BadgeCheck, Landmark, Fingerprint, Contact
+  BadgeCheck, Landmark, Fingerprint, Contact, Loader2
 } from 'lucide-react';
 import { cn } from '../../utils/utils';
 import StatusBadge from '../../components/drivers/StatusBadge';
@@ -14,7 +14,7 @@ import SafetyScoreBadge from '../../components/drivers/SafetyScoreBadge';
 import TimelineEvent from '../../components/drivers/TimelineEvent';
 import TelemetryChart from '../../components/charts/TelemetryChart';
 import BarChart from '../../components/charts/BarChart';
-import { drivers, trainingRequirements } from '../../data/drivers';
+import { driverService } from '../../services/driver.service';
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
@@ -39,30 +39,62 @@ export default function DriverProfile() {
   const { driverId } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  const [driver, setDriver] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const driver = drivers.find(d => d.id === driverId);
+  useEffect(() => {
+    if (!driverId) return;
+    setLoading(true);
+    setError(null);
+    driverService.getById(driverId)
+      .then((res) => {
+        const d = res.data.driver;
+        const initials = d.fullName
+          ? d.fullName.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+          : '--';
+        setDriver({
+          ...d,
+          id: d._id,
+          initials,
+          phone: d.contactNumber,
+          email: d.email || '',
+          employeeId: d.employeeId || '',
+          operationalStatus: d.status,
+          address: d.address || '',
+          assignedVehicle: d.assignedVehicle || null,
+          currentTrip: d.currentTrip || null,
+          totalTrips: d.totalTrips || 0,
+          totalDistance: d.totalDistance || 0,
+          avgFuelEfficiency: d.avgFuelEfficiency || 0,
+          customerRating: d.customerRating ?? 4.5,
+          onTimePerformance: d.onTimePerformance || 95,
+          license: {
+            number: d.licenseNumber,
+            category: d.licenseCategory,
+            expiryDate: d.licenseExpiry ? new Date(d.licenseExpiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A',
+            issueDate: d.licenseIssueDate || 'N/A',
+            issuingAuthority: d.licenseIssuingAuthority || 'RTO',
+            status: d.licenseStatus || 'Active',
+          },
+          emergencyContact: d.emergencyContact || { name: '—', phone: '—', relation: '—' },
+          employment: d.employment || { department: '—', role: '—', joiningDate: '—', status: 'Active' },
+          medical: d.medical || { bloodGroup: '—', certificateExpiry: '—' },
+          history: d.history || [],
+          monthlyPerformance: d.monthlyPerformance || [],
+          trainingCompleted: d.trainingCompleted || [],
+          documents: d.documents || {},
+        });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || err.message || 'Failed to load driver');
+      })
+      .finally(() => setLoading(false));
+  }, [driverId]);
 
-  if (!driver) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center">
-          <User className="w-8 h-8 text-slate-400" />
-        </div>
-        <div className="text-center">
-          <h2 className="text-lg font-black text-slate-900 font-headings">Driver Not Found</h2>
-          <p className="text-xs text-slate-400 font-semibold mt-1">
-            No driver found with ID {driverId}
-          </p>
-        </div>
-        <button
-          onClick={() => navigate('/drivers')}
-          className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-colors"
-        >
-          Back to Drivers
-        </button>
-      </div>
-    );
-  }
+  if (loading) return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>;
+  if (error) return <div className="flex items-center justify-center min-h-[400px] text-danger">{error}</div>;
+  if (!driver) return <div className="flex items-center justify-center min-h-[400px] text-neutral-textMuted">Not found</div>;
 
   const incidentHistory = driver.history.filter(h =>
     h.type === 'incident' || h.type === 'warning' || h.type === 'suspension'
@@ -80,6 +112,7 @@ export default function DriverProfile() {
     value: m.onTime,
   }));
 
+  const trainingRequirements = [];
   const allTraining = trainingRequirements.map(req => ({
     ...req,
     completed: driver.trainingCompleted.includes(req.name),

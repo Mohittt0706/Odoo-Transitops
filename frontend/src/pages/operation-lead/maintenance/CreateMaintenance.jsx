@@ -22,7 +22,7 @@ export default function CreateMaintenance() {
   const methods = useForm({
     resolver: zodResolver(maintenanceSchema),
     defaultValues: {
-      vehicleId: "", issue: "", cost: "", maintenanceDate: "", status: "SCHEDULED",
+      vehicleId: "", issue: "", cost: "", maintenanceDate: "", status: "OPEN",
     },
   });
 
@@ -39,9 +39,10 @@ export default function CreateMaintenance() {
       await maintenanceService.create({
         vehicleId: fd.vehicleId,
         issue: fd.issue,
+        description: fd.issue,
         cost: Number(fd.cost) || 0,
         maintenanceDate: fd.maintenanceDate || undefined,
-        status: "SCHEDULED",
+        status: "OPEN",
       });
       setSaved(true);
       toast("Maintenance request created successfully!", "success");
@@ -70,7 +71,7 @@ export default function CreateMaintenance() {
           <FormSection title="Maintenance Details" description="Vehicle and issue" icon={Wrench} delay={0.05}>
             <FormRow>
               <FormInput name="vehicleId" label="Vehicle ID *" placeholder="Vehicle ObjectId" />
-              <FormSelect name="status" label="Status" options={[{ value: "SCHEDULED", label: "Scheduled" }, { value: "IN_PROGRESS", label: "In Progress" }]} />
+              <FormSelect name="status" label="Status" options={[{ value: "OPEN", label: "Open" }, { value: "IN_PROGRESS", label: "In Progress" }]} />
             </FormRow>
             <FormRow cols={1}>
               <FormTextarea name="issue" label="Issue Description *" rows={3} />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import PageHeader from "../../../components/layout/PageHeader";
@@ -6,11 +6,11 @@ import DataTable from "../../../components/common/DataTable";
 import VehicleStatusBadge from "../../../components/common/VehicleStatusBadge";
 import DocumentCard from "../../../components/dashboard/DocumentCard";
 import TimelineItem from "../../../components/timeline/TimelineItem";
-import { vehicles } from "../../../data/vehicleData";
+import { vehicleService } from "../../../services/vehicle.service";
 import { cn } from "../../../utils/utils";
 import {
   Truck, Edit, Trash2, Gauge, Fuel, Shield, Wrench,
-  Calendar, MapPin, User
+  Calendar, MapPin, User, Loader2, AlertTriangle
 } from "lucide-react";
 
 const tabs = ["Overview", "Specifications", "Trip History", "Maintenance", "Fuel Logs", "Expenses", "Documents", "Timeline"];
@@ -19,21 +19,57 @@ export default function VehicleDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Overview");
+  const [vehicle, setVehicle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const vehicle = vehicles.find((v) => v.id === id);
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    vehicleService.getById(id)
+      .then((res) => {
+        const v = res.data.vehicle;
+        setVehicle({
+          ...v,
+          id: v._id,
+          name: v.vehicleName,
+          registration: v.registrationNumber,
+          type: v.vehicleType,
+          loadCapacity: v.maxLoadCapacity,
+          color: v.color || "#3B82F6",
+          model: v.model || "",
+          manufacturer: v.manufacturer || "",
+          year: v.year || "",
+          vin: v.vin || "",
+          engineNo: v.engineNo || "",
+          licensePlate: v.licensePlate || v.registrationNumber,
+          fuelType: v.fuelType || "",
+          transmission: v.transmission || "",
+          mileage: v.mileage || "",
+          purchaseDate: v.purchaseDate || v.createdAt,
+          insuranceProvider: v.insuranceProvider || "",
+          insuranceExpiry: v.insuranceExpiry || "",
+          driver: v.driver || "",
+          fuelLevel: v.fuelLevel ?? 0,
+          warrantyExpiry: v.warrantyExpiry || v.createdAt,
+          nextService: v.nextService || v.createdAt,
+          tripHistory: v.tripHistory || [],
+          maintenanceHistory: v.maintenanceHistory || [],
+          fuelLogs: v.fuelLogs || [],
+          expenses: v.expenses || [],
+          documents: v.documents || {},
+        });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || err.message || "Failed to load vehicle");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  if (!vehicle) {
-    return (
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20">
-        <Truck className="w-16 h-16 text-neutral-textMuted mx-auto mb-4" strokeWidth={1} />
-        <h2 className="text-lg font-bold text-neutral-textMain">Vehicle not found</h2>
-        <p className="text-sm text-neutral-textMuted mt-1">The vehicle with ID "{id}" does not exist.</p>
-        <button onClick={() => navigate(-1)} className="mt-4 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
-          Go Back
-        </button>
-      </motion.div>
-    );
-  }
+  if (loading) return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>;
+  if (error) return <div className="flex items-center justify-center min-h-[400px] text-danger">{error}</div>;
+  if (!vehicle) return <div className="flex items-center justify-center min-h-[400px] text-neutral-textMuted">Not found</div>;
 
   const tripColumns = [
     { key: "id", label: "Trip ID" },
@@ -124,7 +160,14 @@ export default function VehicleDetails() {
             >
               <Edit className="w-4 h-4" /> Edit
             </button>
-            <button className="inline-flex items-center gap-2 px-3.5 py-2 border border-danger/30 text-danger text-sm font-semibold rounded-lg hover:bg-danger-light transition-colors">
+            <button
+              onClick={() => {
+                if (window.confirm("Are you sure you want to delete this vehicle?")) {
+                  vehicleService.remove(vehicle.id).then(() => navigate("/dashboard/operations/fleet")).catch((err) => setError(err.response?.data?.message || "Delete failed"));
+                }
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-2 border border-danger/30 text-danger text-sm font-semibold rounded-lg hover:bg-danger-light transition-colors"
+            >
               <Trash2 className="w-4 h-4" /> Delete
             </button>
           </>

@@ -1,18 +1,63 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PageHeader from "../../../components/layout/PageHeader";
 import StatusBadge from "../../../components/common/Badge";
 import { TripStatusBadge, ProgressBar, Timeline, RouteCard } from "../../../components/trips/TripComponents";
-import { trips, timelineEvents } from "../../../data/tripData";
-import { ArrowLeft, Truck, User, Package, Fuel, Receipt, FileText, Weight, Map } from "lucide-react";
+import { tripService } from "../../../services/trip.service";
+import { ArrowLeft, Truck, User, Package, Fuel, Receipt, FileText, Weight, Map, Loader2 } from "lucide-react";
 
 export default function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const trip = trips.find(t => t.id === id);
-  if (!trip) return <div className="p-8 text-center text-neutral-textMuted">Trip not found</div>;
+  const [trip, setTrip] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const timeline = timelineEvents.find(t => t.tripId === id)?.events || [];
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    tripService.getById(id)
+      .then((res) => {
+        const t = res.data.trip;
+        setTrip({
+          ...t,
+          id: t._id,
+          from: t.source,
+          to: t.destination,
+          distance: t.plannedDistance,
+          vehicleName: t.vehicleId?.vehicleName || '—',
+          vehicle: t.vehicleId?.registrationNumber || '—',
+          driver: t.driverId?.fullName || '—',
+          driverId: t.driverId?._id || '—',
+          priority: t.priority || 'Medium',
+          departure: t.dispatchTime ? new Date(t.dispatchTime).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : new Date(t.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+          eta: t.eta || '—',
+          progress: t.progress ?? (t.status === 'COMPLETED' ? 100 : t.status === 'DISPATCHED' ? 50 : 0),
+          fuelUsage: t.fuelUsage || '—',
+          cargo: t.cargo || `${t.cargoWeight} kg`,
+          cargoWeight: t.cargoWeight,
+          value: t.value || '—',
+          expenses: t.expenses || '—',
+          revenue: t.revenue || '—',
+          notes: t.receiverRemarks || t.notes || '',
+          deliveryTime: t.deliveryTime ? new Date(t.deliveryTime).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—',
+          rating: t.rating || null,
+          documents: t.documents || [],
+        });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || err.message || "Failed to load trip");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>;
+  if (error) return <div className="flex items-center justify-center min-h-[400px] text-danger">{error}</div>;
+  if (!trip) return <div className="flex items-center justify-center min-h-[400px] text-neutral-textMuted">Not found</div>;
+
+  const timeline = [];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

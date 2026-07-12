@@ -12,11 +12,10 @@ import { Navigation, CheckCircle, Clock, AlertCircle, Plus, Download } from "luc
 import { cn } from "../../utils/utils";
 
 const STATUS_COLORS = {
-  PLANNED: "#8B5CF6",
-  IN_TRANSIT: "#3B82F6",
+  DRAFT: "#8B5CF6",
+  DISPATCHED: "#3B82F6",
   COMPLETED: "#22C55E",
   CANCELLED: "#EF4444",
-  DELAYED: "#F59E0B",
 };
 
 const columns = [
@@ -54,21 +53,19 @@ export default function TripsPage() {
   useEffect(() => { fetchTrips(); }, [fetchTrips]);
 
   const tripStats = useMemo(() => {
-    const inTransit = trips.filter(t => t.status === "IN_TRANSIT").length;
+    const dispatched = trips.filter(t => t.status === "DISPATCHED").length;
     const completed = trips.filter(t => t.status === "COMPLETED").length;
-    const delayed = trips.filter(t => t.status === "DELAYED").length;
     const cancelled = trips.filter(t => t.status === "CANCELLED").length;
-    const planned = trips.filter(t => t.status === "PLANNED").length;
-    const totalDistance = trips.reduce((sum, t) => sum + (t.plannedDistance || t.distanceVal || 0), 0);
-    return { inTransit, completed, delayed, cancelled, pending: planned, totalDistance };
+    const draft = trips.filter(t => t.status === "DRAFT").length;
+    const totalDistance = trips.reduce((sum, t) => sum + (t.plannedDistance || 0), 0);
+    return { dispatched, completed, cancelled, pending: draft, totalDistance, delayed: 0 };
   }, [trips]);
 
   const statusDist = useMemo(() => [
-    { label: "In Transit", value: tripStats.inTransit, color: STATUS_COLORS.IN_TRANSIT },
+    { label: "Draft", value: tripStats.pending, color: STATUS_COLORS.DRAFT },
+    { label: "Dispatched", value: tripStats.dispatched, color: STATUS_COLORS.DISPATCHED },
     { label: "Completed", value: tripStats.completed, color: STATUS_COLORS.COMPLETED },
-    { label: "Delayed", value: tripStats.delayed, color: STATUS_COLORS.DELAYED },
     { label: "Cancelled", value: tripStats.cancelled, color: STATUS_COLORS.CANCELLED },
-    { label: "Planned", value: tripStats.pending, color: STATUS_COLORS.PLANNED },
   ], [tripStats]);
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
@@ -101,11 +98,11 @@ export default function TripsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-6">
         {[
-          { label: "In Transit", value: tripStats.inTransit, icon: Navigation },
+          { label: "Dispatched", value: tripStats.dispatched, icon: Navigation },
           { label: "Completed", value: tripStats.completed, icon: CheckCircle },
-          { label: "Delayed", value: tripStats.delayed, icon: Clock },
+          { label: "Draft", value: tripStats.pending, icon: Clock },
           { label: "Cancelled", value: tripStats.cancelled, icon: AlertCircle },
-          { label: "Planned", value: tripStats.pending, icon: Clock },
+          { label: "Total", value: trips.length, icon: Clock },
           { label: "Total Distance", value: `${(tripStats.totalDistance).toFixed(0)} km` },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
@@ -125,13 +122,13 @@ export default function TripsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <ChartCard title="Trip Status Distribution"><DonutChart data={statusDist} size={130} thickness={16} /></ChartCard>
         <ChartCard title="Route Performance" subtitle="Distance covered per trip">
-          <SimpleBarChart data={trips.slice(0, 10).map(t => ({ label: (t._id || "").slice(-4), value: t.plannedDistance || t.distanceVal || 0 }))} height={160} color="#8B5CF6" />
+          <SimpleBarChart data={trips.slice(0, 10).map(t => ({ label: (t._id || "").slice(-4), value: t.plannedDistance || 0 }))} height={160} color="#8B5CF6" />
         </ChartCard>
       </div>
 
       <div className="flex items-center gap-2 mb-4 flex-wrap">
         <div className="flex items-center gap-1 p-1 bg-white border border-neutral-border rounded-lg">
-          {["all", "IN_TRANSIT", "COMPLETED", "DELAYED", "CANCELLED", "PLANNED"].map(s => (
+          {["all", "DRAFT", "DISPATCHED", "COMPLETED", "CANCELLED"].map(s => (
             <button key={s} onClick={() => setFilter(s)} className={cn("px-3 py-1.5 text-xs font-semibold rounded-md transition-all", filter === s ? "bg-primary text-white" : "text-neutral-textMuted hover:text-accent")}>
               {s === "all" ? "All" : s.replace(/_/g, " ")}
             </button>

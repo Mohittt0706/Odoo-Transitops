@@ -8,7 +8,7 @@ import { vehicleService } from "../../../services/vehicle.service";
 import { Truck, Plus, Download, Eye, Pencil } from "lucide-react";
 import { cn } from "../../../utils/utils";
 
-const statusFilters = ["All", "AVAILABLE", "ON_TRIP", "IN_MAINTENANCE"];
+const statusFilters = ["All", "AVAILABLE", "ON_TRIP", "IN_SHOP"];
 
 export default function AllVehicles() {
   const navigate = useNavigate();

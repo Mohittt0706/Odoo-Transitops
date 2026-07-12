@@ -11,11 +11,11 @@ const columns = [
   { key: "_id", label: "Fuel Log ID", render: (val) => <span className="text-xs font-mono">{(val || "").slice(-6).toUpperCase()}</span> },
   { key: "vehicle", label: "Vehicle", render: (_, r) => <div><p className="text-sm font-semibold">{r.vehicleId?.vehicleName || "-"}</p><p className="text-[10px] text-neutral-textMuted">{r.vehicleId?.registrationNumber || ""}</p></div> },
   { key: "fuelStation", label: "Fuel Station" },
-  { key: "fuelType", label: "Type" },
+  { key: "fuelType", label: "Type", render: (v) => v || "-" },
   { key: "liters", label: "Qty (L)", render: (v) => `${v || 0} L` },
   { key: "cost", label: "Total Cost", render: (v) => `₹${(v || 0).toLocaleString()}` },
   { key: "date", label: "Date", render: (v) => v ? new Date(v).toLocaleDateString() : "-" },
-  { key: "status", label: "Status", render: (v) => <FuelStatusBadge status={v || "Completed"} /> },
+  { key: "status", label: "Status", render: (v) => <FuelStatusBadge status={v || ""} /> },
 ];
 
 export default function FuelLogs() {
@@ -29,7 +29,9 @@ export default function FuelLogs() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fuelService.getAll();
+      const params = {};
+      if (filter !== "all") params.status = filter;
+      const res = await fuelService.getAll(params);
       setLogs(res.data.fuelLogs || []);
     } catch (err) {
       setError(err?.response?.data?.message || err.message || "Failed to load fuel logs");

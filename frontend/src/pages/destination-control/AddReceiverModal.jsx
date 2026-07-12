@@ -69,39 +69,12 @@ export default function AddReceiverModal({ open, onClose, onSave, existingReceiv
 
     setSubmitting(true);
 
-    const isVerified = data.verificationStatus === "verified";
     const newReceiver = {
-      id: `RC-${String(receiverCounter).padStart(3, "0")}`,
-      companyCode: data.companyCode,
-      companyType: data.companyType,
-      gstNumber: data.gstNumber,
-      name: data.companyName,
-      contact: data.contactPerson,
-      designation: data.designation,
-      phone: data.phone,
-      alternatePhone: data.alternatePhone,
+      fullName: data.contactPerson,
+      company: data.companyName,
+      contactNumber: data.phone,
       email: data.email,
       address: `${data.address}, ${data.city}, ${data.state}, ${data.country} - ${data.postalCode}`,
-      city: data.city,
-      state: data.state,
-      country: data.country,
-      postalCode: data.postalCode,
-      preferredWarehouse: data.preferredWarehouse,
-      deliveryZone: data.deliveryZone,
-      defaultDock: data.defaultDock,
-      preferredDeliveryTime: data.preferredDeliveryTime,
-      expectedMonthlyDeliveries: parseInt(data.expectedMonthlyDeliveries) || 0,
-      verified: isVerified,
-      verificationDate: isVerified ? (data.verificationDate || new Date().toISOString().split("T")[0]) : null,
-      verificationStatus: isVerified ? "Verified" : "Pending Verification",
-      assignedRM: data.assignedRM,
-      notes: data.notes,
-      totalDeliveries: 0,
-      pendingDeliveries: 0,
-      rating: 0,
-      digitalSignature: false,
-      status: "active",
-      createdAt: new Date().toISOString().split("T")[0],
     };
 
     receiverCounter++;

@@ -8,7 +8,8 @@ import { Form, FormSection, FormRow, FormInput, FormSelect, FormDatePicker, Form
 import { useToast } from "../../../components/common/Toast";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { maintenanceSchema } from "../../../lib/validations";
-import { ArrowLeft, Wrench, AlertTriangle, AlertCircle } from "lucide-react";
+import { maintenanceService } from "../../../services/maintenance.service";
+import { ArrowLeft, Wrench, AlertTriangle, AlertCircle, Loader2 } from "lucide-react";
 
 const serviceTypes = [
   { value: "Preventive", label: "Preventive Maintenance" },
@@ -18,48 +19,103 @@ const serviceTypes = [
   { value: "Inspection", label: "Inspection" },
 ];
 
-const maintRecords = [
-  { id: "MNT-001", vehicle: "KL-07-AU-4521", serviceType: "Preventive", description: "Scheduled oil change and filter replacement", scheduledDate: "2026-07-15", priority: "High", assignedTo: "Rajesh Mechanic", location: "Ravi Mechanicals", estimatedCost: "₹12,000" },
-];
-
 export default function EditMaintenance() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
   const [showConfirm, setShowConfirm] = useState(false);
   const [saved, setSaved] = useState(false);
-
-  const record = maintRecords.find((r) => r.id === id);
+  const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+  const [recordData, setRecordData] = useState(null);
 
   const methods = useForm({
     resolver: zodResolver(maintenanceSchema),
-    defaultValues: record ? {
-      vehicle: record.vehicle, serviceType: record.serviceType,
-      description: record.description, scheduledDate: record.scheduledDate,
-      priority: record.priority, assignedTo: record.assignedTo,
-      estimatedCost: record.estimatedCost || "", location: record.location || "",
-    } : {},
+    defaultValues: {
+      vehicle: "", serviceType: "Service", description: "", scheduledDate: "",
+      priority: "Medium", assignedTo: "", estimatedCost: "", location: "",
+    },
   });
 
-  const { handleSubmit, formState: { isSubmitting } } = methods;
+  const { handleSubmit, formState: { isSubmitting }, reset } = methods;
+
+  useEffect(() => {
+    const fetchRecord = async () => {
+      setLoading(true);
+      setFetchError(null);
+      try {
+        const res = await maintenanceService.getById(id);
+        const d = res.data.record || res.data;
+        setRecordData(d);
+        const vehicleVal = d.vehicleId?.registrationNumber || (typeof d.vehicleId === "string" ? d.vehicleId : "") || "";
+        reset({
+          vehicle: vehicleVal,
+          serviceType: d.serviceType || "Service",
+          description: d.issue || d.description || "",
+          scheduledDate: d.maintenanceDate || "",
+          priority: d.priority || "Medium",
+          assignedTo: d.technicianName || "",
+          estimatedCost: d.cost ? String(d.cost) : "",
+          location: d.location || "",
+        });
+      } catch (err) {
+        const msg = err?.response?.data?.message || err.message || "Failed to load maintenance record";
+        setFetchError(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecord();
+  }, [id, reset]);
 
   const onSubmit = () => setShowConfirm(true);
 
-  const confirmSubmit = () => {
+  const confirmSubmit = async () => {
     setShowConfirm(false);
-    setSaved(true);
-    toast("Maintenance request updated successfully!", "success");
-    setTimeout(() => navigate("/dashboard/operations/maintenance"), 1200);
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      const fd = methods.getValues();
+      await maintenanceService.update(id, {
+        vehicleId: fd.vehicle,
+        issue: fd.description,
+        description: fd.description,
+        cost: Number(fd.estimatedCost) || 0,
+        maintenanceDate: fd.scheduledDate || undefined,
+        technicianName: fd.assignedTo,
+        status: fd.status || undefined,
+      });
+      setSaved(true);
+      toast("Maintenance request updated successfully!", "success");
+      setTimeout(() => navigate("/dashboard/operations/maintenance"), 1200);
+    } catch (err) {
+      const msg = err?.response?.data?.message || err.message || "Failed to update maintenance request";
+      setApiError(msg);
+      toast(msg, "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
 
-  if (!record) {
+  if (loading) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 text-primary animate-spin mb-3" />
+        <p className="text-sm text-neutral-textMuted">Loading maintenance details...</p>
+      </motion.div>
+    );
+  }
+
+  if (fetchError) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-        <AlertCircle className="w-16 h-16 text-neutral-textMuted mx-auto mb-4" strokeWidth={1} />
-        <h2 className="text-lg font-bold text-neutral-textMain">Record not found</h2>
-        <p className="text-sm text-neutral-textMuted mt-1">The maintenance record "{id}" does not exist.</p>
+        <AlertCircle className="w-16 h-16 text-danger mx-auto mb-4" strokeWidth={1} />
+        <h2 className="text-lg font-bold text-neutral-textMain">Failed to load record</h2>
+        <p className="text-sm text-neutral-textMuted mt-1">{fetchError}</p>
         <button onClick={() => navigate(-1)} className="mt-4 btn btn-primary text-sm">Go Back</button>
       </motion.div>
     );
@@ -67,9 +123,12 @@ export default function EditMaintenance() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <PageHeader title="Edit Maintenance" subtitle={`${record.vehicle} — ${record.serviceType}`}
+      <PageHeader title="Edit Maintenance" subtitle={`${(recordData?.vehicleId?.registrationNumber || recordData?.vehicleId || "")} — ${recordData?.issue || recordData?.serviceType || "Maintenance"}`}
         actions={<button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>}
       />
+      {apiError && (
+        <div className="mb-4 p-3 text-sm text-danger bg-danger-light border border-danger/20 rounded-lg">{apiError}</div>
+      )}
       <Form methods={methods} onSubmit={onSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <FormSection title="Maintenance Details" description="Service type and description" icon={Wrench} delay={0.05}>
@@ -107,7 +166,7 @@ export default function EditMaintenance() {
           </FormSection>
         </div>
 
-        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Update Request" loading={isSubmitting} success={saved} />
+        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Update Request" loading={isSubmitting || submitting} success={saved} />
       </Form>
 
       <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}

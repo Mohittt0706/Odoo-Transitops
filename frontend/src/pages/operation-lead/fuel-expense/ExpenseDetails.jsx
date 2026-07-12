@@ -1,24 +1,49 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PageHeader from "../../../components/layout/PageHeader";
 import StatusBadge from "../../../components/common/Badge";
 import { Timeline, EmptyState } from "../../../components/fuel-expense/FuelExpenseComponents";
-import { expenses } from "../../../data/fuelExpenseData";
-import { ArrowLeft, Download, FileText, Truck, User, DollarSign, Calendar, CheckCircle, Clock, MessageSquare, Activity } from "lucide-react";
+import { expenseService } from "../../../services/expense.service";
+import { ArrowLeft, Download, FileText, Truck, User, DollarSign, Calendar, CheckCircle, Clock, MessageSquare, Activity, Loader2 } from "lucide-react";
 
 export default function ExpenseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const expense = expenses.find((e) => e.id === id);
+  const [expense, setExpense] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!expense) {
-    return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <PageHeader title="Expense Not Found" subtitle="The requested expense record does not exist" />
-        <EmptyState title="No expense found" description={`Expense ${id} could not be located`} action={<button onClick={() => navigate("/dashboard/operations/expenses")} className="btn btn-primary text-xs">Back to Expenses</button>} />
-      </motion.div>
-    );
-  }
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    expenseService.getById(id)
+      .then((res) => {
+        const e = res.data.expense;
+        setExpense({
+          ...e,
+          id: e._id,
+          category: e.type,
+          amount: e.amount,
+          date: e.date ? new Date(e.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—',
+          vehicleName: e.vehicleId?.vehicleName || '—',
+          vehicle: e.vehicleId?.registrationNumber || '—',
+          driver: e.driver || '—',
+          paymentStatus: e.paymentStatus || 'Pending',
+          approvedBy: e.approvedBy || '—',
+          invoice: e.invoice || null,
+        });
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || err.message || "Failed to load expense");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>;
+  if (error) return <div className="flex items-center justify-center min-h-[400px] text-danger">{error}</div>;
+  if (!expense) return <div className="flex items-center justify-center min-h-[400px] text-neutral-textMuted">Not found</div>;
 
   const timeline = [
     { date: expense.date, title: "Expense Created", description: `${expense.category} expense recorded for ${expense.vehicle}` },
