@@ -44,6 +44,10 @@ const vehicleSchema = new mongoose.Schema(
       },
       default: 'AVAILABLE',
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
