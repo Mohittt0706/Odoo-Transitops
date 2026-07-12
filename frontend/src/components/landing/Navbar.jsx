@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Menu, X, Shield, ArrowRight } from 'lucide-react';
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -62,10 +64,10 @@ export default function Navbar() {
 
         {/* Right: Actions */}
         <div className="hidden lg:flex items-center gap-4">
-          <button className="text-sm font-semibold text-neutral-textMuted hover:text-neutral-textMain transition-colors duration-150 cursor-pointer">
+          <button onClick={() => navigate("/login")} className="text-sm font-semibold text-neutral-textMuted hover:text-neutral-textMain transition-colors duration-150 cursor-pointer">
             Log In
           </button>
-          <button className="btn btn-primary text-xs flex items-center gap-1.5 shadow-soft-sm">
+          <button onClick={() => navigate("/login")} className="btn btn-primary text-xs flex items-center gap-1.5 shadow-soft-sm">
             Get Started <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -103,10 +105,10 @@ export default function Navbar() {
               </a>
             ))}
             <div className="flex flex-col gap-3 mt-2">
-              <button onClick={() => setMobileMenuOpen(false)} className="btn btn-secondary w-full text-xs">
+              <button onClick={() => { setMobileMenuOpen(false); navigate("/login"); }} className="btn btn-secondary w-full text-xs">
                 Log In
               </button>
-              <button onClick={() => setMobileMenuOpen(false)} className="btn btn-primary w-full text-xs">
+              <button onClick={() => { setMobileMenuOpen(false); navigate("/login"); }} className="btn btn-primary w-full text-xs">
                 Get Started
               </button>
             </div>

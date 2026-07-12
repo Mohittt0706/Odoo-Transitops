@@ -1,12 +1,13 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../utils/utils";
+import { useAuth } from "../../context/AuthContext";
 import { roleConfigs } from "./roleConfigs";
 import { LogOut, Truck, X } from "lucide-react";
 
 export default function Sidebar({ role, collapsed, mobileOpen, onMobileClose }) {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { logout } = useAuth();
   const config = roleConfigs[role];
 
   if (!config) return null;
@@ -72,7 +73,7 @@ export default function Sidebar({ role, collapsed, mobileOpen, onMobileClose }) 
       {/* Bottom */}
       <div className="border-t border-neutral-border p-2.5">
         <button
-          onClick={() => navigate("/role-selection")}
+          onClick={logout}
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-neutral-textMuted hover:bg-danger-light hover:text-danger transition-all duration-150 w-full",
             collapsed && "justify-center px-2"
