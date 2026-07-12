@@ -5,16 +5,9 @@ import {
 } from 'lucide-react';
 
 export default function SafetyCommand() {
-    const [complianceAlerts, setComplianceAlerts] = useState([
-        { id: 1, type: 'CDL Expire', driver: 'Dave Miller', issue: 'CDL credentials expire in 5 days', priority: 'Critical', resolved: false },
-        { id: 2, type: 'ELD Limit', driver: 'Sarah Jenkins', issue: 'Approaching daily drive time limit', priority: 'High', resolved: false },
-        { id: 3, type: 'DOT Checkup', driver: 'All Fleet Assets', issue: 'Random quarterly screenings pending', priority: 'Medium', resolved: false }
-    ]);
+    const [complianceAlerts, setComplianceAlerts] = useState([]);
 
-    const [telematicsAlerts, setTelematicsAlerts] = useState([
-        { id: 'INC-209', time: '10 mins ago', type: 'Hard Braking', driver: 'Elena Rostova', severity: 'Minor', resolved: false },
-        { id: 'INC-208', time: '1 hr ago', type: 'Speeding (82 in 70)', driver: 'Marcus Vance', severity: 'Moderate', resolved: false }
-    ]);
+    const [telematicsAlerts, setTelematicsAlerts] = useState([]);
 
     const resolveCompliance = (id) => {
         setComplianceAlerts(prev => prev.map(item => item.id === id ? { ...item, resolved: true } : item));

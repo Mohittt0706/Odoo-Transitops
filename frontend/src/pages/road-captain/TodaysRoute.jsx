@@ -6,11 +6,7 @@ import { waypoints } from "../../data/roadCaptainData";
 import { Navigation, Clock, MapPin, CloudSun, AlertTriangle, ChevronRight, Fuel } from "lucide-react";
 
 export default function TodaysRoute() {
-  const routeStops = [
-    { name: "HP Petrol Station", dist: "38 km", type: "Fuel" },
-    { name: "Food Plaza Lonavala", dist: "96 km", type: "Rest" },
-    { name: "BPCL Station Pimpri", dist: "128 km", type: "Fuel" },
-  ];
+  const routeStops = [];
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">

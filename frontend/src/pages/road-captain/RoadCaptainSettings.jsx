@@ -5,13 +5,7 @@ import ChartCard from "../../components/charts/ChartCard";
 import { Toast } from "../../components/road-captain/RoadCaptainComponents";
 import { User, Bell, Route, Monitor, Shield, Save, ChevronRight, Eye, EyeOff } from "lucide-react";
 
-const sections = [
-  { id: "profile", title: "Profile Settings", icon: User },
-  { id: "notifications", title: "Notification Preferences", icon: Bell },
-  { id: "trip", title: "Trip Preferences", icon: Route },
-  { id: "display", title: "Display Settings", icon: Monitor },
-  { id: "security", title: "Security", icon: Shield },
-];
+const sections = [];
 
 function Toggle({ enabled, onChange }) {
   return (
@@ -70,12 +64,12 @@ export default function RoadCaptainSettings() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
-                    { label: "Full Name", val: "Vikram Singh" },
-                    { label: "Phone Number", val: "+91 98765 43212" },
-                    { label: "Email", val: "vikram.singh@transitops.in", type: "email" },
-                    { label: "License Number", val: "MH-2018-2244" },
-                    { label: "Address", val: "Mumbai, Maharashtra" },
-                    { label: "Emergency Contact", val: "+91 98765 43210" },
+                    { label: "Full Name", val: "" },
+                    { label: "Phone Number", val: "" },
+                    { label: "Email", val: "", type: "email" },
+                    { label: "License Number", val: "" },
+                    { label: "Address", val: "" },
+                    { label: "Emergency Contact", val: "" },
                   ].map((f) => (
                     <div key={f.label}>
                       <label className="text-xs font-semibold text-neutral-textMuted uppercase">{f.label}</label>

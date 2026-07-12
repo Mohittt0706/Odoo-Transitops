@@ -9,24 +9,9 @@ import { Route, Truck, MapPin, Clock, Fuel, Star, BarChart3, Play, Pause, CheckC
 export default function RoadCaptainDashboard() {
   const activeTrip = rcTrips.find((t) => t.id === "TR-0084");
 
-  const stats = [
-    { label: "Today's Trips", value: "2", icon: Route, color: "primary" },
-    { label: "Distance Left", value: "68 km", icon: MapPin, color: "warning" },
-    { label: "ETA", value: "2h 15m", icon: Clock, color: "info" },
-    { label: "Fuel Level", value: "78%", icon: Fuel, color: "success" },
-    { label: "Vehicle Health", value: "Good", icon: Gauge, color: "success" },
-    { label: "Performance", value: "94%", icon: TrendingUp, color: "primary" },
-    { label: "Safety Score", value: "99%", icon: Shield, color: "success" },
-    { label: "Weekly Earnings", value: "₹18,500", icon: DollarSign, color: "purple" },
-  ];
+  const stats = [];
 
-  const quickActions = [
-    { label: "Start Trip", icon: Play, color: "bg-success-light text-success" },
-    { label: "Pause Trip", icon: Pause, color: "bg-warning-light text-warning" },
-    { label: "Complete Trip", icon: CheckCircle, color: "bg-primary-light text-primary" },
-    { label: "Emergency", icon: AlertTriangle, color: "bg-danger-light text-danger" },
-    { label: "Upload Fuel", icon: Receipt, color: "bg-purple-50 text-purple-600" },
-  ];
+  const quickActions = [];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">

@@ -123,7 +123,9 @@ export default function LoginForm() {
   };
 
   const selectedRoleData = roles.find((r) => r.id === selectedRole);
-  const hintEmail = mockUsers.find((u) => u.role === selectedRole)?.email;
+  const hintUser = mockUsers.find((u) => u.role === selectedRole);
+  const hintEmail = hintUser?.email;
+  const hintPassword = hintUser?.password;
 
   return (
     <FormCard>
@@ -287,7 +289,7 @@ export default function LoginForm() {
                 Email: <span className="text-primary font-semibold">{hintEmail}</span>
               </p>
               <p className="text-[11px] text-neutral-textMuted font-mono">
-                Password: <span className="text-primary font-semibold">password123</span>
+                Password: <span className="text-primary font-semibold">{hintPassword}</span>
               </p>
             </div>
           </motion.div>

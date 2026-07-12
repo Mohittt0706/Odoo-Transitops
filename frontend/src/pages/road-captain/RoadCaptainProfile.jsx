@@ -6,29 +6,11 @@ import { MetricCard } from "../../components/road-captain/RoadCaptainComponents"
 import { performanceData } from "../../data/roadCaptainData";
 import { User, Phone, Mail, BadgeCheck, Truck, Star, Clock, Ruler, TrendingUp, CheckCircle, Calendar, MapPin, Gauge, Target, Edit3, Shield } from "lucide-react";
 
-const profileStats = [
-  { label: "Total Trips", value: "512", icon: Truck, color: "primary" },
-  { label: "Rating", value: "4.9 / 5", icon: Star, color: "warning" },
-  { label: "Experience", value: "12 years", icon: Clock, color: "success" },
-  { label: "Total Distance", value: "1.8L km", icon: Ruler, color: "purple" },
-];
+const profileStats = [];
 
-const performanceMetrics = [
-  { label: "On-Time Delivery", value: "97%", target: "95%", met: true },
-  { label: "Safety Score", value: "99%", target: "90%", met: true },
-  { label: "Fuel Efficiency", value: "5.2 km/L", target: "4.5 km/L", met: true },
-  { label: "Compliance", value: "99%", target: "95%", met: true },
-  { label: "Customer Rating", value: "4.9", target: "4.5", met: true },
-  { label: "Trip Completion", value: "98%", target: "95%", met: true },
-];
+const performanceMetrics = [];
 
-const recentActivity = [
-  { date: "2026-07-12", action: "Trip TR-0084 started", route: "Mumbai → Pune", icon: Truck, color: "text-primary" },
-  { date: "2026-07-11", action: "Trip TR-0077 completed", route: "Chennai → Bangalore", icon: CheckCircle, color: "text-success" },
-  { date: "2026-07-10", action: "Pre-trip inspection passed", route: "MH-12-RT-2244", icon: CheckCircle, color: "text-success" },
-  { date: "2026-07-09", action: "Fuel logged at BPCL", route: "95L — ₹8,550", icon: MapPin, color: "text-warning" },
-  { date: "2026-07-08", action: "Tire rotation completed", route: "Scheduled maintenance", icon: Calendar, color: "text-purple-600" },
-];
+const recentActivity = [];
 
 export default function RoadCaptainProfile() {
   return (

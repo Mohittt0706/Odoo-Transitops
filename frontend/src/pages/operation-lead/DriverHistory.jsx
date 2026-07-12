@@ -24,26 +24,9 @@ import { cn } from '../../utils/utils';
 import { drivers } from '../../data/drivers';
 import TimelineEvent from '../../components/drivers/TimelineEvent';
 
-const EVENT_TYPES = [
-  { value: 'all', label: 'All', icon: Filter },
-  { value: 'trip', label: 'Trips', icon: Route },
-  { value: 'incident', label: 'Incidents', icon: AlertTriangle },
-  { value: 'training', label: 'Training', icon: BookOpen },
-  { value: 'license', label: 'Licenses', icon: RefreshCw },
-  { value: 'warning', label: 'Warnings', icon: AlertCircle },
-  { value: 'suspension', label: 'Suspensions', icon: Ban },
-  { value: 'medical', label: 'Medical', icon: Clock },
-  { value: 'vehicle', label: 'Vehicles', icon: Car },
-  { value: 'promotion', label: 'Promotions', icon: Award },
-];
+const EVENT_TYPES = [];
 
-const DATE_RANGES = [
-  { value: 'week', label: 'This Week' },
-  { value: 'month', label: 'This Month' },
-  { value: '3months', label: 'Last 3 Months' },
-  { value: 'year', label: 'Last Year' },
-  { value: 'all', label: 'All Time' },
-];
+const DATE_RANGES = [];
 
 function getDateRangeCutoff(range) {
   const now = new Date();
@@ -166,12 +149,7 @@ export default function DriverHistory() {
     };
   }, [allEvents]);
 
-  const statCards = [
-    { label: 'Total Events', value: stats.total, icon: Activity, color: 'text-blue-600 bg-blue-50' },
-    { label: 'Trip Count', value: stats.trips, icon: Route, color: 'text-cyan-600 bg-cyan-50' },
-    { label: 'Incident Count', value: stats.incidents, icon: AlertTriangle, color: 'text-red-600 bg-red-50' },
-    { label: 'Training Count', value: stats.training, icon: BookOpen, color: 'text-emerald-600 bg-emerald-50' },
-  ];
+  const statCards = [];
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">

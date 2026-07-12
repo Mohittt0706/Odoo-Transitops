@@ -8,35 +8,16 @@ import { drivers, incidents, licenses } from "../../data/mockData";
 import { cn } from "../../utils/utils";
 import { AlertTriangle, Shield, FileText, Calendar, UserX, TrendingUp, CheckCircle, Clock } from "lucide-react";
 
-const complianceTrend = [
-  { label: "Jan", value: 88 },
-  { label: "Feb", value: 90 },
-  { label: "Mar", value: 91 },
-  { label: "Apr", value: 93 },
-  { label: "May", value: 92 },
-  { label: "Jun", value: 94 },
-];
+const complianceTrend = [];
 
-const incidentTrend = [
-  { label: "Jan", value: 3 },
-  { label: "Feb", value: 2 },
-  { label: "Mar", value: 4 },
-  { label: "Apr", value: 1 },
-  { label: "May", value: 3 },
-  { label: "Jun", value: 2 },
-];
+const incidentTrend = [];
 
 const driverSafetyScores = drivers.map((d) => ({
   label: d.name.split(" ")[0],
   value: d.compliance,
 }));
 
-const recentAlerts = [
-  { msg: "Driver Rajesh Kumar — License expires in 12 days", severity: "warning", time: "2h ago" },
-  { msg: "Vehicle KL-07-AU-4521 — Brake inspection overdue", severity: "danger",  time: "5h ago" },
-  { msg: "Trip #TRP-0088 — Deviation from approved route",  severity: "warning", time: "Yesterday" },
-  { msg: "Driver Suresh Nair — Passed safety re-certification", severity: "success", time: "Yesterday" },
-];
+const recentAlerts = [];
 
 const severityConfig = {
   warning: { cls: "bg-warning-light text-warning border-amber-200/60",   icon: AlertTriangle, dot: "#D97706" },

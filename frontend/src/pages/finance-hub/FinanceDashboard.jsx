@@ -8,33 +8,12 @@ import { StatCard } from "../../components/finance-hub/FinanceHubComponents";
 import { monthlyRevenue, monthlyExpenses, expenseDist } from "../../data/financeData";
 import { TrendingUp, IndianRupee, Fuel, Truck, BarChart3, Download, CheckCircle, TrendingDown, DollarSign, Receipt, Wallet, Shield } from "lucide-react";
 
-const roiData = [
-  { label: "Volvo FH16", value: 32 }, { label: "Scania R450", value: 28 },
-  { label: "Tata Prima", value: 26 }, { label: "BharatBenz", value: 24 },
-  { label: "M Blazo", value: 22 }, { label: "Isuzu FVR", value: 8 },
-];
+const roiData = [];
 
-const recentTxns = [
-  { desc: "Diesel — KL07AU4521", amount: "₹4,200", type: "debit", date: "Today, 9:15 AM" },
-  { desc: "Trip Invoice #TRP-0084", amount: "₹28,500", type: "credit", date: "Today, 8:00 AM" },
-  { desc: "Tyre Replacement", amount: "₹6,800", type: "debit", date: "Yesterday" },
-  { desc: "Trip Invoice #TRP-0083", amount: "₹21,200", type: "credit", date: "Yesterday" },
-  { desc: "Insurance Premium", amount: "₹12,400", type: "debit", date: "Jul 10" },
-];
+const recentTxns = [];
 
 export default function FinanceDashboard() {
-  const stats = [
-    { label: "Total Revenue", value: "₹42,85,000", icon: TrendingUp, color: "success", trend: 12 },
-    { label: "Total Expenses", value: "₹28,92,500", icon: IndianRupee, color: "danger", trend: -5 },
-    { label: "Net Profit", value: "₹13,92,500", icon: DollarSign, color: "primary", trend: 18 },
-    { label: "Fuel Cost", value: "₹8,45,200", icon: Fuel, color: "warning", trend: 3 },
-    { label: "Maintenance Cost", value: "₹4,25,800", icon: Truck, color: "purple", trend: -2 },
-    { label: "Insurance Cost", value: "₹2,40,000", icon: Shield, color: "cyan", trend: 0 },
-    { label: "Profit Margin", value: "32.5%", icon: BarChart3, color: "success", trend: 8 },
-    { label: "Outstanding Invoices", value: "₹8,50,000", icon: Receipt, color: "danger", trend: 15 },
-    { label: "Paid Invoices", value: "₹34,35,000", icon: CheckCircle, color: "success", trend: 22 },
-    { label: "Monthly Spending", value: "₹4,82,000", icon: Wallet, color: "warning", trend: -3 },
-  ];
+  const stats = [];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
