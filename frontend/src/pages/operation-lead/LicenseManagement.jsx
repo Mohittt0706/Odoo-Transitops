@@ -21,8 +21,8 @@ import StatusBadge from '../../components/drivers/StatusBadge';
 import AreaChart from '../../components/charts/AreaChart';
 import { drivers } from '../../data/drivers';
 
-const licenseStatuses = ['Active', 'Expiring Soon', 'Expired'];
-const categoryOptions = ['Class A CDL', 'Class B CDL', 'Class C CDL'];
+const licenseStatuses = [];
+const categoryOptions = [];
 
 function getDaysUntilExpiry(expiryDate) {
   const now = new Date();
@@ -119,12 +119,7 @@ export default function LicenseManagement() {
   }, [allLicenses]);
 
   const reminders = useMemo(() => {
-    const milestones = [
-      { label: 'Overdue', range: [-Infinity, 0], color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500', icon: XCircle },
-      { label: '30 Days', range: [1, 30], color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500', icon: AlertTriangle },
-      { label: '60 Days', range: [31, 60], color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500', icon: Clock },
-      { label: '90 Days', range: [61, 90], color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200', dot: 'bg-blue-500', icon: Bell },
-    ];
+    const milestones = [];
     return milestones.map((m) => ({
       ...m,
       drivers: allLicenses.filter(
@@ -155,32 +150,7 @@ export default function LicenseManagement() {
     return 'bg-emerald-50 text-emerald-600 border-emerald-200';
   };
 
-  const kpiCards = [
-    {
-      label: 'Total Licenses',
-      value: kpis.total,
-      icon: FileSpreadsheet,
-      color: 'text-primary bg-primary-light',
-    },
-    {
-      label: 'Active Licenses',
-      value: kpis.active,
-      icon: ShieldCheck,
-      color: 'text-emerald-600 bg-emerald-50',
-    },
-    {
-      label: 'Expiring Soon',
-      value: kpis.expiringSoon,
-      icon: Clock,
-      color: 'text-amber-600 bg-amber-50',
-    },
-    {
-      label: 'Expired',
-      value: kpis.expired,
-      icon: XCircle,
-      color: 'text-red-600 bg-red-50',
-    },
-  ];
+  const kpiCards = [];
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">

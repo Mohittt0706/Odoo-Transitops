@@ -3,20 +3,7 @@ import PageHeader from "../../components/layout/PageHeader";
 import { StatCard } from "../../components/finance-hub/FinanceHubComponents";
 import { FileText, Download, BarChart3, TrendingUp, Clock, Filter, Search } from "lucide-react";
 
-const reports = [
-  { title: "Profit & Loss Statement", desc: "Complete P&L summary with revenue, costs, and net profit for Q1 FY 2026-27.", period: "Apr 2026 - Jun 2026", icon: BarChart3, color: "#2563EB" },
-  { title: "Balance Sheet", desc: "Assets, liabilities, and equity position of TransitOps as of the reporting date.", period: "Q1 FY 2026-27", icon: FileText, color: "#7C3AED" },
-  { title: "Cash Flow Report", desc: "Operating, investing, and financing cash flows with net change analysis.", period: "Apr 2026 - Jun 2026", icon: TrendingUp, color: "#22C55E" },
-  { title: "Tax Summary", desc: "GST collected, GST input credits, TDS deductions, and net tax liability.", period: "Q1 FY 2026-27", icon: FileText, color: "#F59E0B" },
-  { title: "Vendor Payments", desc: "Detailed breakdown of all vendor payments, outstanding dues, and payment schedules.", period: "Jul 2026", icon: Clock, color: "#EF4444" },
-  { title: "Budget vs Actual", desc: "Comparison of planned budget against actual expenditure with variance analysis.", period: "Apr 2026 - Jun 2026", icon: BarChart3, color: "#14B8A6" },
-  { title: "Fuel Expense Report", desc: "Comprehensive fuel consumption, cost per km, and efficiency analysis by vehicle.", period: "Jul 2026", icon: FileText, color: "#F97316" },
-  { title: "Maintenance Report", desc: "Vehicle-wise maintenance history, costs, and scheduled service forecast.", period: "Jul 2026", icon: FileText, color: "#6366F1" },
-  { title: "Revenue Analysis", desc: "Revenue breakdown by client, vehicle, and service type with growth trends.", period: "Q1 FY 2026-27", icon: TrendingUp, color: "#84CC16" },
-  { title: "Invoice Aging Report", desc: "Invoice aging analysis with overdue categorization and recovery status.", period: "Jul 2026", icon: Clock, color: "#EC4899" },
-  { title: "Cost Optimization", desc: "Cost-saving opportunities identified through operational efficiency analysis.", period: "Q1 FY 2026-27", icon: Filter, color: "#06B6D4" },
-  { title: "Compliance Report", desc: "Regulatory compliance status including permits, insurance, and tax filings.", period: "H1 FY 2026-27", icon: Search, color: "#A1A1AA" },
-];
+const reports = [];
 
 export default function FinanceReportsPage() {
   return (

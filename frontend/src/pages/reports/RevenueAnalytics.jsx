@@ -7,7 +7,7 @@ import AreaChart from "../../components/charts/AreaChart";
 import DonutChart from "../../components/charts/PieChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
 import { IndianRupee, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Wallet, Target } from "lucide-react";
-import { monthlyRevenue, quarterlyRevenue, annualRevenue, revenueDistribution, driverPerformance, vehiclePerformance } from "../../data/reportData";
+import { monthlyRevenue, quarterlyRevenue, annualRevenue, revenueDistribution, driverPerformance, vehiclePerformance, monthlyExpenses } from "../../data/reportData";
 
 export default function RevenueAnalytics() {
   const totalRevenue = monthlyRevenue.reduce((s, d) => s + d.value, 0);

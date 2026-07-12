@@ -5,7 +5,7 @@ import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { Fuel, DollarSign, Gauge, TrendingUp, TrendingDown, Zap } from "lucide-react";
+import { Fuel, DollarSign, Gauge, TrendingUp, TrendingDown, Zap, Route } from "lucide-react";
 import { fuelData, fuelConsumption, monthlyExpenses, vehiclePerformance } from "../../data/reportData";
 
 export default function FuelAnalytics() {

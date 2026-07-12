@@ -6,34 +6,16 @@ import {
 import { AreaChart } from '../../components/charts/SvgCharts';
 
 export default function FinanceCommand() {
-    const [expenseLogs, setExpenseLogs] = useState([
-        { id: 'EXP-9021', date: 'Jul 12, 2026', vehicle: 'TX-8041', item: 'Fuel Refuel (Shell, Waco)', category: 'Fuel Card', cost: '$280.50' },
-        { id: 'EXP-9020', date: 'Jul 11, 2026', vehicle: 'CA-9102', item: 'Brake Pad Replacement', category: 'Maintenance', cost: '$450.00' },
-        { id: 'EXP-9019', date: 'Jul 11, 2026', vehicle: 'TX-8041', item: 'I-10 E Bridge Toll charge', category: 'Tolls', cost: '$32.40' },
-        { id: 'EXP-9018', date: 'Jul 10, 2026', vehicle: 'FL-4821', item: 'Engine Diagnostics Service', category: 'Maintenance', cost: '$120.00' }
-    ]);
+    const [expenseLogs, setExpenseLogs] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({ vehicle: '', item: '', category: 'Fuel Card', cost: '' });
     const [formError, setFormError] = useState('');
 
     // Revenue chart data (last 7 days)
-    const chartData = [
-        { label: 'Jul 06', value: 12100 },
-        { label: 'Jul 07', value: 14500 },
-        { label: 'Jul 08', value: 13200 },
-        { label: 'Jul 09', value: 15400 },
-        { label: 'Jul 10', value: 17800 },
-        { label: 'Jul 11', value: 16900 },
-        { label: 'Jul 12', value: 18400 }
-    ];
+    const chartData = [];
 
-    const distribution = [
-        { label: 'Fuel Cards Purchase', pct: '64%', val: '$32,940', color: 'bg-blue-600' },
-        { label: 'Maintenance & Repairs', pct: '22%', val: '$12,405', color: 'bg-cyan-500' },
-        { label: 'Driver Salaries', pct: '10%', val: '$6,200', color: 'bg-indigo-600' },
-        { label: 'Tolls & Permits', pct: '4%', val: '$2,312', color: 'bg-purple-500' }
-    ];
+    const distribution = [];
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
