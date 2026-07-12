@@ -1,326 +1,168 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import PageHeader from "../../../components/layout/PageHeader";
+import { Form, FormSection, FormRow, FormInput, FormSelect, FormDatePicker, FormRadioGroup, FormFileUpload, FormActions } from "../../../components/forms";
+import { FormLabel } from "../../../components/forms";
+import { useToast } from "../../../components/common/Toast";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { vehicleSchema } from "../../../lib/validations";
 import { vehicleTypes, manufacturers, fuelTypes } from "../../../data/vehicleData";
-import { cn } from "../../../utils/utils";
-import { Upload, X, Save, RotateCcw, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Truck, Settings, IndianRupee, Activity, Upload } from "lucide-react";
 
-const transmissionOptions = ["Manual", "Automatic"];
+const transmissionOptions = [
+  { value: "Manual", label: "Manual" },
+  { value: "Automatic", label: "Automatic" },
+];
+
 const statusOptions = [
   { value: "Active", label: "Available" },
   { value: "On Trip", label: "On Trip" },
-  { value: "In Maintenance", label: "In Shop" },
+  { value: "In Maintenance", label: "In Maintenance" },
   { value: "Retired", label: "Retired" },
 ];
 
-const uploadAreas = [
-  { key: "vehicleImage", label: "Vehicle Image" },
-  { key: "registrationCert", label: "Registration Certificate" },
-  { key: "insuranceCert", label: "Insurance" },
-  { key: "fitnessCert", label: "Fitness Certificate" },
-  { key: "emissionCert", label: "Emission Certificate" },
+const availabilityOptions = [
+  { value: "Immediate", label: "Immediate" },
+  { value: "Scheduled", label: "Scheduled" },
+  { value: "Unavailable", label: "Unavailable" },
 ];
 
-const initialForm = {
-  registrationNumber: "",
-  vehicleName: "",
-  vehicleModel: "",
-  vehicleType: "",
-  manufacturer: "",
-  manufacturingYear: "",
-  vinNumber: "",
-  engineNumber: "",
-  licensePlate: "",
-  maxLoadCapacity: "",
-  fuelType: "",
-  transmission: "",
-  mileage: "",
-  odometer: "",
-  purchaseDate: "",
-  acquisitionCost: "",
-  insuranceProvider: "",
-  insuranceExpiry: "",
-  warrantyExpiry: "",
-  operationalStatus: "Active",
-  vehicleImage: null,
-  registrationCert: null,
-  insuranceCert: null,
-  fitnessCert: null,
-  emissionCert: null,
+const defaultValues = {
+  plateNumber: "", vehicleName: "", brand: "", model: "", year: "", vin: "", engineNumber: "",
+  fuelType: "", transmission: "", color: "", seatingCapacity: "",
+  registrationNumber: "", registrationDate: "", registrationExpiry: "",
+  insuranceNumber: "", insuranceExpiry: "", insuranceProvider: "",
+  purchaseDate: "", purchasePrice: "", depreciationMethod: "",
+  vehicleStatus: "Active", availability: "Immediate",
 };
 
 export default function RegisterVehicle() {
   const navigate = useNavigate();
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState({});
+  const toast = useToast();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const updateField = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  const methods = useForm({
+    resolver: zodResolver(vehicleSchema),
+    defaultValues,
+  });
+
+  const { handleSubmit, reset, formState: { isSubmitting } } = methods;
+
+  const onSubmit = () => {
+    setShowConfirm(true);
   };
 
-  const handleFileChange = (key, file) => {
-    setForm((prev) => ({ ...prev, [key]: file }));
+  const confirmSubmit = () => {
+    setShowConfirm(false);
+    setSaved(true);
+    toast("Vehicle registered successfully", "success");
+    setTimeout(() => navigate("/dashboard/operations/fleet"), 1200);
   };
 
-  const validate = () => {
-    const newErrors = {};
-    if (!form.registrationNumber.trim()) newErrors.registrationNumber = "Required";
-    if (!form.vehicleName.trim()) newErrors.vehicleName = "Required";
-    if (!form.vehicleModel.trim()) newErrors.vehicleModel = "Required";
-    if (!form.vehicleType) newErrors.vehicleType = "Required";
-    if (!form.manufacturer) newErrors.manufacturer = "Required";
-    if (!form.manufacturingYear) newErrors.manufacturingYear = "Required";
-    if (!form.vinNumber.trim()) newErrors.vinNumber = "Required";
-    if (!form.engineNumber.trim()) newErrors.engineNumber = "Required";
-    if (!form.licensePlate.trim()) newErrors.licensePlate = "Required";
-    if (!form.maxLoadCapacity.trim()) newErrors.maxLoadCapacity = "Required";
-    if (!form.fuelType) newErrors.fuelType = "Required";
-    if (!form.transmission) newErrors.transmission = "Required";
-    if (!form.mileage.trim()) newErrors.mileage = "Required";
-    if (!form.odometer.trim()) newErrors.odometer = "Required";
-    if (!form.purchaseDate) newErrors.purchaseDate = "Required";
-    if (!form.acquisitionCost.trim()) newErrors.acquisitionCost = "Required";
-    if (!form.insuranceProvider.trim()) newErrors.insuranceProvider = "Required";
-    if (!form.insuranceExpiry) newErrors.insuranceExpiry = "Required";
-    if (!form.warrantyExpiry) newErrors.warrantyExpiry = "Required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      navigate("/dashboard/operations/fleet");
-    }
-  };
-
-  const inputClass = (key) =>
-    cn(
-      "w-full h-10 px-3 text-sm bg-neutral-light border rounded-lg outline-none transition-all",
-      errors[key] ? "border-danger focus:ring-2 focus:ring-danger/10" : "border-neutral-border focus:border-primary focus:ring-2 focus:ring-primary/10"
-    );
+  useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-      <PageHeader
-        title="Register New Vehicle"
-        subtitle="Add a new vehicle to your fleet"
-        actions={
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-border text-neutral-textMain text-sm font-semibold rounded-lg hover:bg-accent-light transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back
-          </button>
-        }
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <PageHeader title="Register New Vehicle" subtitle="Add a new vehicle to your fleet"
+        actions={<button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>}
       />
-
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <Form methods={methods} onSubmit={onSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm">
-            <h3 className="text-sm font-bold font-headings text-neutral-textMain mb-4">Basic Information</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Registration Number *</label>
-                <input value={form.registrationNumber} onChange={(e) => updateField("registrationNumber", e.target.value)} placeholder="e.g. KL-07-AU-4521" className={inputClass("registrationNumber")} />
-                {errors.registrationNumber && <p className="text-[10px] text-danger mt-1">{errors.registrationNumber}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Vehicle Name *</label>
-                <input value={form.vehicleName} onChange={(e) => updateField("vehicleName", e.target.value)} placeholder="e.g. Tata Prima 4040.S" className={inputClass("vehicleName")} />
-                {errors.vehicleName && <p className="text-[10px] text-danger mt-1">{errors.vehicleName}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Vehicle Model *</label>
-                <input value={form.vehicleModel} onChange={(e) => updateField("vehicleModel", e.target.value)} placeholder="e.g. Prima 4040.S" className={inputClass("vehicleModel")} />
-                {errors.vehicleModel && <p className="text-[10px] text-danger mt-1">{errors.vehicleModel}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Vehicle Type *</label>
-                <select value={form.vehicleType} onChange={(e) => updateField("vehicleType", e.target.value)} className={inputClass("vehicleType")}>
-                  <option value="">Select type</option>
-                  {vehicleTypes.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                {errors.vehicleType && <p className="text-[10px] text-danger mt-1">{errors.vehicleType}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Manufacturer *</label>
-                <select value={form.manufacturer} onChange={(e) => updateField("manufacturer", e.target.value)} className={inputClass("manufacturer")}>
-                  <option value="">Select manufacturer</option>
-                  {manufacturers.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-                {errors.manufacturer && <p className="text-[10px] text-danger mt-1">{errors.manufacturer}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Manufacturing Year *</label>
-                <input type="number" min="2000" max="2026" value={form.manufacturingYear} onChange={(e) => updateField("manufacturingYear", e.target.value)} placeholder="e.g. 2023" className={inputClass("manufacturingYear")} />
-                {errors.manufacturingYear && <p className="text-[10px] text-danger mt-1">{errors.manufacturingYear}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">VIN Number *</label>
-                <input value={form.vinNumber} onChange={(e) => updateField("vinNumber", e.target.value)} placeholder="e.g. MAT725104N123456" className={inputClass("vinNumber")} />
-                {errors.vinNumber && <p className="text-[10px] text-danger mt-1">{errors.vinNumber}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Engine Number *</label>
-                <input value={form.engineNumber} onChange={(e) => updateField("engineNumber", e.target.value)} placeholder="e.g. TATA-DE12-4040" className={inputClass("engineNumber")} />
-                {errors.engineNumber && <p className="text-[10px] text-danger mt-1">{errors.engineNumber}</p>}
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">License Plate *</label>
-                <input value={form.licensePlate} onChange={(e) => updateField("licensePlate", e.target.value)} placeholder="e.g. KL-07-AU-4521" className={cn(inputClass("licensePlate"), "font-mono")} />
-                {errors.licensePlate && <p className="text-[10px] text-danger mt-1">{errors.licensePlate}</p>}
-              </div>
-            </div>
-          </motion.div>
+          <FormSection title="Basic Information" description="Vehicle identification details" icon={Truck} delay={0.05}>
+            <FormRow>
+              <FormInput name="plateNumber" label="Plate Number *" placeholder="KL-07-AU-4521" icon={Truck} />
+              <FormInput name="vehicleName" label="Vehicle Name *" placeholder="Tata Prima 4040.S" />
+            </FormRow>
+            <FormRow>
+              <FormSelect name="brand" label="Brand *" placeholder="Select brand"
+                options={manufacturers.map((m) => ({ value: m, label: m }))} searchable />
+              <FormInput name="model" label="Model *" placeholder="Prima 4040.S" />
+            </FormRow>
+            <FormRow>
+              <FormSelect name="year" label="Year *" placeholder="Select year"
+                options={Array.from({ length: 27 }, (_, i) => ({ value: String(2026 - i), label: String(2026 - i) }))} />
+              <FormInput name="vin" label="VIN Number *" placeholder="MAT725104N123456" />
+            </FormRow>
+            <FormRow>
+              <FormInput name="engineNumber" label="Engine Number *" placeholder="TATA-DE12-4040" />
+              <FormInput name="color" label="Color" placeholder="White" />
+            </FormRow>
+          </FormSection>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm">
-            <h3 className="text-sm font-bold font-headings text-neutral-textMain mb-4">Specifications</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Maximum Load Capacity *</label>
-                <input value={form.maxLoadCapacity} onChange={(e) => updateField("maxLoadCapacity", e.target.value)} placeholder="e.g. 40 Tons" className={inputClass("maxLoadCapacity")} />
-                {errors.maxLoadCapacity && <p className="text-[10px] text-danger mt-1">{errors.maxLoadCapacity}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Fuel Type *</label>
-                <select value={form.fuelType} onChange={(e) => updateField("fuelType", e.target.value)} className={inputClass("fuelType")}>
-                  <option value="">Select fuel type</option>
-                  {fuelTypes.map((f) => (
-                    <option key={f} value={f}>{f}</option>
-                  ))}
-                </select>
-                {errors.fuelType && <p className="text-[10px] text-danger mt-1">{errors.fuelType}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Transmission *</label>
-                <select value={form.transmission} onChange={(e) => updateField("transmission", e.target.value)} className={inputClass("transmission")}>
-                  <option value="">Select transmission</option>
-                  {transmissionOptions.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                {errors.transmission && <p className="text-[10px] text-danger mt-1">{errors.transmission}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Mileage *</label>
-                <input value={form.mileage} onChange={(e) => updateField("mileage", e.target.value)} placeholder="e.g. 4.2 km/L" className={inputClass("mileage")} />
-                {errors.mileage && <p className="text-[10px] text-danger mt-1">{errors.mileage}</p>}
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Odometer (km) *</label>
-                <input type="number" min="0" value={form.odometer} onChange={(e) => updateField("odometer", e.target.value)} placeholder="e.g. 124500" className={inputClass("odometer")} />
-                {errors.odometer && <p className="text-[10px] text-danger mt-1">{errors.odometer}</p>}
-              </div>
-            </div>
-          </motion.div>
+          <FormSection title="Specifications" description="Technical specifications" icon={Settings} delay={0.1}>
+            <FormRow>
+              <FormSelect name="fuelType" label="Fuel Type *" placeholder="Select fuel type"
+                options={fuelTypes.map((f) => ({ value: f, label: f }))} />
+              <FormSelect name="transmission" label="Transmission *" placeholder="Select transmission"
+                options={transmissionOptions} />
+            </FormRow>
+            <FormRow>
+              <FormInput name="seatingCapacity" label="Seating Capacity" placeholder="2" type="number" />
+              <FormSelect name="vehicleStatus" label="Vehicle Status *" placeholder="Select status"
+                options={[{ value: "Active", label: "Active" }, { value: "Inactive", label: "Inactive" }, { value: "Pending", label: "Pending" }]} />
+            </FormRow>
+          </FormSection>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm">
-            <h3 className="text-sm font-bold font-headings text-neutral-textMain mb-4">Financial Information</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Purchase Date *</label>
-                <input type="date" value={form.purchaseDate} onChange={(e) => updateField("purchaseDate", e.target.value)} className={inputClass("purchaseDate")} />
-                {errors.purchaseDate && <p className="text-[10px] text-danger mt-1">{errors.purchaseDate}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Acquisition Cost *</label>
-                <input value={form.acquisitionCost} onChange={(e) => updateField("acquisitionCost", e.target.value)} placeholder="e.g. ₹45,00,000" className={inputClass("acquisitionCost")} />
-                {errors.acquisitionCost && <p className="text-[10px] text-danger mt-1">{errors.acquisitionCost}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Insurance Provider *</label>
-                <input value={form.insuranceProvider} onChange={(e) => updateField("insuranceProvider", e.target.value)} placeholder="e.g. ICICI Lombard" className={inputClass("insuranceProvider")} />
-                {errors.insuranceProvider && <p className="text-[10px] text-danger mt-1">{errors.insuranceProvider}</p>}
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Insurance Expiry *</label>
-                <input type="date" value={form.insuranceExpiry} onChange={(e) => updateField("insuranceExpiry", e.target.value)} className={inputClass("insuranceExpiry")} />
-                {errors.insuranceExpiry && <p className="text-[10px] text-danger mt-1">{errors.insuranceExpiry}</p>}
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Warranty Expiry *</label>
-                <input type="date" value={form.warrantyExpiry} onChange={(e) => updateField("warrantyExpiry", e.target.value)} className={inputClass("warrantyExpiry")} />
-                {errors.warrantyExpiry && <p className="text-[10px] text-danger mt-1">{errors.warrantyExpiry}</p>}
-              </div>
-            </div>
-          </motion.div>
+          <FormSection title="Registration & Insurance" description="Registration and insurance details" icon={Activity} delay={0.15}>
+            <FormRow>
+              <FormInput name="registrationNumber" label="Registration Number *" placeholder="KL-07-AU-4521" />
+              <FormDatePicker name="registrationDate" label="Registration Date *" />
+            </FormRow>
+            <FormRow>
+              <FormDatePicker name="registrationExpiry" label="Registration Expiry *" />
+              <FormInput name="insuranceNumber" label="Insurance Number *" placeholder="POL-2024-001234" />
+            </FormRow>
+            <FormRow>
+              <FormDatePicker name="insuranceExpiry" label="Insurance Expiry *" />
+              <FormInput name="insuranceProvider" label="Insurance Provider *" placeholder="ICICI Lombard" />
+            </FormRow>
+          </FormSection>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm">
-            <h3 className="text-sm font-bold font-headings text-neutral-textMain mb-4">Operational Status</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {statusOptions.map((opt) => (
-                <label
-                  key={opt.value}
-                  className={cn(
-                    "flex items-center gap-3 p-3.5 rounded-lg border-2 cursor-pointer transition-all",
-                    form.operationalStatus === opt.value ? "border-primary bg-primary-light/30" : "border-neutral-border hover:border-primary/30"
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name="operationalStatus"
-                    value={opt.value}
-                    checked={form.operationalStatus === opt.value}
-                    onChange={(e) => updateField("operationalStatus", e.target.value)}
-                    className="w-4 h-4 text-primary accent-primary"
-                  />
-                  <span className="text-sm font-semibold text-neutral-textMain">{opt.label}</span>
-                </label>
-              ))}
-            </div>
-          </motion.div>
+          <FormSection title="Financial Information" description="Purchase and financial details" icon={IndianRupee} delay={0.2}>
+            <FormRow>
+              <FormDatePicker name="purchaseDate" label="Purchase Date" />
+              <FormInput name="purchasePrice" label="Purchase Price" placeholder="₹45,00,000" />
+            </FormRow>
+            <FormRow>
+              <FormSelect name="depreciationMethod" label="Depreciation Method" placeholder="Select method"
+                options={[{ value: "Straight Line", label: "Straight Line" }, { value: "Declining Balance", label: "Declining Balance" }, { value: "Sum of Years", label: "Sum of Years" }]} />
+            </FormRow>
+          </FormSection>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm">
-          <h3 className="text-sm font-bold font-headings text-neutral-textMain mb-4">Document Uploads</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {uploadAreas.map((area) => (
-              <div key={area.key}>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">{area.label}</label>
-                <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-neutral-border rounded-xl cursor-pointer hover:border-primary/40 hover:bg-primary-light/20 transition-all group">
-                  {form[area.key] ? (
-                    <div className="text-center px-2">
-                      <p className="text-xs font-semibold text-primary truncate max-w-[120px]">{form[area.key].name}</p>
-                      <button
-                        type="button"
-                        onClick={(e) => { e.preventDefault(); handleFileChange(area.key, null); }}
-                        className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-danger hover:underline"
-                      >
-                        <X className="w-3 h-3" /> Remove
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <Upload className="w-6 h-6 text-neutral-textMuted group-hover:text-primary transition-colors" strokeWidth={1.5} />
-                      <span className="text-[11px] text-neutral-textMuted mt-1.5">Click to upload</span>
-                    </>
-                  )}
-                  <input type="file" accept=".jpg,.jpeg,.png,.pdf" className="hidden" onChange={(e) => handleFileChange(area.key, e.target.files[0])} />
-                </label>
-              </div>
-            ))}
+        <FormSection title="Operational Status" description="Set vehicle availability and status" icon={Activity} delay={0.25}>
+          <div className="space-y-6">
+            <FormRadioGroup name="vehicleStatus" label="Vehicle Status" options={statusOptions} />
           </div>
-        </motion.div>
+        </FormSection>
 
-        <div className="flex items-center justify-end gap-3 pb-6">
-          <button type="button" onClick={() => navigate(-1)} className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-neutral-textMuted hover:bg-accent-light rounded-lg transition-colors">
-            Cancel
-          </button>
-          <button type="button" onClick={() => setForm(initialForm)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-neutral-border text-sm font-semibold text-neutral-textMain rounded-lg hover:bg-accent-light transition-colors">
-            <RotateCcw className="w-4 h-4" /> Reset
-          </button>
-          <button type="submit" className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
-            <Save className="w-4 h-4" /> Save Vehicle
-          </button>
-        </div>
-      </form>
+        <FormSection title="Document Uploads" description="Upload vehicle documents" icon={Upload} delay={0.3}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <FormLabel>Vehicle Image</FormLabel>
+              <FormFileUpload name="vehicleImage" label="Upload Image" accept="image/*" />
+            </div>
+            <div>
+              <FormLabel>Registration Certificate</FormLabel>
+              <FormFileUpload name="registrationCert" label="Upload Document" accept="image/*,.pdf" />
+            </div>
+            <div>
+              <FormLabel>Insurance Certificate</FormLabel>
+              <FormFileUpload name="insuranceCert" label="Upload Document" accept="image/*,.pdf" />
+            </div>
+          </div>
+        </FormSection>
+
+        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} onReset={() => reset(defaultValues)}
+          submitLabel="Save Vehicle" loading={isSubmitting} success={saved} />
+      </Form>
+
+      <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}
+        title="Register Vehicle?" message="This will add a new vehicle to your fleet. You can edit details later." confirmLabel="Register Vehicle" />
     </motion.div>
   );
 }

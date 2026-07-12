@@ -1,141 +1,129 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import PageHeader from "../../../components/layout/PageHeader";
-import { vehicles, fuelStations } from "../../../data/fuelExpenseData";
-import { Toast, ConfirmationModal, FileUpload } from "../../../components/fuel-expense/FuelExpenseComponents";
-import { ArrowLeft } from "lucide-react";
-
-const fuelTypes = ["Diesel", "Petrol", "CNG", "EV"];
-const paymentMethods = ["Fuel Card", "Cash", "Credit", "UPI"];
-
-const init = { vehicle: "", driver: "", fuelStation: "", fuelType: "Diesel", quantity: "", pricePerLiter: "", totalAmount: "", currentOdometer: "", previousOdometer: "", fuelEconomy: "", paymentMethod: "Fuel Card", fuelDate: "", remarks: "" };
+import { Form, FormSection, FormRow, FormInput, FormSelect, FormDatePicker, FormTextarea, FormFileUpload, FormActions } from "../../../components/forms";
+import { FormLabel } from "../../../components/forms";
+import { useToast } from "../../../components/common/Toast";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { fuelLogSchema } from "../../../lib/validations";
+import { ArrowLeft, Fuel, Droplets, Gauge, CreditCard, Receipt } from "lucide-react";
 
 export default function AddFuelLog() {
   const navigate = useNavigate();
-  const [form, setForm] = useState(init);
-  const [errors, setErrors] = useState({});
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [toast, setToast] = useState(null);
-  const [receipt, setReceipt] = useState(null);
+  const toast = useToast();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const set = (k, v) => {
-    const next = { ...form, [k]: v };
-    if (k === "quantity" || k === "pricePerLiter") {
-      const q = parseFloat(next.quantity) || 0;
-      const p = parseFloat(next.pricePerLiter) || 0;
-      next.totalAmount = q * p ? `₹${(q * p).toLocaleString()}` : "";
-    }
-    if ((k === "currentOdometer" || k === "previousOdometer") && next.currentOdometer && next.previousOdometer) {
-      const diff = parseFloat(next.currentOdometer) - parseFloat(next.previousOdometer);
-      const q = parseFloat(next.quantity) || 1;
-      next.fuelEconomy = diff > 0 ? (diff / q).toFixed(1) : "";
-    }
-    setForm(next);
-  };
+  const methods = useForm({
+    resolver: zodResolver(fuelLogSchema),
+    defaultValues: {
+      vehicle: "", driver: "", fuelStation: "", fuelType: "Diesel",
+      quantity: "", pricePerUnit: "", totalAmount: "",
+      odometerStart: "", odometerEnd: "",
+      paymentMethod: "Fuel Card", date: "", remarks: "",
+    },
+  });
 
-  const validate = () => {
-    const e = {};
-    if (!form.vehicle) e.vehicle = "Vehicle is required";
-    if (!form.driver) e.driver = "Driver is required";
-    if (!form.quantity || parseFloat(form.quantity) <= 0) e.quantity = "Valid quantity required";
-    if (form.totalAmount && parseFloat(form.totalAmount.replace(/[₹,]/g, "")) <= 0) e.totalAmount = "Valid amount required";
-    if (!form.fuelDate) e.fuelDate = "Date is required";
-    if (!form.currentOdometer) e.currentOdometer = "Odometer reading required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
+  const { handleSubmit, control, setValue, formState: { isSubmitting } } = methods;
 
-  const handleSubmit = (e) => { e.preventDefault(); if (validate()) setConfirmOpen(true); };
-  const handleConfirm = () => {
-    setConfirmOpen(false);
-    setToast({ type: "success", message: "Fuel log created successfully!" });
-    setTimeout(() => navigate("/dashboard/operations/fuel"), 1500);
-  };
+  const quantity = useWatch({ control, name: "quantity" });
+  const price = useWatch({ control, name: "pricePerUnit" });
+  const odoStart = useWatch({ control, name: "odometerStart" });
+  const odoEnd = useWatch({ control, name: "odometerEnd" });
 
-  const selectedVehicle = vehicles.find((v) => v.plate === form.vehicle);
+  useEffect(() => {
+    const q = parseFloat(quantity) || 0;
+    const p = parseFloat(price) || 0;
+    if (q && p) setValue("totalAmount", `₹${(q * p).toLocaleString()}`);
+    else setValue("totalAmount", "");
+  }, [quantity, price, setValue]);
 
-  const fields = [
-    { key: "vehicle", label: "Vehicle", type: "select", options: vehicles.map((v) => ({ value: v.plate, label: `${v.name} (${v.plate})` })), required: true, col: true },
-    { key: "driver", label: "Driver", type: "text", required: true, placeholder: selectedVehicle?.driver !== "—" ? selectedVehicle.driver : "Enter driver name", col: true },
-    { key: "fuelStation", label: "Fuel Station", type: "select", options: fuelStations.map((f) => ({ value: f, label: f })), col: true },
-    { key: "fuelType", label: "Fuel Type", type: "select", options: fuelTypes.map((f) => ({ value: f, label: f })), col: true },
-    { key: "quantity", label: "Fuel Quantity (L)", type: "number", placeholder: "e.g. 100", col: true },
-    { key: "pricePerLiter", label: "Price Per Liter (₹)", type: "number", placeholder: "e.g. 90", col: true },
-    { key: "totalAmount", label: "Total Amount", type: "text", readOnly: true, placeholder: "Auto-calculated", col: true },
-    { key: "currentOdometer", label: "Current Odometer (km)", type: "number", placeholder: "e.g. 124500", col: true },
-    { key: "previousOdometer", label: "Previous Odometer (km)", type: "number", placeholder: "e.g. 123900", col: true },
-    { key: "fuelEconomy", label: "Fuel Economy (km/L)", type: "text", readOnly: true, placeholder: "Auto-calculated", col: true },
-    { key: "paymentMethod", label: "Payment Method", type: "select", options: paymentMethods.map((p) => ({ value: p, label: p })), col: true },
-    { key: "fuelDate", label: "Fuel Date", type: "date", required: true, col: true },
+  const vehicleOptions = [
+    { value: "KL-07-AU-4521", label: "Tata Prima 4040.S (KL-07-AU-4521)" },
+    { value: "KA-01-MN-3312", label: "Ashok Leyland 4220 (KA-01-MN-3312)" },
+    { value: "MH-12-RT-2244", label: "Mahindra Blazo X25 (MH-12-RT-2244)" },
+    { value: "DL-03-KP-5567", label: "BharatBenz 2528 (DL-03-KP-5567)" },
+    { value: "RJ-14-AB-9988", label: "Volvo FH16 (RJ-14-AB-9988)" },
   ];
+
+  const onSubmit = () => setShowConfirm(true);
+
+  const confirmSubmit = () => {
+    setShowConfirm(false);
+    setSaved(true);
+    toast("Fuel log created successfully!", "success");
+    setTimeout(() => navigate("/dashboard/operations/fuel"), 1200);
+  };
+
+  useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <PageHeader
-        title="Add Fuel Log"
-        subtitle="Record new fuel transaction"
-        actions={
-          <button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
-          </button>
-        }
+      <PageHeader title="Add Fuel Log" subtitle="Record a new fuel transaction"
+        actions={<button onClick={() => navigate(-1)} className="btn btn-secondary text-xs flex items-center gap-1.5"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>}
       />
-      <form onSubmit={handleSubmit} className="max-w-3xl">
-        <div className="card space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {fields.map((f) => (
-              <div key={f.key} className={f.col ? "" : "sm:col-span-2"}>
-                <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">
-                  {f.label}{f.required && <span className="text-danger ml-0.5">*</span>}
-                </label>
-                {f.type === "select" ? (
-                  <select
-                    value={form[f.key]}
-                    onChange={(e) => set(f.key, e.target.value)}
-                    className="w-full h-10 px-3 text-sm bg-white border border-neutral-border rounded-lg outline-none focus:border-primary"
-                  >
-                    <option value="">Select...</option>
-                    {f.options.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type={f.type}
-                    value={form[f.key]}
-                    readOnly={f.readOnly}
-                    onChange={(e) => set(f.key, e.target.value)}
-                    placeholder={f.placeholder || ""}
-                    className={`w-full h-10 px-3 text-sm bg-white border rounded-lg outline-none transition-all ${f.readOnly ? "bg-neutral-light border-neutral-border text-neutral-textMuted" : "border-neutral-border focus:border-primary"}`}
-                  />
-                )}
-                {errors[f.key] && <p className="text-[11px] text-danger mt-1">{errors[f.key]}</p>}
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <FileUpload label="Upload Receipt" accept=".pdf,.png,.jpg,.jpeg" onFile={(e) => setReceipt(e.target.files[0])} preview={receipt} />
-            <div>
-              <label className="block text-xs font-semibold text-neutral-textMuted mb-1.5">Remarks</label>
-              <textarea
-                value={form.remarks}
-                onChange={(e) => set("remarks", e.target.value)}
-                rows={3}
-                placeholder="Optional notes..."
-                className="w-full px-3 py-2 text-sm bg-white border border-neutral-border rounded-lg outline-none focus:border-primary resize-none"
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-border">
-            <button type="button" onClick={() => navigate(-1)} className="btn btn-secondary text-xs px-5 py-2.5">Cancel</button>
-            <button type="reset" onClick={() => { setForm(init); setErrors({}); }} className="btn btn-ghost text-xs px-5 py-2.5">Reset</button>
-            <button type="submit" className="btn btn-primary text-xs px-5 py-2.5">Submit Fuel Log</button>
-          </div>
+      <Form methods={methods} onSubmit={onSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <FormSection title="Transaction Details" description="Fuel purchase information" icon={Fuel} delay={0.05}>
+            <FormRow>
+              <FormSelect name="vehicle" label="Vehicle *" placeholder="Select vehicle" options={vehicleOptions} searchable />
+              <FormInput name="driver" label="Driver *" placeholder="Rajesh Kumar" />
+            </FormRow>
+            <FormRow>
+              <FormInput name="fuelStation" label="Fuel Station *" placeholder="BPCL, IOCL, etc." />
+              <FormSelect name="fuelType" label="Fuel Type *" placeholder="Select type"
+                options={[{ value: "Diesel", label: "Diesel" }, { value: "Petrol", label: "Petrol" }, { value: "CNG", label: "CNG" }, { value: "EV", label: "EV" }]} />
+            </FormRow>
+          </FormSection>
+
+          <FormSection title="Fuel Measurements" description="Quantity and pricing" icon={Droplets} delay={0.1}>
+            <FormRow>
+              <FormInput name="quantity" label="Quantity (L) *" placeholder="100" type="number" />
+              <FormInput name="pricePerUnit" label="Price per Litre *" placeholder="90" type="number" />
+            </FormRow>
+            <FormRow>
+              <FormInput name="totalAmount" label="Total Amount" placeholder="Auto-calculated" />
+              <FormSelect name="paymentMethod" label="Payment Method *" placeholder="Select method"
+                options={[{ value: "Fuel Card", label: "Fuel Card" }, { value: "Cash", label: "Cash" }, { value: "Credit", label: "Credit" }, { value: "UPI", label: "UPI" }]} />
+            </FormRow>
+          </FormSection>
+
+          <FormSection title="Odometer Readings" description="Vehicle mileage tracking" icon={Gauge} delay={0.15}>
+            <FormRow>
+              <FormInput name="odometerStart" label="Previous Odometer (km)" placeholder="123900" type="number" />
+              <FormInput name="odometerEnd" label="Current Odometer (km)" placeholder="124500" type="number" />
+            </FormRow>
+            <p className="text-[11px] text-neutral-textMuted">
+              {odoStart && odoEnd && parseFloat(odoEnd) > parseFloat(odoStart)
+                ? `Distance travelled: ${parseFloat(odoEnd) - parseFloat(odoStart)} km`
+                : "Enter both readings to calculate distance"}
+              {quantity && odoStart && odoEnd && parseFloat(odoEnd) > parseFloat(odoStart)
+                && ` · Fuel economy: ${((parseFloat(odoEnd) - parseFloat(odoStart)) / parseFloat(quantity)).toFixed(1)} km/L`}
+            </p>
+          </FormSection>
+
+          <FormSection title="Date & Notes" description="Transaction date and remarks" icon={CreditCard} delay={0.2}>
+            <FormRow>
+              <FormDatePicker name="date" label="Fuel Date *" />
+            </FormRow>
+            <FormRow cols={1}>
+              <FormTextarea name="remarks" label="Remarks" rows={2} />
+            </FormRow>
+          </FormSection>
         </div>
-      </form>
-      <ConfirmationModal open={confirmOpen} title="Add Fuel Log" message="Submit this fuel log entry?" confirmLabel="Submit" onConfirm={handleConfirm} onCancel={() => setConfirmOpen(false)} />
-      {toast && <Toast show type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
+
+        <FormSection title="Receipt Upload" description="Upload fuel receipt" icon={Receipt} delay={0.25}>
+          <FormFileUpload name="receipt" label="Upload Receipt" accept="image/*,.pdf" />
+        </FormSection>
+
+        <FormActions onSubmit={onSubmit} onCancel={() => navigate(-1)} submitLabel="Submit Fuel Log" loading={isSubmitting} success={saved} />
+      </Form>
+
+      <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}
+        title="Submit Fuel Log?" message="This will record a new fuel transaction." confirmLabel="Submit" />
     </motion.div>
   );
 }

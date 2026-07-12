@@ -1,116 +1,89 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/layout/PageHeader";
-import ChartCard from "../../components/charts/ChartCard";
-import SimpleBarChart from "../../components/charts/BarChart";
-import { MetricCard } from "../../components/road-captain/RoadCaptainComponents";
-import { performanceData } from "../../data/roadCaptainData";
-import { User, Phone, Mail, BadgeCheck, Truck, Star, Clock, Ruler, TrendingUp, CheckCircle, Calendar, MapPin, Gauge, Target, Edit3, Shield } from "lucide-react";
-
-const profileStats = [
-  { label: "Total Trips", value: "512", icon: Truck, color: "primary" },
-  { label: "Rating", value: "4.9 / 5", icon: Star, color: "warning" },
-  { label: "Experience", value: "12 years", icon: Clock, color: "success" },
-  { label: "Total Distance", value: "1.8L km", icon: Ruler, color: "purple" },
-];
-
-const performanceMetrics = [
-  { label: "On-Time Delivery", value: "97%", target: "95%", met: true },
-  { label: "Safety Score", value: "99%", target: "90%", met: true },
-  { label: "Fuel Efficiency", value: "5.2 km/L", target: "4.5 km/L", met: true },
-  { label: "Compliance", value: "99%", target: "95%", met: true },
-  { label: "Customer Rating", value: "4.9", target: "4.5", met: true },
-  { label: "Trip Completion", value: "98%", target: "95%", met: true },
-];
-
-const recentActivity = [
-  { date: "2026-07-12", action: "Trip TR-0084 started", route: "Mumbai → Pune", icon: Truck, color: "text-primary" },
-  { date: "2026-07-11", action: "Trip TR-0077 completed", route: "Chennai → Bangalore", icon: CheckCircle, color: "text-success" },
-  { date: "2026-07-10", action: "Pre-trip inspection passed", route: "MH-12-RT-2244", icon: CheckCircle, color: "text-success" },
-  { date: "2026-07-09", action: "Fuel logged at BPCL", route: "95L — ₹8,550", icon: MapPin, color: "text-warning" },
-  { date: "2026-07-08", action: "Tire rotation completed", route: "Scheduled maintenance", icon: Calendar, color: "text-purple-600" },
-];
+import { Form, FormSection, FormRow, FormInput, FormSelect, FormFileUpload, FormActions } from "../../components/forms";
+import { FormLabel } from "../../components/forms";
+import { useToast } from "../../components/common/Toast";
+import ConfirmationModal from "../../components/common/ConfirmationModal";
+import { profileSchema } from "../../lib/validations";
+import { User, Mail, Phone, Building, Globe, MapPin, Camera, Save } from "lucide-react";
 
 export default function RoadCaptainProfile() {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const methods = useForm({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: "Vikram Singh",
+      email: "vikram.singh@transitops.in",
+      phone: "+91 98765 43212",
+      department: "Transport",
+      role: "Road Captain",
+      timezone: "IST (UTC+5:30)",
+    },
+  });
+
+  const { handleSubmit, formState: { isSubmitting } } = methods;
+
+  const onSubmit = () => setShowConfirm(true);
+
+  const confirmSubmit = () => {
+    setShowConfirm(false);
+    setSaved(true);
+    toast("Profile updated successfully!", "success");
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  useEffect(() => { const first = document.querySelector("input"); first?.focus(); }, []);
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <PageHeader title="My Profile" subtitle="Driver profile and performance" />
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <ChartCard title="Profile" delay={0} className="lg:col-span-1">
-          <div className="flex flex-col items-center text-center py-4">
-            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-              <User className="w-12 h-12 text-primary" strokeWidth={1.5} />
-            </div>
-            <h2 className="text-xl font-bold font-headings text-neutral-textMain">Vikram Singh</h2>
-            <p className="text-sm text-neutral-textMuted">Road Captain</p>
-            <p className="text-xs text-neutral-textMuted mt-0.5">EMP-0042</p>
-            <div className="flex items-center gap-1 mt-2">
-              <Star className="w-4 h-4 fill-warning text-warning" />
-              <span className="text-sm font-semibold text-warning">4.9</span>
-              <span className="text-xs text-neutral-textMuted">(512 trips)</span>
-            </div>
-          </div>
-          <div className="space-y-2.5 mt-4 border-t border-neutral-border pt-4">
-            {[
-              { icon: Phone, text: "+91 98765 43212" },
-              { icon: Mail, text: "vikram.singh@transitops.in" },
-              { icon: BadgeCheck, text: "MH-2018-2244 (License)" },
-              { icon: MapPin, text: "Mumbai, Maharashtra" },
-              { icon: Calendar, text: "Joined Jan 2018" },
-              { icon: Shield, text: "Safety Score: 99%" },
-            ].map((s, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <s.icon className="w-4 h-4 text-neutral-textMuted flex-shrink-0" strokeWidth={1.5} />
-                <span className="text-sm text-neutral-textMain">{s.text}</span>
-              </div>
-            ))}
-          </div>
-        </ChartCard>
-
-        <div className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {profileStats.map((s, i) => <MetricCard key={s.label} {...s} delay={i * 0.05} />)}
-          </div>
-
-          <ChartCard title="Performance Metrics" delay={0.15}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {performanceMetrics.map((metric) => (
-                <div key={metric.label} className="flex items-center justify-between p-3 rounded-xl bg-slate-50/80">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-textMain">{metric.label}</p>
-                    <p className="text-[11px] text-neutral-textMuted mt-0.5">Target: {metric.target}</p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-neutral-textMain">{metric.value}</span>
-                    {metric.met && <TrendingUp className="w-4 h-4 text-success" />}
-                  </div>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <PageHeader title="Edit Profile" subtitle="Update your personal information and preferences" />
+      <Form methods={methods} onSubmit={onSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <FormSection title="Profile Photo" description="Upload your profile picture" icon={Camera} delay={0.05}>
+            <div className="flex flex-col items-center py-4">
+              <div className="w-28 h-28 bg-primary/10 rounded-full flex items-center justify-center mb-4 relative group cursor-pointer">
+                <User className="w-14 h-14 text-primary" strokeWidth={1.5} />
+                <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera className="w-6 h-6 text-white" />
                 </div>
-              ))}
+              </div>
+              <FormFileUpload name="avatar" label="Change Photo" accept="image/*" />
             </div>
-          </ChartCard>
+          </FormSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ChartCard title="Safety Score Trend" delay={0.2}>
-              <SimpleBarChart data={performanceData.safetyScore.map((v, i) => ({ label: `W${i + 1}`, value: v }))} color="#16A34A" />
-            </ChartCard>
-            <ChartCard title="Fuel Efficiency" delay={0.25}>
-              <SimpleBarChart data={performanceData.fuelEfficiency.map((v, i) => ({ label: `W${i + 1}`, value: Math.round(v * 10) }))} color="#F59E0B" />
-            </ChartCard>
+          <div className="lg:col-span-2 space-y-6">
+            <FormSection title="Personal Information" description="Your basic details" icon={User} delay={0.1}>
+              <FormRow>
+                <FormInput name="name" label="Full Name *" placeholder="Vikram Singh" icon={User} />
+                <FormInput name="email" label="Email *" type="email" placeholder="vikram@transitops.in" icon={Mail} />
+              </FormRow>
+              <FormRow>
+                <FormInput name="phone" label="Phone" placeholder="+91 98765 43212" icon={Phone} />
+                <FormSelect name="department" label="Department" placeholder="Select department"
+                  options={[{ value: "Transport", label: "Transport" }, { value: "Logistics", label: "Logistics" }, { value: "Warehouse", label: "Warehouse" }, { value: "Administration", label: "Administration" }, { value: "Maintenance", label: "Maintenance" }]} />
+              </FormRow>
+              <FormRow>
+                <FormInput name="role" label="Role" placeholder="Road Captain" icon={Building} />
+                <FormSelect name="timezone" label="Timezone" placeholder="Select timezone"
+                  options={[{ value: "IST (UTC+5:30)", label: "IST (UTC+5:30)" }, { value: "GMT (UTC+0)", label: "GMT (UTC+0)" }, { value: "PST (UTC-8)", label: "PST (UTC-8)" }, { value: "EST (UTC-5)", label: "EST (UTC-5)" }]} />
+              </FormRow>
+            </FormSection>
           </div>
         </div>
-      </div>
 
-      <ChartCard title="Recent Activity" delay={0.3}>
-        <div className="space-y-0">
-          {recentActivity.map((a, i) => (
-            <div key={i} className="flex items-start gap-3 py-3 border-b border-neutral-border/50 last:border-0">
-              <div className="mt-0.5"><a.icon className={`w-4 h-4 ${a.color}`} /></div>
-              <div className="flex-1"><p className="text-sm font-medium text-neutral-textMain">{a.action}</p><p className="text-xs text-neutral-textMuted mt-0.5">{a.route}</p></div>
-              <span className="text-[11px] text-neutral-textMuted flex-shrink-0">{a.date}</span>
-            </div>
-          ))}
-        </div>
-      </ChartCard>
+        <FormActions onSubmit={onSubmit} submitLabel="Save Profile" loading={isSubmitting} success={saved} showCancel={false} showReset={false} />
+      </Form>
+
+      <ConfirmationModal open={showConfirm} onClose={() => setShowConfirm(false)} onConfirm={confirmSubmit}
+        title="Update Profile?" message="Are you sure you want to save these changes?" confirmLabel="Save Changes" />
     </motion.div>
   );
 }
