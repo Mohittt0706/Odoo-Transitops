@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import {
@@ -7,7 +7,7 @@ import {
   Mail, CheckCircle, XCircle, Shield, Plus, RotateCcw, Filter,
   Eye, Edit, AlertTriangle, Trash2, FileText,
 } from "lucide-react";
-import { receivers as mockReceivers } from "../../data/destinationData";
+import { receiverService } from "../../services/receiver.service";
 import AddReceiverModal from "./AddReceiverModal";
 import {
   ViewReceiverModal, EditReceiverModal, VerifyReceiverModal,
@@ -15,7 +15,22 @@ import {
 } from "./ReceiverActionModals";
 
 export default function ReceiversPage() {
-  const [receiverList, setReceiverList] = useState(() => mockReceivers.map(r => ({ ...r, status: r.status || "active" })));
+  const [receiverList, setReceiverList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchReceivers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await receiverService.getAll();
+      setReceiverList((res.data.receivers || []).map(r => ({ ...r, status: r.status || "active" })));
+    } catch (e) {
+      setReceiverList([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchReceivers(); }, [fetchReceivers]);
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
@@ -72,16 +87,25 @@ export default function ReceiversPage() {
     ? <ChevronUp className="w-3 h-3 opacity-0 group-hover:opacity-30" />
     : sortDir === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />;
 
-  const handleAddReceiver = (newReceiver) => {
-    receiverList.unshift(newReceiver);
-    setReceiverList([...receiverList]);
+  const handleAddReceiver = async (formData) => {
+    try {
+      const res = await receiverService.create(formData);
+      setReceiverList(prev => [res.data, ...prev]);
+    } catch (e) {
+      return { error: e?.response?.data?.message || "Failed to create receiver" };
+    }
   };
 
-  const handleDelete = (id) => {
-    setReceiverList(prev => prev.filter(r => r.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await receiverService.remove(id);
+      setReceiverList(prev => prev.filter(r => r._id !== id && r.id !== id));
+    } catch (e) {
+      // ignore
+    }
   };
 
-  const refreshList = () => setReceiverList([...receiverList]);
+  const refreshList = () => fetchReceivers();
 
   const verifiedCount = receiverList.filter(r => r.verified).length;
   const totalPendingDeliveries = receiverList.reduce((s, r) => s + r.pendingDeliveries, 0);
