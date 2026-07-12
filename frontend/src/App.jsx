@@ -41,7 +41,7 @@ import FAQ from "./components/landing/FAQ";
 import Footer from "./components/landing/Footer";
 import { ArrowRight } from "lucide-react";
 
-import OperationsDashboard from "./pages/operation-lead/OperationsDashboard";
+import MissionControl from "./pages/operation-lead/MissionControl";
 import FleetLayout from "./layouts/FleetLayout";
 import VehicleOverview from "./pages/operation-lead/fleet/VehicleOverview";
 import AllVehicles from "./pages/operation-lead/fleet/AllVehicles";
@@ -94,7 +94,7 @@ import ExpensesPageOp from "./pages/operation-lead/fuel-expense/Expenses";
 import ExpenseDetails from "./pages/operation-lead/fuel-expense/ExpenseDetails";
 import VehicleExpenses from "./pages/operation-lead/fuel-expense/VehicleExpenses";
 
-import RoadCaptainDashboard from "./pages/road-captain/RoadCaptainDashboard";
+import DriverCockpit from "./pages/road-captain/DriverCockpit";
 import MyTripsPage from "./pages/road-captain/MyTripsPage";
 import TripHistoryPage from "./pages/road-captain/TripHistoryPage";
 import AssignedVehiclePage from "./pages/road-captain/AssignedVehiclePage";
@@ -105,7 +105,7 @@ import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
 import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
 import TodaysRoute from "./pages/road-captain/TodaysRoute";
 
-import SafetyDashboard from "./pages/safety-officer/SafetyDashboard";
+import SafetyCommand from "./pages/safety-officer/SafetyCommand";
 import SafetyDriversPage from "./pages/safety-officer/SafetyDriversPage";
 import CompliancePage from "./pages/safety-officer/CompliancePage";
 import LicensesPage from "./pages/safety-officer/LicensesPage";
@@ -115,7 +115,7 @@ import InspectionsPage from "./pages/safety-officer/InspectionsPage";
 import SafetyReportsPage from "./pages/safety-officer/SafetyReportsPage";
 import SafetySettings from "./pages/safety-officer/SafetySettings";
 
-import FinanceDashboard from "./pages/finance-hub/FinanceDashboard";
+import FinanceCommand from "./pages/finance-hub/FinanceCommand";
 import ExpensesPage from "./pages/finance-hub/ExpensesPage";
 import FuelCostPage from "./pages/finance-hub/FuelCostPage";
 import MaintenanceCostPage from "./pages/finance-hub/MaintenanceCostPage";
@@ -135,7 +135,7 @@ import LicenseAlerts from "./pages/notifications/LicenseAlerts";
 import FinancialAlerts from "./pages/notifications/FinancialAlerts";
 import NotificationSettingsPage from "./pages/notifications/NotificationSettings";
 
-import DestinationDashboard from "./pages/destination-control/DestinationDashboard";
+import ArrivalHub from "./pages/destination-control/ArrivalHub";
 import IncomingDeliveriesPage from "./pages/destination-control/IncomingDeliveriesPage";
 import CompletedDeliveriesPage from "./pages/destination-control/CompletedDeliveriesPage";
 import WarehousePage from "./pages/destination-control/WarehousePage";
@@ -236,7 +236,7 @@ export default function App() {
               </RoleGuard>
             </ProtectedRoute>
           }>
-          <Route index element={<OperationsDashboard />} />
+          <Route index element={<MissionControl />} />
           <Route path="fleet" element={<FleetLayout />}>
             <Route index element={<VehicleOverview />} />
             <Route path="all" element={<AllVehicles />} />
@@ -307,7 +307,7 @@ export default function App() {
               </RoleGuard>
             </ProtectedRoute>
           }>
-          <Route index element={<RoadCaptainDashboard />} />
+          <Route index element={<DriverCockpit />} />
           <Route path="my-trips" element={<MyTripsPage />} />
           <Route path="todays-route" element={<TodaysRoute />} />
           <Route path="trip-history" element={<TripHistoryPage />} />
@@ -329,7 +329,7 @@ export default function App() {
               </RoleGuard>
             </ProtectedRoute>
           }>
-          <Route index element={<SafetyDashboard />} />
+          <Route index element={<SafetyCommand />} />
           <Route path="drivers" element={<SafetyDriversPage />} />
           <Route path="compliance" element={<CompliancePage />} />
           <Route path="licenses" element={<LicensesPage />} />
@@ -347,7 +347,7 @@ export default function App() {
               </RoleGuard>
             </ProtectedRoute>
           }>
-          <Route index element={<FinanceDashboard />} />
+          <Route index element={<FinanceCommand />} />
           <Route path="expenses" element={<ExpensesPage />} />
           <Route path="fuel-cost" element={<FuelCostPage />} />
           <Route path="maintenance-cost" element={<MaintenanceCostPage />} />
@@ -366,7 +366,7 @@ export default function App() {
               </RoleGuard>
             </ProtectedRoute>
           }>
-          <Route index element={<DestinationDashboard />} />
+          <Route index element={<ArrivalHub />} />
           <Route path="incoming" element={<IncomingDeliveriesPage />} />
           <Route path="completed" element={<CompletedDeliveriesPage />} />
           <Route path="warehouse" element={<WarehousePage />} />
