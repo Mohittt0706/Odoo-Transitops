@@ -73,7 +73,13 @@ import CreateMaintenance from "./pages/operation-lead/maintenance/CreateMaintena
 import MaintenanceDetails from "./pages/operation-lead/maintenance/MaintenanceDetails";
 import MaintenanceHistory from "./pages/operation-lead/maintenance/MaintenanceHistory";
 import VehicleServiceLog from "./pages/operation-lead/maintenance/VehicleServiceLog";
-import ReportsPage from "./pages/operation-lead/ReportsPage";
+import ReportsDashboard from "./pages/reports/ReportsDashboard";
+import FleetAnalytics from "./pages/reports/FleetAnalytics";
+import FuelAnalytics from "./pages/reports/FuelAnalytics";
+import RevenueAnalytics from "./pages/reports/RevenueAnalytics";
+import VehicleROI from "./pages/reports/VehicleROI";
+import OperationalCost from "./pages/reports/OperationalCost";
+import ExportReports from "./pages/reports/ExportReports";
 import AnalyticsPage from "./pages/operation-lead/AnalyticsPage";
 import OperationsNotifications from "./pages/operation-lead/OperationsNotifications";
 import OperationsSettings from "./pages/operation-lead/OperationsSettings";
@@ -248,7 +254,13 @@ export default function App() {
             <Route path="history" element={<MaintenanceHistory />} />
             <Route path="service-log" element={<VehicleServiceLog />} />
           </Route>
-          <Route path="reports" element={<ReportsPage />} />
+          <Route path="reports" element={<ReportsDashboard />} />
+          <Route path="reports/fleet" element={<FleetAnalytics />} />
+          <Route path="reports/fuel" element={<FuelAnalytics />} />
+          <Route path="reports/revenue" element={<RevenueAnalytics />} />
+          <Route path="reports/roi" element={<VehicleROI />} />
+          <Route path="reports/operational-cost" element={<OperationalCost />} />
+          <Route path="reports/export" element={<ExportReports />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="notifications" element={<OperationsNotifications />} />
           <Route path="settings" element={<OperationsSettings />} />
