@@ -118,6 +118,7 @@ const remove = async (id) => {
     error.statusCode = 404;
     throw error;
   }
+  await record.deleteOne();
   return record;
 };
 
