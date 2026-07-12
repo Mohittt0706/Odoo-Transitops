@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { MONGODB_URI } = require('../config/env');
+const { DATABASE_URL } = require('../config/env');
 const User = require('../models/User');
 
 const users = [
@@ -37,7 +37,7 @@ const users = [
 
 const seed = async () => {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(DATABASE_URL);
     console.log('MongoDB connected');
 
     for (const userData of users) {
