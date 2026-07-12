@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatusBadge from "../../components/common/Badge";
@@ -23,8 +23,11 @@ import {
   ChevronRight,
   Filter,
   RotateCcw,
+  Loader,
+  TriangleAlert,
+  Inbox,
 } from "lucide-react";
-import { reports } from "../../data/reportData";
+import { reportService } from "../../services/report.service";
 import { cn } from "../../utils/utils";
 
 export default function ExportReports() {
@@ -34,7 +37,86 @@ export default function ExportReports() {
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(new Set());
   const [showExportModal, setShowExportModal] = useState(false);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const pageSize = 10;
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.overview();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load reports");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const reports = useMemo(() => {
+    if (!data) return [];
+    const items = [];
+    const now = new Date();
+    const fmtDate = (d) => d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+    if (data.totalVehicles !== undefined) {
+      items.push({
+        id: "RPT-001", name: "Fleet Overview", category: "Fleet", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "PDF", size: "2.4 MB",
+      });
+    }
+    if (data.totalTrips !== undefined) {
+      items.push({
+        id: "RPT-002", name: "Trip Summary", category: "Trip", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "CSV", size: "1.8 MB",
+      });
+    }
+    if (data.totalDrivers !== undefined) {
+      items.push({
+        id: "RPT-003", name: "Driver Performance", category: "Driver", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "Excel", size: "3.1 MB",
+      });
+    }
+    if (data.totalRevenue !== undefined) {
+      items.push({
+        id: "RPT-004", name: "Revenue Report", category: "Revenue", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "PDF", size: "1.2 MB",
+      });
+    }
+    if (data.totalExpenses !== undefined) {
+      items.push({
+        id: "RPT-005", name: "Expense Analysis", category: "Fuel", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "CSV", size: "0.9 MB",
+      });
+    }
+    if (data.activeVehicles !== undefined) {
+      items.push({
+        id: "RPT-006", name: "Vehicle Health", category: "Maintenance", generatedBy: "System",
+        createdDate: fmtDate(now), status: "Completed", format: "PDF", size: "1.5 MB",
+      });
+    }
+    return items;
+  }, [data]);
+
+  const handleDownload = async (format, type = 'fleet') => {
+    try {
+      const service = format === 'PDF' ? reportService.exportPDF : reportService.exportCSV;
+      const response = await service({ type });
+      const blob = new Blob([response.data]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `report.${format.toLowerCase()}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(`Export ${format} failed`, err);
+    }
+  };
 
   const filtered = useMemo(() => {
     let result = reports;
@@ -55,7 +137,7 @@ export default function ExportReports() {
       });
     }
     return result;
-  }, [search, sortKey, sortDir]);
+  }, [search, sortKey, sortDir, reports]);
 
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -86,6 +168,7 @@ export default function ExportReports() {
 
   const handleExport = (format) => {
     setShowExportModal(false);
+    handleDownload(format);
   };
 
   const SortIcon = ({ colKey }) => {
@@ -106,6 +189,42 @@ export default function ExportReports() {
     CSV: "text-primary bg-primary-light",
     JSON: "text-purple-600 bg-purple-50",
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No export data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -147,7 +266,13 @@ export default function ExportReports() {
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.02 }}
-            onClick={() => action.label === "Export CSV" || action.label === "Download PDF" ? setShowExportModal(true) : null}
+            onClick={() => {
+              if (action.label === "Export CSV") handleDownload("CSV", "fleet");
+              else if (action.label === "Download PDF") handleDownload("PDF", "fleet");
+              else if (action.label === "Export Excel") handleDownload("CSV", "fleet");
+              else if (action.label === "Generate Report") setShowExportModal(true);
+              else if (action.label === "Print Report") window.print();
+            }}
             className={cn(
               "inline-flex items-center gap-2 px-3 py-2 text-xs font-bold rounded-lg border border-transparent transition-all",
               action.color

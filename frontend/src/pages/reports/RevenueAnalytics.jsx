@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -6,17 +7,80 @@ import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import DonutChart from "../../components/charts/PieChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { IndianRupee, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Wallet, Target } from "lucide-react";
-import { monthlyRevenue, quarterlyRevenue, annualRevenue, revenueDistribution, driverPerformance, vehiclePerformance, monthlyExpenses } from "../../data/reportData";
+import { IndianRupee, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Wallet, Target, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { reportService } from "../../services/report.service";
 
 export default function RevenueAnalytics() {
-  const totalRevenue = monthlyRevenue.reduce((s, d) => s + d.value, 0);
-  const totalProfit = monthlyRevenue.reduce((s, d) => s + d.profit, 0);
-  const totalTrips = monthlyRevenue.reduce((s, d) => s + d.trips, 0);
-  const avgRevenuePerTrip = Math.round(totalRevenue / totalTrips);
-  const avgRevenuePerVehicle = Math.round(totalRevenue / vehiclePerformance.length);
-  const profitMargin = Math.round((totalProfit / totalRevenue) * 100);
-  const lastMonthRevenue = monthlyRevenue[monthlyRevenue.length - 1].value;
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.finance();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load revenue data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const monthlyRevenue = data?.monthlyRevenue || [];
+  const quarterlyRevenue = data?.quarterlyRevenue || [];
+  const annualRevenue = data?.annualRevenue || [];
+  const revenueDistribution = data?.revenueDistribution || [];
+  const driverPerformance = data?.driverPerformance || [];
+  const vehiclePerformance = data?.vehiclePerformance || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+
+  const totalRevenue = monthlyRevenue.reduce((s, d) => s + (d.value || 0), 0);
+  const totalProfit = monthlyRevenue.reduce((s, d) => s + (d.profit || 0), 0);
+  const totalTrips = monthlyRevenue.reduce((s, d) => s + (d.trips || 0), 0);
+  const avgRevenuePerTrip = totalTrips ? Math.round(totalRevenue / totalTrips) : 0;
+  const avgRevenuePerVehicle = vehiclePerformance.length ? Math.round(totalRevenue / vehiclePerformance.length) : 0;
+  const profitMargin = totalRevenue ? Math.round((totalProfit / totalRevenue) * 100) : 0;
+  const lastMonthRevenue = monthlyRevenue.length ? monthlyRevenue[monthlyRevenue.length - 1].value : 0;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No revenue data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -32,12 +96,12 @@ export default function RevenueAnalytics() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-5">
         <StatCard title="Monthly Revenue" value={`₹${(lastMonthRevenue / 1000).toFixed(0)}K`} icon={IndianRupee} change="+8.3%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-emerald-50 text-emerald-600" delay={0} />
-        <StatCard title="Quarterly Revenue" value={`₹${(quarterlyRevenue[quarterlyRevenue.length - 1].value / 1000).toFixed(0)}K`} icon={BarChart3} change="+6.5%" changeType="up" sparklineData={quarterlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-blue-50 text-blue-600" delay={0.02} />
-        <StatCard title="Annual Revenue" value={`₹${(annualRevenue[annualRevenue.length - 1].value / 10000000).toFixed(1)}Cr`} icon={TrendingUp} change="+10.8%" changeType="up" sparklineData={annualRevenue.map(d => Math.round(d.value / 100000))} color="bg-primary/10 text-primary" delay={0.04} />
+        <StatCard title="Quarterly Revenue" value={`₹${(quarterlyRevenue.length ? quarterlyRevenue[quarterlyRevenue.length - 1].value / 1000 : 0).toFixed(0)}K`} icon={BarChart3} change="+6.5%" changeType="up" sparklineData={quarterlyRevenue.map(d => Math.round(d.value / 1000))} color="bg-blue-50 text-blue-600" delay={0.02} />
+        <StatCard title="Annual Revenue" value={`₹${(annualRevenue.length ? annualRevenue[annualRevenue.length - 1].value / 10000000 : 0).toFixed(1)}Cr`} icon={TrendingUp} change="+10.8%" changeType="up" sparklineData={annualRevenue.map(d => Math.round(d.value / 100000))} color="bg-primary/10 text-primary" delay={0.04} />
         <StatCard title="Revenue / Trip" value={`₹${avgRevenuePerTrip.toLocaleString()}`} icon={Target} change="+3.2%" changeType="up" sparklineData={[1250, 1280, 1300, 1320, 1340, 1350, avgRevenuePerTrip]} color="bg-purple-50 text-purple-600" delay={0.06} />
         <StatCard title="Revenue / Vehicle" value={`₹${avgRevenuePerVehicle.toLocaleString()}`} icon={DollarSign} change="+5.1%" changeType="up" sparklineData={[180, 185, 190, 195, 198, 200, Math.round(avgRevenuePerVehicle / 1000)]} color="bg-cyan-50 text-cyan-600" delay={0.08} />
         <StatCard title="Net Profit" value={`₹${(totalProfit / 100000).toFixed(1)}L`} icon={Wallet} change="+12.4%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.1} />
-        <StatCard title="Gross Profit" value={`₹${((totalRevenue - monthlyExpenses[monthlyExpenses.length - 1].value) / 1000).toFixed(0)}K`} icon={TrendingUp} change="+6.8%" changeType="up" sparklineData={[120, 125, 130, 135, 140, 142, 148]} color="bg-green-50 text-green-600" delay={0.12} />
+        <StatCard title="Gross Profit" value={`₹${((totalRevenue - (monthlyExpenses.length ? monthlyExpenses[monthlyExpenses.length - 1].value : 0)) / 1000).toFixed(0)}K`} icon={TrendingUp} change="+6.8%" changeType="up" sparklineData={[120, 125, 130, 135, 140, 142, 148]} color="bg-green-50 text-green-600" delay={0.12} />
         <StatCard title="Profit Margin" value={`${profitMargin}%`} icon={PieChart} change="+2.3%" changeType="up" sparklineData={[28, 29, 30, 30, 31, 31, profitMargin]} color="bg-indigo-50 text-indigo-600" delay={0.14} />
       </div>
 

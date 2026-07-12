@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -5,18 +6,82 @@ import ChartCard from "../../components/charts/ChartCard";
 import SimpleBarChart from "../../components/charts/BarChart";
 import AreaChart from "../../components/charts/AreaChart";
 import TrendIndicator from "../../components/reports/TrendIndicator";
-import { Fuel, DollarSign, Gauge, TrendingUp, TrendingDown, Zap, Route } from "lucide-react";
-import { fuelData, fuelConsumption, monthlyExpenses, vehiclePerformance } from "../../data/reportData";
+import { Fuel, DollarSign, Gauge, TrendingUp, TrendingDown, Zap, Route, Loader, TriangleAlert, Inbox } from "lucide-react";
+import { reportService } from "../../services/report.service";
 
 export default function FuelAnalytics() {
-  const totalFuelCost = fuelData.reduce((s, f) => s + f.fuelCost, 0);
-  const totalConsumption = fuelData.reduce((s, f) => s + f.consumption, 0);
-  const avgEfficiency = (fuelData.reduce((s, f) => s + f.efficiency, 0) / fuelData.length).toFixed(1);
-  const avgMileage = Math.round(fuelData.reduce((s, f) => s + f.mileage, 0) / fuelData.length);
-  const totalFuelExpense = monthlyExpenses.reduce((s, d) => s + d.fuel, 0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.fleet();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load fuel data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const fuelData = data?.fuelData || [];
+  const fuelConsumption = data?.fuelConsumption || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+  const vehiclePerformance = data?.vehiclePerformance || [];
+
+  const totalFuelCost = fuelData.reduce((s, f) => s + (f.fuelCost || 0), 0);
+  const totalConsumption = fuelData.reduce((s, f) => s + (f.consumption || 0), 0);
+  const avgEfficiency = fuelData.length
+    ? (fuelData.reduce((s, f) => s + (f.efficiency || 0), 0) / fuelData.length).toFixed(1)
+    : "0.0";
+  const avgMileage = fuelData.length
+    ? Math.round(fuelData.reduce((s, f) => s + (f.mileage || 0), 0) / fuelData.length)
+    : 0;
+  const totalFuelExpense = monthlyExpenses.reduce((s, d) => s + (d.fuel || 0), 0);
   const wasteEstimate = Math.round(totalConsumption * 0.08);
 
-  const sortedByEfficiency = [...fuelData].sort((a, b) => b.efficiency - a.efficiency);
+  const sortedByEfficiency = [...fuelData].sort((a, b) => (b.efficiency || 0) - (a.efficiency || 0));
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No fuel data available</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

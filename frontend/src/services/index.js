@@ -7,3 +7,4 @@ export { maintenanceService } from './maintenance.service';
 export { fuelService } from './fuel.service';
 export { expenseService } from './expense.service';
 export { receiverService } from './receiver.service';
+export { notificationService } from './notification.service';

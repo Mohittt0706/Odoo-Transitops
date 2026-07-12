@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
-import { NotificationCard, FilterPanel, StatCard, EmptyState } from "../../components/notifications/NotificationComponents";
-import { tripAlerts } from "../../data/notificationData";
+import { NotificationCard, FilterPanel, StatCard, EmptyState, LoadingSkeleton } from "../../components/notifications/NotificationComponents";
+import { notificationService } from "../../services";
 import { cn } from "../../utils/utils";
-import { Route, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Route, Search, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 
 const subFilters = [
   { key: "all", label: "All" },
@@ -27,10 +27,29 @@ export default function TripAlerts() {
   const [subFilter, setSubFilter] = useState("all");
   const [priFilter, setPriFilter] = useState("all");
   const [page, setPage] = useState(1);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const pageSize = 8;
 
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await notificationService.getAll({ category: 'trip' });
+      const { notifications: data } = res.data;
+      setNotifications((data || []).map(n => ({ ...n, id: n._id, description: n.message || n.title, read: n.isRead, date: n.createdAt, category: 'trip' })));
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to fetch trip alerts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchNotifications(); }, []);
+
   const filtered = useMemo(() => {
-    let result = [...tripAlerts];
+    let result = [...notifications];
     if (search) {
       const q = search.toLowerCase();
       result = result.filter((n) => n.title.toLowerCase().includes(q) || n.driver?.toLowerCase().includes(q));
@@ -38,24 +57,39 @@ export default function TripAlerts() {
     if (subFilter !== "all") result = result.filter((n) => n.subcategory === subFilter);
     if (priFilter !== "all") result = result.filter((n) => n.priority === priFilter);
     return result.sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [search, subFilter, priFilter]);
+  }, [search, subFilter, priFilter, notifications]);
 
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
-  const activeTrips = tripAlerts.filter((n) => n.subcategory === "Trip Started" || n.subcategory === "Trip Assigned").length;
+  const activeTrips = notifications.filter((n) => n.subcategory === "Trip Started" || n.subcategory === "Trip Assigned").length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
+  const delayed = notifications.filter((n) => n.subcategory === "Trip Delayed").length;
+  const completed = notifications.filter((n) => n.subcategory === "Delivery Completed").length;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <PageHeader title="Trip Alerts" subtitle={`${tripAlerts.length} trip notifications`}
-        badge={`${tripAlerts.filter((n) => !n.read).length} New`}
+      <PageHeader title="Trip Alerts" subtitle={`${notifications.length} trip notifications`}
+        badge={`${unreadCount} New`}
       />
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-        <StatCard label="Total Trip Alerts" value={tripAlerts.length} icon={Route} color="primary" />
+        <StatCard label="Total Trip Alerts" value={notifications.length} icon={Route} color="primary" />
         <StatCard label="Active Trips" value={activeTrips} icon={Route} color="success" />
-        <StatCard label="Delayed" value={tripAlerts.filter((n) => n.subcategory === "Trip Delayed").length} icon={Route} color="danger" />
-        <StatCard label="Completed" value={tripAlerts.filter((n) => n.subcategory === "Delivery Completed").length} icon={Route} color="cyan" />
+        <StatCard label="Delayed" value={delayed} icon={Route} color="danger" />
+        <StatCard label="Completed" value={completed} icon={Route} color="cyan" />
       </div>
+      {loading ? (
+        <LoadingSkeleton />
+      ) : error ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16 px-4">
+          <div className="w-16 h-16 bg-danger/10 rounded-2xl flex items-center justify-center mb-4">
+            <AlertCircle className="w-7 h-7 text-danger" strokeWidth={1.5} />
+          </div>
+          <h3 className="text-base font-bold text-neutral-textMain mb-1">Failed to load trip alerts</h3>
+          <p className="text-sm text-neutral-textMuted max-w-xs text-center mb-4">{error}</p>
+          <button onClick={fetchNotifications} className="px-4 py-2 text-xs font-semibold text-white bg-primary rounded-lg hover:bg-primary/80 transition-all">Retry</button>
+        </motion.div>
+      ) : (<>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-textMuted" />
@@ -100,6 +134,7 @@ export default function TripAlerts() {
           </div>
         </div>
       )}
+      </>)}
     </motion.div>
   );
 }

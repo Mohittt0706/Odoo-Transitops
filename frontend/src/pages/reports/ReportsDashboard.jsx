@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageHeader from "../../components/layout/PageHeader";
 import StatCard from "../../components/reports/StatCard";
@@ -23,27 +24,87 @@ import {
   ArrowRight,
   Building2,
   PieChart,
+  Loader,
+  TriangleAlert,
+  Inbox,
 } from "lucide-react";
-import {
-  monthlyRevenue,
-  monthlyExpenses,
-  fleetUtilization,
-  vehicleStatusData,
-  revenueDistribution,
-  fuelConsumption,
-  maintenanceTrend,
-  driverPerformance,
-  vehiclePerformance,
-} from "../../data/reportData";
+import { reportService } from "../../services/report.service";
 import { useNavigate } from "react-router-dom";
 
 export default function ReportsDashboard() {
   const navigate = useNavigate();
-  const totalRevenue = monthlyRevenue.reduce((s, d) => s + d.value, 0);
-  const totalExpenses = monthlyExpenses.reduce((s, d) => s + d.value, 0);
-  const totalProfit = monthlyRevenue.reduce((s, d) => s + d.profit, 0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.overview();
+      setData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load report data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const monthlyRevenue = data?.monthlyRevenue || [];
+  const monthlyExpenses = data?.monthlyExpenses || [];
+  const fleetUtilization = data?.fleetUtilization || [];
+  const vehicleStatusData = data?.vehicleStatusData || [];
+  const revenueDistribution = data?.revenueDistribution || [];
+  const fuelConsumption = data?.fuelConsumption || [];
+  const maintenanceTrend = data?.maintenanceTrend || [];
+  const driverPerformance = data?.driverPerformance || [];
+  const vehiclePerformance = data?.vehiclePerformance || [];
+
+  const totalRevenue = monthlyRevenue.reduce((s, d) => s + (d.value || 0), 0);
+  const totalExpenses = monthlyExpenses.reduce((s, d) => s + (d.value || 0), 0);
+  const totalProfit = monthlyRevenue.reduce((s, d) => s + (d.profit || 0), 0);
   const activeVehicles = vehiclePerformance.filter(v => v.status === "Active").length;
-  const avgSafety = Math.round(driverPerformance.reduce((s, d) => s + d.score, 0) / driverPerformance.length);
+  const avgSafety = driverPerformance.length
+    ? Math.round(driverPerformance.reduce((s, d) => s + (d.score || 0), 0) / driverPerformance.length)
+    : 0;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-danger-light flex items-center justify-center">
+          <TriangleAlert className="w-7 h-7 text-danger" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMain">{error}</p>
+        <button
+          onClick={fetchData}
+          className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-14 h-14 rounded-xl bg-neutral-light flex items-center justify-center">
+          <Inbox className="w-7 h-7 text-neutral-textMuted" />
+        </div>
+        <p className="text-sm font-bold text-neutral-textMuted">No report data available</p>
+      </div>
+    );
+  }
 
   const quickNav = [
     { label: "Fleet Analytics", path: "/dashboard/operations/reports/fleet", icon: Truck, color: "bg-primary/10 text-primary" },
@@ -77,8 +138,8 @@ export default function ReportsDashboard() {
         <StatCard title="Total Fleet" value="58" icon={Truck} change="+5.2%" changeType="up" sparklineData={[48, 50, 52, 54, 55, 56, 58]} color="bg-primary/10 text-primary" delay={0} />
         <StatCard title="Active Vehicles" value={activeVehicles} icon={Building2} change="+3" changeType="up" sparklineData={[38, 40, 39, 42, 41, 43, activeVehicles]} color="bg-emerald-50 text-emerald-600" delay={0.02} />
         <StatCard title="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} icon={IndianRupee} change="+12.4%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.value / 10000))} color="bg-blue-50 text-blue-600" delay={0.04} />
-        <StatCard title="Monthly Profit" value={`₹${(monthlyRevenue[monthlyRevenue.length - 1].profit / 1000).toFixed(0)}K`} icon={TrendingUp} change="+8.3%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.06} />
-        <StatCard title="Monthly Expenses" value={`₹${(monthlyExpenses[monthlyExpenses.length - 1].value / 1000).toFixed(0)}K`} icon={Wallet} change="+3.2%" changeType="up" sparklineData={monthlyExpenses.map(d => Math.round(d.value / 1000))} color="bg-amber-50 text-amber-600" delay={0.08} />
+        <StatCard title="Monthly Profit" value={`₹${(monthlyRevenue.length ? monthlyRevenue[monthlyRevenue.length - 1].profit / 1000 : 0).toFixed(0)}K`} icon={TrendingUp} change="+8.3%" changeType="up" sparklineData={monthlyRevenue.map(d => Math.round(d.profit / 1000))} color="bg-emerald-50 text-emerald-600" delay={0.06} />
+        <StatCard title="Monthly Expenses" value={`₹${(monthlyExpenses.length ? monthlyExpenses[monthlyExpenses.length - 1].value / 1000 : 0).toFixed(0)}K`} icon={Wallet} change="+3.2%" changeType="up" sparklineData={monthlyExpenses.map(d => Math.round(d.value / 1000))} color="bg-amber-50 text-amber-600" delay={0.08} />
         <StatCard title="Active Trips" value="128" icon={Route} change="+12" changeType="up" sparklineData={[95, 102, 110, 115, 118, 124, 128]} color="bg-purple-50 text-purple-600" delay={0.1} />
         <StatCard title="Completed Trips" value="3,450" icon={CheckCircle2} change="+8.5%" changeType="up" sparklineData={[2800, 2950, 3100, 3200, 3350, 3400, 3450]} color="bg-cyan-50 text-cyan-600" delay={0.12} />
         <StatCard title="Safety Score" value={`${avgSafety}%`} icon={ShieldCheck} change="+2.1%" changeType="up" sparklineData={[88, 90, 91, 92, 93, 94, avgSafety]} color="bg-green-50 text-green-600" delay={0.14} />
