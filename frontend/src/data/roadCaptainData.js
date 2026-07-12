@@ -19,17 +19,6 @@ const rcNotifications = [
   { id: 5, title: "Trip TR-0077 completed successfully", time: "3 hrs ago", type: "trip", unread: false },
 ];
 
-const rcDocuments = [
-  { id: 1, name: "Driving License", number: "MH-2018-2244", type: "Heavy Vehicle", expiry: "2026-09-10", status: "Expiring Soon", icon: "FileText", color: "bg-primary/10 text-primary" },
-  { id: 2, name: "Vehicle Insurance", number: "INS-MH-2026-4455", type: "Comprehensive", expiry: "2027-03-12", status: "Valid", icon: "Shield", color: "bg-success-light text-success" },
-  { id: 3, name: "Fitness Certificate", number: "FC-MH-2026-1122", type: "Annual Fitness", expiry: "2027-01-15", status: "Valid", icon: "CheckCircle", color: "bg-success-light text-success" },
-  { id: 4, name: "PUC Certificate", number: "PUC-MH-2026-3344", type: "Pollution Under Control", expiry: "2026-12-20", status: "Valid", icon: "Car", color: "bg-success-light text-success" },
-  { id: 5, name: "RC Book", number: "RC-MH-12-RT-2244", type: "Registration", expiry: "2028-01-20", status: "Valid", icon: "BookOpen", color: "bg-success-light text-success" },
-  { id: 6, name: "Route Permit", number: "RP-MH-PUNE-2026", type: "Interstate Permit", expiry: "2026-12-31", status: "Valid", icon: "Map", color: "bg-success-light text-success" },
-  { id: 7, name: "Delivery Challan", number: "DC-TR-0084", type: "Trip Document", expiry: "—", status: "Valid", icon: "FileText", color: "bg-info-light text-primary" },
-  { id: 8, name: "Invoice Copy", number: "INV-2026-042", type: "Trip Document", expiry: "—", status: "Valid", icon: "FileText", color: "bg-info-light text-primary" },
-];
-
 const emergencyContacts = [
   { id: 1, name: "Fleet Manager", person: "Rajesh Mehta", phone: "+91 98765 43200", icon: "Truck", color: "bg-primary/10 text-primary", type: "internal" },
   { id: 2, name: "Safety Officer", person: "Anita Desai", phone: "+91 98765 43201", icon: "Shield", color: "bg-success-light text-success", type: "internal" },
@@ -74,4 +63,4 @@ const rcFuelLogs = [
   { id: "FL-005", driver: "Vikram Singh", vehicle: "MH-12-RT-2244", date: "2026-07-04", liters: 130, cost: "₹11,700", station: "BPCL, Nagpur", mileage: "4.6 km/L", fuelType: "Diesel", status: "Approved" },
 ];
 
-export { rcTrips, rcNotifications, rcDocuments, emergencyContacts, waypoints, weeklyDistanceData, fuelTrendData, performanceData, rcFuelLogs };
+export { rcTrips, rcNotifications, emergencyContacts, waypoints, weeklyDistanceData, fuelTrendData, performanceData, rcFuelLogs };
