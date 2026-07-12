@@ -19,6 +19,7 @@ export default function DataTable({
   pageSize = 10,
   bulkSelect = false,
   actions,
+  rowActions,
   emptyMessage = "No records found",
   onRowClick,
 }) {
@@ -199,10 +200,34 @@ export default function DataTable({
                         <MoreHorizontal className="w-4 h-4" />
                       </button>
                       {openActionRow === i && (
-                        <div className="absolute right-0 top-full mt-1 w-36 bg-white border border-neutral-border rounded-lg shadow-soft-lg py-1 z-10">
-                          <button className="w-full text-left px-3 py-2 text-sm text-neutral-textMuted hover:bg-accent-light">View</button>
-                          <button className="w-full text-left px-3 py-2 text-sm text-neutral-textMuted hover:bg-accent-light">Edit</button>
-                          <button className="w-full text-left px-3 py-2 text-sm text-danger hover:bg-danger-light">Delete</button>
+                        <div className="absolute right-0 top-full mt-1 w-36 bg-white border border-neutral-border rounded-lg shadow-soft-lg py-1 z-20">
+                          {rowActions ? (
+                            typeof rowActions === "function" ? (
+                              rowActions(row, i, () => setOpenActionRow(null))
+                            ) : (
+                              rowActions.map((act, actIdx) => (
+                                <button
+                                  key={actIdx}
+                                  onClick={() => {
+                                    act.onClick(row);
+                                    setOpenActionRow(null);
+                                  }}
+                                  className={cn(
+                                    "w-full text-left px-3 py-2 text-sm hover:bg-accent-light transition-colors",
+                                    act.className || "text-neutral-textMuted"
+                                  )}
+                                >
+                                  {act.label}
+                                </button>
+                              ))
+                            )
+                          ) : (
+                            <>
+                              <button className="w-full text-left px-3 py-2 text-sm text-neutral-textMuted hover:bg-accent-light">View</button>
+                              <button className="w-full text-left px-3 py-2 text-sm text-neutral-textMuted hover:bg-accent-light">Edit</button>
+                              <button className="w-full text-left px-3 py-2 text-sm text-danger hover:bg-danger-light">Delete</button>
+                            </>
+                          )}
                         </div>
                       )}
                     </div>
