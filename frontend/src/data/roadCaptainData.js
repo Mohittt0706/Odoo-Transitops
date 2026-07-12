@@ -63,4 +63,42 @@ const rcFuelLogs = [
   { id: "FL-005", driver: "Vikram Singh", vehicle: "MH-12-RT-2244", date: "2026-07-04", liters: 130, cost: "₹11,700", station: "BPCL, Nagpur", mileage: "4.6 km/L", fuelType: "Diesel", status: "Approved" },
 ];
 
-export { rcTrips, rcNotifications, emergencyContacts, waypoints, weeklyDistanceData, fuelTrendData, performanceData, rcFuelLogs };
+// Route coordinates representing the expressway from Mumbai to Pune
+const routeCoordinates = [
+  [19.0760, 72.8777], // Mumbai Central (Start)
+  [19.0435, 72.9150], // Chembur
+  [19.0302, 73.0182], // Vashi
+  [19.0185, 73.0984], // Belapur
+  [19.0234, 73.1090], // Kalamboli (Start of Expressway)
+  [18.9894, 73.1175], // Panvel Toll Plaza (Waypoint 2)
+  [18.9221, 73.1789], // Chowk
+  [18.8413, 73.2801], // Khalapur Toll Plaza (Waypoint 3)
+  [18.7981, 73.3456], // Khopoli
+  [18.7712, 73.3982], // Khandala
+  [18.7557, 73.4091], // Lonavala (Waypoint 4)
+  [18.7410, 73.4560], // Kusgaon
+  [18.7290, 73.5510], // Kamshet
+  [18.7303, 73.6669], // Talegaon Toll Plaza
+  [18.6650, 73.7420], // Dehu Road
+  [18.6298, 73.7997], // Pimpri-Chinchwad (Waypoint 5)
+  [18.5980, 73.8120], // Khadki
+  [18.5308, 73.8474], // Shivajinagar
+  [18.5204, 73.8567]  // Pune Hub (Destination)
+];
+
+// Mapping waypoints to their routeCoordinates index
+const waypointIndexes = [0, 5, 7, 10, 15, 18];
+
+export { 
+  rcTrips, 
+  rcNotifications, 
+  emergencyContacts, 
+  waypoints, 
+  weeklyDistanceData, 
+  fuelTrendData, 
+  performanceData, 
+  rcFuelLogs,
+  routeCoordinates,
+  waypointIndexes
+};
+
