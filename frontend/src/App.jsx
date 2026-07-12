@@ -100,7 +100,6 @@ import TripHistoryPage from "./pages/road-captain/TripHistoryPage";
 import AssignedVehiclePage from "./pages/road-captain/AssignedVehiclePage";
 import NavigationPage from "./pages/road-captain/NavigationPage";
 import FuelLogsPage from "./pages/road-captain/FuelLogsPage";
-import DocumentsPage from "./pages/road-captain/DocumentsPage";
 import EmergencyPage from "./pages/road-captain/EmergencyPage";
 import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
 import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
@@ -318,7 +317,6 @@ export default function App() {
           <Route path="navigation" element={<NavigationPage />} />
           <Route path="fuel-logs" element={<FuelLogsPage />} />
           <Route path="fuel" element={<FuelLogsPage />} />
-          <Route path="documents" element={<DocumentsPage />} />
           <Route path="emergency" element={<EmergencyPage />} />
           <Route path="profile" element={<RoadCaptainProfile />} />
           <Route path="settings" element={<RoadCaptainSettings />} />

@@ -69,7 +69,6 @@ export const roleConfigs = {
       { label: "Trip History", path: "/dashboard/road-captain/trip-history", icon: FileText },
       { label: "Assigned Vehicle", path: "/dashboard/road-captain/assigned-vehicle", icon: Truck },
       { label: "Fuel Logs", path: "/dashboard/road-captain/fuel-logs", icon: Fuel },
-      { label: "Documents", path: "/dashboard/road-captain/documents", icon: FolderOpen },
       { label: "Emergency", path: "/dashboard/road-captain/emergency", icon: AlertTriangle },
       { label: "Profile", path: "/dashboard/road-captain/profile", icon: UserCheck },
       { label: "Settings", path: "/dashboard/road-captain/settings", icon: Settings },
