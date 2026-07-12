@@ -1,6 +1,7 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { ToastProvider } from "./components/common/Toast";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RoleGuard from "./components/auth/RoleGuard";
@@ -66,12 +67,14 @@ import TripDetails from "./pages/operations/trips/TripDetails";
 import TripTimelinePage from "./pages/operations/trips/TripTimeline";
 import CompletedTrips from "./pages/operations/trips/CompletedTrips";
 import CancelledTrips from "./pages/operations/trips/CancelledTrips";
+import EditTrip from "./pages/operations/trips/EditTrip";
 import AssignmentsPage from "./pages/operation-lead/AssignmentsPage";
 import MaintenancePage from "./pages/operation-lead/MaintenancePage";
 import MaintenanceLayout from "./components/maintenance/MaintenanceLayout";
 import CreateMaintenance from "./pages/operation-lead/maintenance/CreateMaintenance";
 import MaintenanceDetails from "./pages/operation-lead/maintenance/MaintenanceDetails";
 import MaintenanceHistory from "./pages/operation-lead/maintenance/MaintenanceHistory";
+import EditMaintenance from "./pages/operation-lead/maintenance/EditMaintenance";
 import VehicleServiceLog from "./pages/operation-lead/maintenance/VehicleServiceLog";
 import ReportsDashboard from "./pages/reports/ReportsDashboard";
 import FleetAnalytics from "./pages/reports/FleetAnalytics";
@@ -86,6 +89,7 @@ import OperationsSettings from "./pages/operation-lead/OperationsSettings";
 import FuelLayout from "./layouts/FuelLayout";
 import FuelLogs from "./pages/operation-lead/fuel-expense/FuelLogs";
 import AddFuelLog from "./pages/operation-lead/fuel-expense/AddFuelLog";
+import ExpenseEntry from "./pages/operation-lead/fuel-expense/ExpenseEntry";
 import ExpensesPageOp from "./pages/operation-lead/fuel-expense/Expenses";
 import ExpenseDetails from "./pages/operation-lead/fuel-expense/ExpenseDetails";
 import VehicleExpenses from "./pages/operation-lead/fuel-expense/VehicleExpenses";
@@ -96,7 +100,6 @@ import TripHistoryPage from "./pages/road-captain/TripHistoryPage";
 import AssignedVehiclePage from "./pages/road-captain/AssignedVehiclePage";
 import NavigationPage from "./pages/road-captain/NavigationPage";
 import FuelLogsPage from "./pages/road-captain/FuelLogsPage";
-import DocumentsPage from "./pages/road-captain/DocumentsPage";
 import EmergencyPage from "./pages/road-captain/EmergencyPage";
 import RoadCaptainProfile from "./pages/road-captain/RoadCaptainProfile";
 import RoadCaptainSettings from "./pages/road-captain/RoadCaptainSettings";
@@ -169,12 +172,12 @@ function LandingPage() {
             certified operators on optimized route plans in minutes.
           </p>
           <div className="flex items-center gap-3.5 flex-wrap justify-center mt-2">
-            <a href="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
-              Start Free Trial
-            </a>
-            <a href="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
-              Request Live Demo <ArrowRight className="w-4 h-4" />
-            </a>
+              <Link to="/login" className="btn btn-primary px-8 py-3.5 text-sm shadow-soft-sm">
+                Start Free Trial
+              </Link>
+              <Link to="/login" className="btn btn-secondary px-8 py-3.5 text-sm flex items-center gap-1.5">
+                Request Live Demo <ArrowRight className="w-4 h-4" />
+              </Link>
           </div>
         </div>
       </section>
@@ -218,8 +221,9 @@ export default function App() {
 
   return (
     <AuthProvider>
+      <ToastProvider>
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
+        <Routes location={location}>
           <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
           <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
           <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
@@ -259,6 +263,7 @@ export default function App() {
             <Route path="create" element={<CreateTrip />} />
             <Route path="details/:id" element={<TripDetails />} />
             <Route path="timeline/:id" element={<TripTimelinePage />} />
+            <Route path="edit/:id" element={<EditTrip />} />
             <Route path="completed" element={<CompletedTrips />} />
             <Route path="cancelled" element={<CancelledTrips />} />
           </Route>
@@ -266,14 +271,16 @@ export default function App() {
           <Route path="maintenance" element={<MaintenanceLayout />}>
             <Route index element={<MaintenancePage />} />
             <Route path="create" element={<CreateMaintenance />} />
+            <Route path="edit/:id" element={<EditMaintenance />} />
             <Route path=":id" element={<MaintenanceDetails />} />
             <Route path="history" element={<MaintenanceHistory />} />
             <Route path="service-log" element={<VehicleServiceLog />} />
           </Route>
           <Route path="fuel" element={<FuelLayout />}>
             <Route index element={<FuelLogs />} />
-            <Route path="add" element={<AddFuelLog />} />
-          </Route>
+          <Route path="add" element={<AddFuelLog />} />
+        </Route>
+          <Route path="expense/add" element={<ExpenseEntry />} />
           <Route path="expenses" element={<FuelLayout />}>
             <Route index element={<ExpensesPageOp />} />
             <Route path=":id" element={<ExpenseDetails />} />
@@ -310,7 +317,6 @@ export default function App() {
           <Route path="navigation" element={<NavigationPage />} />
           <Route path="fuel-logs" element={<FuelLogsPage />} />
           <Route path="fuel" element={<FuelLogsPage />} />
-          <Route path="documents" element={<DocumentsPage />} />
           <Route path="emergency" element={<EmergencyPage />} />
           <Route path="profile" element={<RoadCaptainProfile />} />
           <Route path="settings" element={<RoadCaptainSettings />} />
@@ -388,6 +394,7 @@ export default function App() {
         </Route>
         </Routes>
       </AnimatePresence>
+      </ToastProvider>
     </AuthProvider>
   );
 }

@@ -20,8 +20,7 @@ export default function Navbar() {
     { label: 'Features', href: '#features' },
     { label: 'Solutions', href: '#solutions' },
     { label: 'Roles', href: '#roles' },
-    { label: 'Pricing', href: '#pricing', badge: 'Soon' },
-    { label: 'About', href: '#about' }
+    { label: 'About', href: '#footer' }
   ];
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Truck, Users, Compass, Wrench, Fuel, BarChart3, ShieldCheck, Activity, ArrowRight 
+  Truck, Users, Compass, Wrench, Fuel, BarChart3, ShieldCheck, Activity 
 } from 'lucide-react';
 
 export default function Features() {
@@ -41,7 +41,7 @@ export default function Features() {
                 key={idx}
                 whileHover={{ y: -3 }}
                 transition={{ duration: 0.2 }}
-                className="card bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm flex flex-col justify-between gap-6 card-transition"
+                className="card bg-white border border-neutral-border rounded-xl p-6 shadow-soft-sm flex flex-col card-transition h-full"
               >
                 <div className="flex flex-col gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-primary shrink-0">
@@ -53,10 +53,6 @@ export default function Features() {
                   <p className="text-xs text-slate-400 leading-relaxed font-medium">
                     {feat.desc}
                   </p>
-                </div>
-
-                <div className="flex items-center gap-1 text-xs font-bold text-primary font-headings group cursor-pointer hover:underline self-start pt-2">
-                  Learn More <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </motion.div>
             );

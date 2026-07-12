@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, ArrowRight, Truck, Compass, Battery, AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Truck, Compass, Battery, AlertTriangle } from 'lucide-react';
 
 export default function HeroSection() {
+  const navigate = useNavigate();
   return (
     <section className="pt-28 md:pt-36 pb-20 overflow-hidden relative border-b border-neutral-border bg-white">
       {/* Background soft grid */}
@@ -46,11 +48,8 @@ export default function HeroSection() {
             transition={{ duration: 0.4, delay: 0.3 }}
             className="flex items-center gap-3.5 flex-wrap mt-2"
           >
-            <button className="btn btn-primary shadow-soft-sm px-6 py-3.5 text-sm">
+            <button onClick={() => navigate("/login")} className="btn btn-primary shadow-soft-sm px-6 py-3.5 text-sm">
               Get Started <ArrowRight className="w-4 h-4" />
-            </button>
-            <button className="btn btn-secondary px-6 py-3.5 text-sm flex items-center gap-2">
-              <Play className="w-4 h-4 text-slate-600 fill-current" /> Watch Demo
             </button>
           </motion.div>
         </div>
