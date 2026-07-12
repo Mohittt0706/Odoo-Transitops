@@ -173,63 +173,6 @@ export default function App() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-<<<<<<< HEAD
-        <Route
-          path="/"
-          element={
-            <AnimatedPage>
-              <LandingPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <AnimatedPage>
-              <LoginPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <AnimatedPage>
-              <ForgotPasswordPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/role-selection"
-          element={
-            <AnimatedPage>
-              <RoleSelectionPage />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/dashboard/:role"
-          element={
-            <AnimatedPage>
-              <DashboardPlaceholder />
-            </AnimatedPage>
-          }
-        />
-        <Route path="/drivers" element={<DriverLayout />}>
-          <Route index element={<DriverOverview />} />
-          <Route path="overview" element={<DriverOverview />} />
-          <Route path="all" element={<AllDrivers />} />
-          <Route path="register" element={<RegisterDriver />} />
-          <Route path="profile/:driverId" element={<DriverProfile />} />
-          <Route path="edit/:driverId" element={<EditDriver />} />
-          <Route path="documents" element={<DriverDocuments />} />
-          <Route path="documents/:driverId" element={<DriverDocuments />} />
-          <Route path="performance" element={<DriverPerformance />} />
-          <Route path="performance/:driverId" element={<DriverPerformance />} />
-          <Route path="licenses" element={<LicenseManagement />} />
-          <Route path="history" element={<DriverHistory />} />
-          <Route path="history/:driverId" element={<DriverHistory />} />
-          <Route path="settings" element={<DriverSettings />} />
-=======
         <Route path="/" element={<AnimatedPage><LandingPage /></AnimatedPage>} />
         <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
         <Route path="/forgot-password" element={<AnimatedPage><ForgotPasswordPage /></AnimatedPage>} />
@@ -308,7 +251,6 @@ export default function App() {
           <Route path="proof-of-delivery" element={<ProofOfDeliveryPage />} />
           <Route path="reports" element={<DestinationReportsPage />} />
           <Route path="settings" element={<DestinationSettings />} />
->>>>>>> origin/frontend
         </Route>
       </Routes>
     </AnimatePresence>
