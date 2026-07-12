@@ -44,6 +44,7 @@ export const roleConfigs = {
       { label: "Drivers", path: "/dashboard/operations/drivers", icon: Users },
       { label: "Trips", path: "/dashboard/operations/trips", icon: Route },
       { label: "Assignments", path: "/dashboard/operations/assignments", icon: ClipboardList },
+      { label: "Fuel & Expense", path: "/dashboard/operations/fuel", icon: Fuel },
       { label: "Maintenance", path: "/dashboard/operations/maintenance", icon: Wrench },
       { label: "Reports", path: "/dashboard/operations/reports", icon: FileText },
       { label: "Fleet Analytics", path: "/dashboard/operations/reports/fleet", icon: Truck },
@@ -64,9 +65,9 @@ export const roleConfigs = {
     items: [
       { label: "Dashboard", path: "/dashboard/road-captain", icon: LayoutDashboard },
       { label: "My Trips", path: "/dashboard/road-captain/my-trips", icon: Route },
+      { label: "Today's Route", path: "/dashboard/road-captain/todays-route", icon: Navigation },
       { label: "Trip History", path: "/dashboard/road-captain/trip-history", icon: FileText },
       { label: "Assigned Vehicle", path: "/dashboard/road-captain/assigned-vehicle", icon: Truck },
-      { label: "Navigation", path: "/dashboard/road-captain/navigation", icon: Navigation },
       { label: "Fuel Logs", path: "/dashboard/road-captain/fuel-logs", icon: Fuel },
       { label: "Documents", path: "/dashboard/road-captain/documents", icon: FolderOpen },
       { label: "Emergency", path: "/dashboard/road-captain/emergency", icon: AlertTriangle },
