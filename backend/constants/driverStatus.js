@@ -1,1 +1,10 @@
-// Driver status constants
+const DRIVER_STATUS = {
+  AVAILABLE: 'AVAILABLE',
+  ON_TRIP: 'ON_TRIP',
+  OFF_DUTY: 'OFF_DUTY',
+  SUSPENDED: 'SUSPENDED',
+};
+
+const DRIVER_STATUS_ARRAY = Object.values(DRIVER_STATUS);
+
+module.exports = { DRIVER_STATUS, DRIVER_STATUS_ARRAY };

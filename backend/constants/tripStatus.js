@@ -1,1 +1,10 @@
-// Trip status constants
+const TRIP_STATUS = {
+  DRAFT: 'DRAFT',
+  DISPATCHED: 'DISPATCHED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+};
+
+const TRIP_STATUS_ARRAY = Object.values(TRIP_STATUS);
+
+module.exports = { TRIP_STATUS, TRIP_STATUS_ARRAY };
