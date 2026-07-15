@@ -429,15 +429,14 @@ NODE_ENV=production npm start
 
 <div align="center">
 
-| Name | Role | GitHub | LinkedIn |
-|------|------|--------|----------|
-| **Team Member 1** | Full Stack Developer | [@github](https://github.com/Mohittt0706) | [LinkedIn](https://linkedin.com) |
-| **Team Member 2** | Frontend Developer | [@github](https://github.com/Disha9917) | [LinkedIn](https://linkedin.com) |
-| **Team Member 3** | Backend Developer | [@github](https://github.com/Bhagyashree-ce) | [LinkedIn](https://linkedin.com) |
-| **Team Member 4** | UI/UX Designer | [@github](https://github.com/innerkidd) | [LinkedIn](https://linkedin.com) |
+| Name | Role | GitHub |
+|------|------|--------|
+| **Team Member 1** | Full Stack Developer | [@Mohittt0706](https://github.com/Mohittt0706) |
+| **Team Member 2** | Frontend Developer | [@Disha9917](https://github.com/Disha9917) |
+| **Team Member 3** | Backend Developer | [@Bhagyashree-ce](https://github.com/Bhagyashree-ce) |
+| **Team Member 4** | UI/UX Designer | [@innerkidd](https://github.com/innerkidd) |
 
 </div>
-
 ---
 
 ## 📄 License
