@@ -3,44 +3,23 @@
 
   **Smart Fleet & Transportation Management Platform** <img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/95044fed-6bb9-41c4-ba2a-3a7281cc8d43" />
 
-
-  <p align="center">
-    <strong>Odoo Hackathon 2026</strong>
-  </p>
-
-  <br>
-
-  ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-  ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-  ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-  ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
-  ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
-  ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-  ![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
-  ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
-
-  <br>
-  <br>
-
-</div>
-
 ---
 
 ## 📋 Table of Contents
 
-- [Project Overview](#-project-overview)
-- [Key Features](#-key-features)
-- [Technology Stack](#-technology-stack)
-- [Folder Structure](#-folder-structure)
-- [User Roles](#-user-roles)
-- [Workflow](#-workflow)
-- [Dashboard Preview](#-dashboard-preview)
-- [Screenshots](#-screenshots)
-- [Installation](#-installation)
-- [Demo Credentials](#-demo-credentials)
-- [Future Scope](#-future-scope)
-- [Team](#-team)
-- [License](#-license)
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Folder Structure](#folder-structure)
+- [User Roles](#user-roles)
+- [Workflow](#workflow)
+- [Dashboard Preview](#dashboard-preview)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Demo Credentials](#demo-credentials)
+- [Future Scope](#future-scope)
+- [Team](#team)
+- [License](#license)
 
 ---
 
@@ -87,8 +66,23 @@ Built for the **Odoo Hackathon 2026**, TransitOps demonstrates how modern web te
 | **🔄 Real-Time CRUD** | All create, update, and delete operations reflect immediately with toast notifications and auto-refresh |
 
 ---
+---
 
 ## 🛠️ Technology Stack
+
+<p align="center">
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+
+</p>
+
 
 ### Frontend
 
@@ -361,6 +355,36 @@ npm run build           # Output in frontend/dist/
 cd backend
 NODE_ENV=production npm start
 ```
+
+---
+---
+
+# 📊 Dashboard Preview
+
+<p align="center">
+  <img src="assets/dashboard.png" alt="Mission Control Dashboard" width="100%" />
+</p>
+
+> **Mission Control Dashboard** provides a centralized view of fleet operations with live KPIs, active trips, vehicle availability, driver status, maintenance alerts, financial insights, and operational analytics.
+
+---
+
+# 📸 Screenshots
+
+| Page | Preview |
+|------|---------|
+| **Landing Page** | ![Landing Page](assets/landing.png) |
+| **Mission Control Dashboard** | ![Mission Control Dashboard](assets/mission-control.png) |
+| **Vehicle Module** | ![Vehicle Module](assets/vehicles.png) |
+| **Driver Module** | ![Driver Module](assets/drivers.png) |
+| **Trip Module** | ![Trip Module](assets/trips.png) |
+| **Maintenance Module** | ![Maintenance Module](assets/maintenance.png) |
+| **Fuel Module** | ![Fuel Module](assets/fuel.png) |
+| **Finance Dashboard** | ![Finance Dashboard](assets/finance.png) |
+| **Safety Dashboard** | ![Safety Dashboard](assets/safety.png) |
+| **Destination Control** | ![Destination Control](assets/destination.png) |
+| **Reports & Analytics** | ![Reports](assets/reports.png) |
+| **Notifications Center** | ![Notifications](assets/notifications.png) |
 
 ---
 
