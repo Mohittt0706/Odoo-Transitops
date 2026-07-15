@@ -379,7 +379,6 @@ NODE_ENV=production npm start
 | **Driver Module** | ![Driver Module](assets/drivers.png) |
 | **Trip Module** | ![Trip Module](assets/trips.png) |
 | **Maintenance Module** | ![Maintenance Module](assets/maintenance.png) |
-| **Fuel Module** | ![Fuel Module](assets/fuel.png) |
 | **Finance Dashboard** | ![Finance Dashboard](assets/finance.png) |
 | **Safety Dashboard** | ![Safety Dashboard](assets/safety.png) |
 | **Destination Control** | ![Destination Control](assets/destination.png) |
