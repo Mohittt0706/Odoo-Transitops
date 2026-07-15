@@ -431,10 +431,10 @@ NODE_ENV=production npm start
 
 | Name | Role | GitHub | LinkedIn |
 |------|------|--------|----------|
-| **Team Member 1** | Full Stack Developer | [@github](https://github.com) | [LinkedIn](https://linkedin.com) |
-| **Team Member 2** | Frontend Developer | [@github](https://github.com) | [LinkedIn](https://linkedin.com) |
-| **Team Member 3** | Backend Developer | [@github](https://github.com) | [LinkedIn](https://linkedin.com) |
-| **Team Member 4** | UI/UX Designer | [@github](https://github.com) | [LinkedIn](https://linkedin.com) |
+| **Team Member 1** | Full Stack Developer | [@github](https://github.com/Mohittt0706) | [LinkedIn](https://linkedin.com) |
+| **Team Member 2** | Frontend Developer | [@github](https://github.com/Disha9917) | [LinkedIn](https://linkedin.com) |
+| **Team Member 3** | Backend Developer | [@github](https://github.com/Bhagyashree-ce) | [LinkedIn](https://linkedin.com) |
+| **Team Member 4** | UI/UX Designer | [@github](https://github.com/innerkidd) | [LinkedIn](https://linkedin.com) |
 
 </div>
 
