@@ -1,7 +1,8 @@
 
   # 🚛 TransitOps
 
-  **Smart Fleet & Transportation Management Platform**
+  **Smart Fleet & Transportation Management Platform** <img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/95044fed-6bb9-41c4-ba2a-3a7281cc8d43" />
+
 
   <p align="center">
     <strong>Odoo Hackathon 2026</strong>
