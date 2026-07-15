@@ -1,10 +1,3 @@
-<div align="center">
-
-  <br>
-  
-  ![Project Banner](assets/banner.png)
-
-  <br>
 
   # 🚛 TransitOps
 
@@ -303,33 +296,6 @@ API-level role enforcement is handled by the `authorize()` middleware, which che
      │   Delivery)  │              └──────────────┘
      └──────────────┘
 ```
-
----
-
-## 📊 Dashboard Preview
-
-![Dashboard Preview](assets/dashboard.png)
-
----
-
-## 📸 Screenshots
-
-| Page | Preview |
-|------|---------|
-| **Landing Page** | ![Landing Page](assets/landing.png) |
-| **Mission Control Dashboard** | ![Mission Control](assets/mission-control.png) |
-| **Vehicle Module** | ![Vehicle Module](assets/vehicles.png) |
-| **Driver Module** | ![Driver Module](assets/drivers.png) |
-| **Trip Module** | ![Trip Module](assets/trips.png) |
-| **Maintenance Module** | ![Maintenance Module](assets/maintenance.png) |
-| **Fuel Module** | ![Fuel Module](assets/fuel.png) |
-| **Finance Dashboard** | ![Finance Dashboard](assets/finance.png) |
-| **Safety Dashboard** | ![Safety Dashboard](assets/safety.png) |
-| **Destination Control** | ![Destination Control](assets/destination.png) |
-| **Reports** | ![Reports](assets/reports.png) |
-| **Notifications** | ![Notifications](assets/notifications.png) |
-
----
 
 ## 🔧 Installation
 
