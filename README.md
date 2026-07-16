@@ -362,7 +362,7 @@ NODE_ENV=production npm start
 # 📊 Dashboard Preview
 
 <p align="center">
-  <img src="assets/dashboard.png" alt="Mission Control Dashboard" width="100%" />
+  <img src="Assests/Dashboard.jpeg" alt="Mission Control Dashboard" width="100%" />
 </p>
 
 > **Mission Control Dashboard** provides a centralized view of fleet operations with live KPIs, active trips, vehicle availability, driver status, maintenance alerts, financial insights, and operational analytics.
@@ -373,17 +373,17 @@ NODE_ENV=production npm start
 
 | Page | Preview |
 |------|---------|
-| Landing Page | <img src="Assets/landing%20page.jpeg" width="300"> |
-| Mission Control Dashboard | <img src="Assets/Dashboard.jpeg" width="300"> |
-| Vehicle Module | <img src="Assets/vehicle%20module.jpeg" width="300"> |
-| Driver Module | <img src="Assets/drivers%20module.jpeg" width="300"> |
-| Trip Module | <img src="Assets/Trips%20module.jpeg" width="300"> |
-| Maintenance Module | <img src="Assets/maintaince%20.jpeg" width="300"> |
-| Finance Dashboard | <img src="Assets/finance%20.jpeg" width="300"> |
-| Safety Dashboard | <img src="Assets/Safety.jpeg" width="300"> |
-| Destination Control | <img src="Assets/Destination%20Control.jpeg" width="300"> |
-| Reports & Analytics | <img src="Assets/Reports.jpeg" width="300"> |
-| Notifications | <img src="Assets/Notification.jpeg" width="300"> |
+| Landing Page | <img src="Assests/landing%20page.jpeg" width="300"> |
+| Mission Control Dashboard | <img src="Assests/Dashboard.jpeg" width="300"> |
+| Vehicle Module | <img src="Assests/vehicle%20module.jpeg" width="300"> |
+| Driver Module | <img src="Assests/drivers%20module.jpeg" width="300"> |
+| Trip Module | <img src="Assests/Trips%20module.jpeg" width="300"> |
+| Maintenance Module | <img src="Assests/maintaince%20.jpeg" width="300"> |
+| Finance Dashboard | <img src="Assests/finance%20.jpeg" width="300"> |
+| Safety Dashboard | <img src="Assests/Safety.jpeg" width="300"> |
+| Destination Control | <img src="Assests/Destination%20Control.jpeg" width="300"> |
+| Reports & Analytics | <img src="Assests/Reports.jpeg" width="300"> |
+| Notifications | <img src="Assests/Notification.jpeg" width="300"> |
 
 ## 🔑 Demo Credentials
 
