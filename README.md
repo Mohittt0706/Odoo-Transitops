@@ -373,19 +373,17 @@ NODE_ENV=production npm start
 
 | Page | Preview |
 |------|---------|
-| **Landing Page** | ![Landing Page](assets/landing.png) |
-| **Mission Control Dashboard** | ![Mission Control Dashboard](assets/mission-control.png) |
-| **Vehicle Module** | ![Vehicle Module](assets/vehicles.png) |
-| **Driver Module** | ![Driver Module](assets/drivers.png) |
-| **Trip Module** | ![Trip Module](assets/trips.png) |
-| **Maintenance Module** | ![Maintenance Module](assets/maintenance.png) |
-| **Finance Dashboard** | ![Finance Dashboard](assets/finance.png) |
-| **Safety Dashboard** | ![Safety Dashboard](assets/safety.png) |
-| **Destination Control** | ![Destination Control](assets/destination.png) |
-| **Reports & Analytics** | ![Reports](assets/reports.png) |
-| **Notifications Center** | ![Notifications](assets/notifications.png) |
-
----
+| Landing Page | <img src="Assets/landing page.jpeg" width="300"> |
+| Mission Control Dashboard | <img src="Assets/Dashboard.jpeg" width="300"> |
+| Vehicle Module | <img src="Assets/vehicle module.jpeg" width="300"> |
+| Driver Module | <img src="Assets/drivers module.jpeg" width="300"> |
+| Trip Module | <img src="Assets/Trips module.jpeg" width="300"> |
+| Maintenance Module | <img src="Assets/maintaince .jpeg" width="300"> |
+| Finance Dashboard | <img src="Assets/finance .jpeg" width="300"> |
+| Safety Dashboard | <img src="Assets/Safety.jpeg" width="300"> |
+| Destination Control | <img src="Assets/Destination Control.jpeg" width="300"> |
+| Reports & Analytics | <img src="Assets/Reports.jpeg" width="300"> |
+| Notifications | <img src="Assets/Notification.jpeg" width="300"> |
 
 ## 🔑 Demo Credentials
 
